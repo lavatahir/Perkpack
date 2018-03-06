@@ -1,10 +1,10 @@
-package controllers;
+package perkpack.controllers;
 
-import models.User;
+import perkpack.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import repositories.UserRepository;
+import perkpack.repositories.UserRepository;
 
 import javax.validation.Valid;
 
@@ -33,7 +33,6 @@ public class UserController {
         }
 
         return ResponseEntity.ok().body(user);
-
     }
 
 }

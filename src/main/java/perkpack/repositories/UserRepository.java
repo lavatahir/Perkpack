@@ -1,6 +1,6 @@
-package repositories;
+package perkpack.repositories;
 
-import models.User;
+import perkpack.models.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User,Long> {
