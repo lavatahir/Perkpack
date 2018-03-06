@@ -1,4 +1,4 @@
-package repositories;
+package perkpack.repositories;
 
 import models.Perk;
 import org.springframework.data.repository.PagingAndSortingRepository;
