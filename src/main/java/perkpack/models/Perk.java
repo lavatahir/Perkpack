@@ -1,4 +1,4 @@
-package models;
+package perkpack.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
