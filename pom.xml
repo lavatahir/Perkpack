@@ -10,6 +10,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <start-class>AppBoot</start-class>
     </properties>
 
     <parent>
