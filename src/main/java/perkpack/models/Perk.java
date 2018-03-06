@@ -20,6 +20,10 @@ public class Perk {
     // private User creator;
     // private Product product;
 
+    public Perk () {
+
+    }
+
     public Perk (String name, Date expiryDate, String location, String description) {
         this.name = name;
         this.expiryDate = expiryDate;
@@ -31,5 +35,9 @@ public class Perk {
 
     public Perk (String name, String description) {
         this(name, new Date(), "", description);
+    }
+
+    public String toString() {
+        return (name + " - " + description);
     }
 }
