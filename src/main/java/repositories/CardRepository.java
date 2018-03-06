@@ -1,6 +1,6 @@
 package repositories;
 
-import models.Card;
+import perkpack.models.Card;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
