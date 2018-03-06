@@ -30,6 +30,11 @@ public class User {
     @GeneratedValue
     private long id;
 
+    public User()
+    {
+
+    }
+
     public User(String firstName, String lastName, String email)
     {
         this.email = email;
