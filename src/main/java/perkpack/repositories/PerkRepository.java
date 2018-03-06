@@ -1,4 +1,4 @@
-package repositories;
+package perkpack.repositories;
 
 public class PerkRepository {
 }
