@@ -19,7 +19,6 @@ public class UserController {
     public User createUser(@Valid @RequestBody User user)
     {
         return userRepository.save(user);
-
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
