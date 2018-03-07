@@ -18,14 +18,18 @@ public class PerkController {
 
     @GetMapping("/perk")
     private String perkForm(Model model) {
+        Iterable<Perk> perkList = perkRepository.findAll();
+
+        model.addAttribute("perks", perkList);
         model.addAttribute("createdPerk", new Perk());
+
         return "perk";
     }
 
     @PostMapping("/perk")
     public String perkCreation(@ModelAttribute Perk createdPerk, Model model) {
         if (perkRepository.findByName(createdPerk.getName()) == null) {
-            perkRepository.save(createdPerk);
+            System.out.println(perkRepository.save(createdPerk));
         }
 
         return perkForm(model);

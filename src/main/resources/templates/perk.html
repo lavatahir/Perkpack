@@ -11,14 +11,14 @@
             <p>Description: <input type="text" th:field="*{description}" id="description"/></p>
             <p><input type = "submit" value = "Submit" id = "create"/> <input type = "reset" value = "Reset" /></p>
         </form>
-        <!--<h2>Perk List</h2>
+        <h2>Perk List</h2>
         <table id="perkTable">
-            <tbody th:each="perk : ${perks}" th:remove=""tag">
+            <tbody th:each="perk : ${perks}" th:remove="tag">
                 <tr>
                     <td th:text = "${perk.name}"></td>
                     <td th:text = "${perk.description}"></td>
                 </tr>
             </tbody>
-        </table>-->
+        </table>
         </body>
 </html>

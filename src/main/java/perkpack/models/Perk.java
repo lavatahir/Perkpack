@@ -44,6 +44,14 @@ public class Perk {
         return this.description;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String toString() {
         return (name + " - " + description);
     }
