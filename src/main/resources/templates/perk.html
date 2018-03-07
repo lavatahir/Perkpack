@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>PerkPack: Perk Creation</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <h1>Create a Perk</h1>
+        <form action="#" th:action="@{/perk}" th:object="${createdPerk}" method="post">
+            <p>Name: <input type="text" th:field="*{name}" id="name"/></p>
+            <p>Description: <input type="text" th:field="*{description}" id="description"/></p>
+            <p><input type = "submit" value = "Submit" id = "create"/> <input type = "reset" value = "Reset" /></p>
+        </form>
+        <!--<h2>Perk List</h2>
+        <table id="perkTable">
+            <tbody th:each="perk : ${perks}" th:remove=""tag">
+                <tr>
+                    <td th:text = "${perk.name}"></td>
+                    <td th:text = "${perk.description}"></td>
+                </tr>
+            </tbody>
+        </table>-->
+        </body>
+</html>
