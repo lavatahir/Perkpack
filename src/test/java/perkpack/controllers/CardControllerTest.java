@@ -50,13 +50,14 @@ public class CardControllerTest {
 
     private User user = new User("Lava", "Tahir", "lavatahir@gmail.com");
 
-    private Card validCard = new Card("American Express", "Credit Card");
+    private Card validCard = new Card("American Express", "Credit Card", user);
 
     @Before
     public void setup()
     {
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        userRepository.save(user);
     }
 
     @Test
