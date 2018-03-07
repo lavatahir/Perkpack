@@ -8,6 +8,7 @@ import perkpack.repositories.CardRepository;
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("cards")
 public class CardController {
 
     private final CardRepository cardRepository;
