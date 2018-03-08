@@ -44,12 +44,20 @@ public class Perk {
         return this.description;
     }
 
+    public int getScore() {
+        return this.score;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public String toString() {
