@@ -48,6 +48,8 @@ public class Perk {
         return this.score;
     }
 
+    public Long getId() { return this.id; }
+
     public void setName(String name) {
         this.name = name;
     }
