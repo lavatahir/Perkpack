@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppBoot.class)
 @WebAppConfiguration
-public class CardControllerTest {
+public class RestCardControllerTest {
 
     private MediaType jsonContentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
@@ -50,13 +50,14 @@ public class CardControllerTest {
 
     private User user = new User("Lava", "Tahir", "lavatahir@gmail.com");
 
-    private Card validCard = new Card("American Express", "Credit Card");
+    private Card validCard = new Card("American Express", "Credit Card", user);
 
     @Before
     public void setup()
     {
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        userRepository.save(user);
     }
 
     @Test
