@@ -27,7 +27,7 @@ $(document).ready(function() {
     $(".upvote, .downvote").click(function(event) {
         event.preventDefault();
 
-        modifyScore($(event.target).parent(), $(event.target));
+        modifyScore($(event.target).closest('tr'), $(event.target));
     });
 
     function modifyScore(perk, button) {
