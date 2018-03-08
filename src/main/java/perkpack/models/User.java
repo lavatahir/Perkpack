@@ -81,8 +81,8 @@ public class User {
 
         return this.email == user.email
                 && this.firstName == user.firstName
-                && this.lastName == user.email
-                && this.id == user.id
+                && this.lastName == user.lastName
+                && this.email == user.email
                 && this.id == user.id;
     }
 
