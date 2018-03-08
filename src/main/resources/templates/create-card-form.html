@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Perkpack Card Creation</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    </head>
+    <body>
+        <h2>Add a new card</h2>
+        <form id="create-card" th:action="@{/card}" th:object="${card}" method="post">
+            <p>
+                Name: <input type="text" th:field="*{name}" />
+            </p>
+            <p>
+                Description: <input type="text" th:field="*{description}" />
+            </p>
+            <p>
+                <input type="submit" value="Create" id="submit-card"/>
+                <input type="reset" value="Reset" />
+            </p>
+        </form>
+        <h2>Cards</h2>
+        <table id="cards">
+            <tr>
+                <th>Card Name</th>
+                <th>Description</th>
+            </tr>
+            <tbody th:each="card : ${cards}" th:remove="tag">
+            <tr>
+                <td th:text = "${card.name}"></td>
+                <td th:text = "${card.description}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

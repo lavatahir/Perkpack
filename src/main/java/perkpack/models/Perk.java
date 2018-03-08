@@ -63,4 +63,16 @@ public class Perk {
     public String toString() {
         return (name + " - " + description);
     }
+
+    public boolean equals(Object o){
+        if (!(o instanceof Perk) || o == null){
+            return false;
+        }
+        Perk p = (Perk) o;
+        return p.name.equalsIgnoreCase(this.name) &&
+                p.description.equalsIgnoreCase(this.description) &&
+                p.location.equalsIgnoreCase(this.location) &&
+                p.score == this.score &&
+                p.expiryDate.equals(this.expiryDate);
+    }
 }
