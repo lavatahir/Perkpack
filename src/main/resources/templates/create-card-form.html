@@ -8,7 +8,7 @@
     <body>
         <h1>Cards</h1>
         <h2>Add a new card</h2>
-        <form id="create-card" th:action="@{/cards}" th:object="${card}" method="post">
+        <form id="create-card" th:action="@{/card}" th:object="${card}" method="post">
             <p>
                 Name: <input type="text" th:field="*{name}" />
             </p>
@@ -16,7 +16,7 @@
                 Description: <input type="text" th:field="*{description}" />
             </p>
             <p>
-                <input type="submit" value="Create" />
+                <input type="submit" value="Create" id="submit-card"/>
                 <input type="reset" value="Reset" />
             </p>
         </form>
