@@ -19,12 +19,14 @@ public class CardController {
     @GetMapping("/card")
     public String cardForm(Model model) {
         model.addAttribute("card", new Card());
+        Iterable<Card> cards = cardRepository.findAll();
+        model.addAttribute("cards", cards);
         return "create-card-form";
     }
 
     @PostMapping("/card")
     public String cardFormSubmit(@ModelAttribute Card card, Model model) {
-        if (cardRepository.findOne(card.getId()) == null) {
+        if (cardRepository.findByName(card.getName()) == null){
             cardRepository.save(card);
         }
         return cardForm(model);

@@ -6,7 +6,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     </head>
     <body>
-        <h1>Cards</h1>
         <h2>Add a new card</h2>
         <form id="create-card" th:action="@{/card}" th:object="${card}" method="post">
             <p>
@@ -20,5 +19,18 @@
                 <input type="reset" value="Reset" />
             </p>
         </form>
+        <h2>Cards</h2>
+        <table id="cards">
+            <tr>
+                <th>Card Name</th>
+                <th>Description</th>
+            </tr>
+            <tbody th:each="card : ${cards}" th:remove="tag">
+            <tr>
+                <td th:text = "${card.name}"></td>
+                <td th:text = "${card.description}"></td>
+            </tr>
+            </tbody>
+        </table>
     </body>
 </html>
