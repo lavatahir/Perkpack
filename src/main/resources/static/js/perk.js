@@ -10,8 +10,8 @@ $(document).ready(function() {
         }).done(function(perk) {
             var perkRow = '<tr class = "perk"><td>' + perk.name + '</td>' + '<td>' + perk.description + '</td>' + '<td>Score:</td><td class = "score">' + perk.score + '</td>';
 
-            perkRow += '<td><input type = "button" value = "Upvote" class = "upvote"/></td>';
-            perkRow += '<td><input type = "button" value = "Downvote" class = "downvote"/></td>';
+            perkRow += '<td class = "upcell"><input type = "button" value = "Upvote" class = "upvote"/></td>';
+            perkRow += '<td class = "downcell"><input type = "button" value = "Downvote" class = "downvote"/></td>';
             perkRow += '</tr>';
 
             $(perkRow).appendTo($("#perkTable"));
@@ -19,8 +19,7 @@ $(document).ready(function() {
             $('.perk').on('click', '.upvote, .downvote', function(event) {
                 event.preventDefault();
 
-                $(this).prop("disabled", true);
-                modifyScore($(event.target).closest('tr'), $(this));
+                modifyScore($(event.target).closest('tr'), $(event.target));
             });
         });
     });
@@ -28,35 +27,48 @@ $(document).ready(function() {
     $(".upvote, .downvote").click(function(event) {
         event.preventDefault();
 
-        $(this).prop("disabled", true);
-        modifyScore($(event.target).parent());
+        modifyScore($(event.target).parent(), $(event.target));
     });
 
     function modifyScore(perk, button) {
         var score = parseInt($(perk).find('td.score')[0].innerHTML);
-                let eventSource = $($(perk).context);
+        let eventSource = $($(perk).context);
 
-                if (eventSource.hasClass('undo')) {
-                    if (eventSource.hasClass('upvote')) {
-                        score--;
-                        eventSource.prop("value", "Upvote");
-                    } else {
-                        score++;
-                        eventSource.prop("value", "Downvote");
-                    }
+        if (eventSource.hasClass('undo')) {
+            if (eventSource.hasClass('upvote')) {
+                score--;
+                eventSource.prop("value", "Upvote");
+            } else {
+                score++;
+                eventSource.prop("value", "Downvote");
+            }
 
-                    $(button).removeClass('undo');
-                } else {
-                    if (eventSource.hasClass('upvote')) {
-                        score++;
-                    } else {
-                        score--;
-                    }
+            $(button).removeClass('undo');
+        } else {
+            if (eventSource.hasClass('upvote')) {
+                let downvoteButton = $(perk).find('td.downcell').find('input');
+                score++;
 
-                    $(button).prop("value", "Undo");
-                    $(button).addClass('undo');
+                if (downvoteButton.hasClass('undo')) {
+                    score++;
+                    downvoteButton.removeClass('undo');
+                    downvoteButton.prop("value", "Downvote");
                 }
+            } else {
+                let upvoteButton = $(perk).find('td.upcell').find('input');
+                score--;
 
-                $(perk).find('td.score')[0].innerHTML = score;
+                if (upvoteButton.hasClass('undo')) {
+                    score--;
+                    upvoteButton.removeClass('undo');
+                    upvoteButton.prop("value", "Upvote");
+                }
+            }
+
+            $(button).prop("value", "Undo");
+            $(button).addClass('undo');
+        }
+
+        $(perk).find('td.score')[0].innerHTML = score;
     }
 });
