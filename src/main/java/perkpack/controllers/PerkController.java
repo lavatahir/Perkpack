@@ -1,13 +1,13 @@
 package perkpack.controllers;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import perkpack.models.Perk;
 import org.springframework.beans.factory.annotation.Autowired;
 import perkpack.repositories.PerkRepository;
 
-@RestController
-@RequestMapping("/perk")
+@Controller
 public class PerkController {
     private final PerkRepository perkRepository;
 
@@ -16,27 +16,22 @@ public class PerkController {
         this.perkRepository = perkRepository;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public Perk addPerk(@RequestParam(value = "name") String name, @RequestParam(value = "description") String description) {
-        Perk perkInRepository = perkRepository.findByName(name);
+    @GetMapping("/perk")
+    private String perkForm(Model model) {
+        Iterable<Perk> perkList = perkRepository.findAll();
 
-        if (perkInRepository != null) {
-            return perkInRepository;
-        }
+        model.addAttribute("perks", perkList);
+        model.addAttribute("createdPerk", new Perk());
 
-        perkInRepository = new Perk(name, description);
-        perkRepository.save(perkInRepository);
-        return perkInRepository;
+        return "perk";
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public Perk getPerk(@RequestParam(value="name") String name) {
-        Perk perk = perkRepository.findByName(name);
-
-        if (perk == null) {
-            return null;
+    @PostMapping("/perk")
+    public String perkCreation(@ModelAttribute Perk createdPerk, Model model) {
+        if (perkRepository.findByName(createdPerk.getName()) == null) {
+            System.out.println(perkRepository.save(createdPerk));
         }
 
-        return perk;
+        return perkForm(model);
     }
 }
