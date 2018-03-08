@@ -8,7 +8,7 @@ $(document).ready(function() {
             contentType: "application/json",
             data: '{"name": "' + $("#name").val() + '", "description": "' + $("#description").val() + '"}'
         }).done(function(perk) {
-            var perkRow = '<tr class = "perk"><td>' + perk.name + '</td>' + '<td>' + perk.description + '</td>' + '<td>Score:</td><td class = "score">' + perk.score + '</td>';
+            var perkRow = '<tr class = "perk"><td class = "name">' + perk.name + '</td>' + '<td>' + perk.description + '</td>' + '<td>Score:</td><td class = "score">' + perk.score + '</td>';
 
             perkRow += '<td class = "upcell"><input type = "button" value = "Upvote" class = "upvote"/></td>';
             perkRow += '<td class = "downcell"><input type = "button" value = "Downvote" class = "downvote"/></td>';
@@ -33,6 +33,7 @@ $(document).ready(function() {
     function modifyScore(perk, button) {
         var score = parseInt($(perk).find('td.score')[0].innerHTML);
         let eventSource = $($(perk).context);
+        let perkName = $(perk).find('td.name')[0].innerHTML;
 
         if (eventSource.hasClass('undo')) {
             if (eventSource.hasClass('upvote')) {
@@ -70,5 +71,17 @@ $(document).ready(function() {
         }
 
         $(perk).find('td.score')[0].innerHTML = score;
+
+        updateServerScore(perkName, score);
+    }
+
+    function updateServerScore(perkName, score) {
+        $.ajax({
+            method: "POST",
+            url: "/score",
+            contentType: "application/json",
+            data: '{"name": "' + perkName + '", "score": "' + score + '"}'
+        }).done(function(perk) {
+        });
     }
 });
