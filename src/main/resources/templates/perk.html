@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <title>PerkPack: Perk Creation</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/perk.js"></script>
+    </head>
+    <body>
+    <h1>Create a Perk</h1>
+    <form action="/perk" method="post">
+        <p>Name: <input type="text" id="name" name="name" value="" /></p>
+        <p>Description: <input type="text" id="description" name="description" value="" /></p>
+        <p><input type="submit" value="Submit" id="create" /> <input type="reset" value="Reset" /></p>
+    </form>
+    <h2>Perk List</h2>
+    <table id="perkTable">
+        <tbody th:each="perk : ${perks}" th:remove="tag">
+            <tr class="perk">
+                <td class = "name" th:text = "${perk.name}"></td>
+                <td th:text = "${perk.description}"></td>
+                <td>Score: </td><td class="score" th:text = "${perk.score}">0</td>
+                <td class = "upcell"><input type="button" value="Upvote" class="upvote" /></td>
+                <td class = "downcell"><input type="button" value="Downvote" class="downvote" /></td>
+            </tr>
+        </tbody>
+    </table>
+    </body>
+</html>

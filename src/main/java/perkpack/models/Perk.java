@@ -1,9 +1,6 @@
 package perkpack.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -17,7 +14,9 @@ public class Perk {
     private String location;
     private String description;
     private int score;
-    // private User creator;
+
+    @ManyToOne
+    private User creator;
     // private Product product;
 
     public Perk () {
@@ -35,6 +34,30 @@ public class Perk {
 
     public Perk (String name, String description) {
         this(name, new Date(), "", description);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public int getScore() {
+        return this.score;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public String toString() {
