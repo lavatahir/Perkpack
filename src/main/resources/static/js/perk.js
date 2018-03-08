@@ -34,16 +34,29 @@ $(document).ready(function() {
 
     function modifyScore(perk, button) {
         var score = parseInt($(perk).find('td.score')[0].innerHTML);
-        let eventSource = $($(perk).context);
+                let eventSource = $($(perk).context);
 
-        console.log(button.innerHTML);
+                if (eventSource.hasClass('undo')) {
+                    if (eventSource.hasClass('upvote')) {
+                        score--;
+                        eventSource.prop("value", "Upvote");
+                    } else {
+                        score++;
+                        eventSource.prop("value", "Downvote");
+                    }
 
-        if (eventSource.hasClass('upvote')) {
-            score++;
-        } else {
-            score--;
-        }
+                    $(button).removeClass('undo');
+                } else {
+                    if (eventSource.hasClass('upvote')) {
+                        score++;
+                    } else {
+                        score--;
+                    }
 
-        $(perk).find('td.score')[0].innerHTML = score;
+                    $(button).prop("value", "Undo");
+                    $(button).addClass('undo');
+                }
+
+                $(perk).find('td.score')[0].innerHTML = score;
     }
 });
