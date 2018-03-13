@@ -1,5 +1,6 @@
 package perkpack.controllers;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import java.nio.charset.Charset;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,14 +50,18 @@ public class PerkRestControllerTest {
         perkRepository.save(testPerk);
     }
 
+    @After
+    public void tearDown() {
+        Perk toRemove = perkRepository.findByName("10% off Coffee");
+        perkRepository.delete(toRemove.getId());
+    }
+
     @Test
     public void getValidPerkTest() throws Exception {
-        Perk savedPerk = perkRepository.save(testPerk);
-
-        mockMvc.perform(get("/perks/" + savedPerk.getId())).
+        mockMvc.perform(get("/perks/" + testPerk.getId())).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.name", is(savedPerk.getName()))).
-                andExpect(jsonPath("$.description", is(savedPerk.getDescription())));
+                andExpect(jsonPath("$.name", is(testPerk.getName()))).
+                andExpect(jsonPath("$.description", is(testPerk.getDescription())));
     }
 
     @Test
@@ -68,5 +74,14 @@ public class PerkRestControllerTest {
                 contentType(jsonContentType).
                 content(perkJson)).
                 andExpect(status().isCreated());
+    }
+
+    @Test
+    public void editPerkTest() throws Exception {
+        Perk savedPerk = perkRepository.findByName("10% off Coffee");
+        String newName = "25% off Coffee";
+        String newDescription = "Test Description 2";
+
+        mockMvc.perform(patch("/perkedit/" + savedPerk.getId() + "?name=" + newName + "&description=" + newDescription)).andExpect(status().isOk());
     }
 }
