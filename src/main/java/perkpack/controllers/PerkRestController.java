@@ -33,8 +33,6 @@ public class PerkRestController {
     @RequestMapping(value = "/perkedit", method = RequestMethod.PATCH)
     public ResponseEntity<Perk> editPerk(@RequestParam(value = "id") Long id, @RequestParam(value = "name", required = false) String name,
                                           @RequestParam(value = "description", required = false) String description) {
-        System.out.println(id + " " + name + " " + description);
-
         Perk perkInRepository = perkRepository.findOne(id);
 
         if (perkInRepository == null) {

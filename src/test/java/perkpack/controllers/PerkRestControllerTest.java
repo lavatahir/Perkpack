@@ -78,10 +78,12 @@ public class PerkRestControllerTest {
 
     @Test
     public void editPerkTest() throws Exception {
-        Perk savedPerk = perkRepository.findByName("10% off Coffee");
+        Perk startingPerk = new Perk("50% off", "Everything");
+        startingPerk = perkRepository.save(startingPerk);
+
         String newName = "25% off Coffee";
         String newDescription = "Test Description 2";
 
-        mockMvc.perform(patch("/perkedit/" + savedPerk.getId() + "?name=" + newName + "&description=" + newDescription)).andExpect(status().isOk());
+        mockMvc.perform(patch("/perkedit?id=" + startingPerk.getId() + "&name=" + newName + "&description=" + newDescription)).andExpect(status().isOk());
     }
 }
