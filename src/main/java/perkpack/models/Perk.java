@@ -9,7 +9,9 @@ public class Perk {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id = null;
 
+    @Column(unique = true)
     private String name;
+
     private Date expiryDate;
     private String location;
     private String description;
