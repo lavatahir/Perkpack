@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppBoot.class)
 @WebAppConfiguration
-public class RestCardControllerTest {
+public class CardRestControllerTest {
 
     private MediaType jsonContentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
