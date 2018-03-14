@@ -57,4 +57,13 @@ public class RestCardController {
 
         return ResponseEntity.ok().body(card);
     }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Card>> getCards(){
+        Iterable<Card> cards = cardRepository.findAll();
+        if(cards == null){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().body(cards);
+    }
 }
