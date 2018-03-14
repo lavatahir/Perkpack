@@ -76,11 +76,11 @@ public class Perk {
     }
 
     public String toString() {
-        return (name + " - " + description);
+        return (name + " - " + description + " - " + category.toString());
     }
 
     public boolean equals(Object o){
-        if (!(o instanceof Perk) || o == null){
+        if (!(o instanceof Perk)){
             return false;
         }
 

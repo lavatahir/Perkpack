@@ -18,6 +18,15 @@ public class PerkRestController {
     public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository) {
         this.perkRepository = perkRepository;
         this.categoryRepository = categoryRepository;
+        this.setupCategories();
+    }
+
+    private void setupCategories() {
+        Category foodCatergory = new Category("Food");
+        Category clothesCategory = new Category("Clothes");
+
+        categoryRepository.save(foodCatergory);
+        categoryRepository.save(clothesCategory);
     }
 
     @RequestMapping(value = "/score", method = RequestMethod.POST)

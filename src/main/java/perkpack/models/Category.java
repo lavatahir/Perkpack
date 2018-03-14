@@ -36,13 +36,13 @@ public class Category {
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof Category) || o == null) {
+        if (!(o instanceof Category)) {
             return false;
         }
 
         Category c = (Category) o;
 
-        return c.name.equalsIgnoreCase(this.name);
+        return c.name.equalsIgnoreCase(this.name) && c.id == this.id;
     }
 
     public String toString() {

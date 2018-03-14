@@ -6,9 +6,24 @@ $(document).ready(function() {
             method: "POST",
             url: "/perks",
             contentType: "application/json",
-            data: '{"name": "' + $("#name").val() + '", "description": "' + $("#description").val() + '"}'
+            data: '{"name": "' + $("#name").val() + '", "description": "' + $("#description").val() + '", "category": "/categories/' + $("#category").val() + '"}'
         }).done(function(perk) {
-            var perkRow = '<tr class = "perk"><td class = "name">' + perk.name + '</td>' + '<td>' + perk.description + '</td>' + '<td>Score:</td><td class = "score">' + perk.score + '</td>';
+            setPerkRow(perk);
+        });
+    });
+
+    $(".upvote, .downvote").click(function(event) {
+        event.preventDefault();
+
+        modifyScore($(event.target).closest('tr'), $(event.target));
+    });
+
+    function setPerkRow(perk) {
+        $.ajax({
+            method: "GET",
+            url: perk._links.category.href
+        }).done(function(category) {
+            var perkRow = '<tr class = "perk"><td class = "name">' + perk.name + '</td>' + '<td>' + perk.description + '</td>' + '<td>' + category.name + '</td>' + '<td>Score:</td><td class = "score">' + perk.score + '</td>';
 
             perkRow += '<td class = "upcell"><input type = "button" value = "Upvote" class = "upvote"/></td>';
             perkRow += '<td class = "downcell"><input type = "button" value = "Downvote" class = "downvote"/></td>';
@@ -22,13 +37,7 @@ $(document).ready(function() {
                 modifyScore($(event.target).closest('tr'), $(event.target));
             });
         });
-    });
-
-    $(".upvote, .downvote").click(function(event) {
-        event.preventDefault();
-
-        modifyScore($(event.target).closest('tr'), $(event.target));
-    });
+    }
 
     function modifyScore(perk, button) {
         var score = parseInt($(perk).find('td.score')[0].innerHTML);
