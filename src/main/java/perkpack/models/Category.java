@@ -36,4 +36,8 @@ public class Category {
 
         return c.name.equalsIgnoreCase(this.name);
     }
+
+    public String toString() {
+        return this.name;
+    }
 }

@@ -3,17 +3,21 @@ package perkpack.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import perkpack.models.Category;
 import perkpack.models.Perk;
 import perkpack.models.PerkScoreChange;
+import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
 
 @RestController
 public class PerkRestController {
     private final PerkRepository perkRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public PerkRestController(PerkRepository perkRepository) {
+    public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository) {
         this.perkRepository = perkRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @RequestMapping(value = "/score", method = RequestMethod.POST)

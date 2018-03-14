@@ -18,23 +18,27 @@ public class Perk {
     private int score;
 
     @ManyToOne
+    private Category category;
+
+    @ManyToOne
     private User creator;
 
     public Perk () {
 
     }
 
-    public Perk (String name, Date expiryDate, String location, String description) {
+    public Perk (String name, Date expiryDate, String location, String description, Category category) {
         this.name = name;
         this.expiryDate = expiryDate;
         this.location = location;
         this.description = description;
+        this.category = category;
 
         score = 0;
     }
 
     public Perk (String name, String description) {
-        this(name, new Date(), "", description);
+        this(name, new Date(), "", description, new Category(""));
     }
 
     public String getName() {
@@ -51,6 +55,10 @@ public class Perk {
 
     public Long getId() { return this.id; }
 
+    public Category getCategory() {
+        return this.category;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -61,6 +69,10 @@ public class Perk {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String toString() {
