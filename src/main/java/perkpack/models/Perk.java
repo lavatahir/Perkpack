@@ -9,7 +9,9 @@ public class Perk {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id = null;
 
+    @Column(unique = true)
     private String name;
+
     private Date expiryDate;
     private String location;
     private String description;
@@ -47,6 +49,8 @@ public class Perk {
     public int getScore() {
         return this.score;
     }
+
+    public Long getId() { return this.id; }
 
     public void setName(String name) {
         this.name = name;
