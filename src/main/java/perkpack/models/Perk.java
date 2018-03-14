@@ -37,8 +37,8 @@ public class Perk {
         score = 0;
     }
 
-    public Perk (String name, String description) {
-        this(name, new Date(), "", description, new Category(""));
+    public Perk (String name, String description, Category category) {
+        this(name, new Date(), "", description, category);
     }
 
     public String getName() {
