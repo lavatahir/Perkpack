@@ -19,7 +19,6 @@ public class Perk {
 
     @ManyToOne
     private User creator;
-    // private Product product;
 
     public Perk () {
 
@@ -72,7 +71,9 @@ public class Perk {
         if (!(o instanceof Perk) || o == null){
             return false;
         }
+
         Perk p = (Perk) o;
+
         return p.name.equalsIgnoreCase(this.name) &&
                 p.description.equalsIgnoreCase(this.description) &&
                 p.location.equalsIgnoreCase(this.location) &&
