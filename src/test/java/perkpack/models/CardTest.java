@@ -14,6 +14,7 @@ public class CardTest {
 
     private static String name = "Visa";
     private static String description = "Credit Card";
+    private static User user = new User("Lava", "Tahir", "lava@gmail.com","password");
     private static Card card;
     private static Category food = new Category("Food");
 
@@ -41,16 +42,16 @@ public class CardTest {
 
     @Test
     public void addUserTest() throws Exception {
-        User u = new User("Lava", "Tahir", "lavatahir@gmail.com");
+        User u = new User("Lava", "Tahir", "lavatahir@gmail.com", "password");
         card.addUser(u);
         assertTrue(card.getUsers().contains(u));
     }
 
     @Test
     public void removeUserTest() throws Exception {
-        User u = new User("Lava", "Tahir", "lavatahir@gmail.com");
+        User u = new User("Lava", "Tahir", "lavatahir@gmail.com", "password");
         card.addUser(u);
-        User u2 = new User("Lava", "Tahir", "lavatahir@gmail.com");
+        User u2 = new User("Lava", "Tahir", "lavatahir@gmail.com", "password");
         card.removeUser(u2);
         assertTrue(!card.getUsers().contains(u));
     }
@@ -111,9 +112,9 @@ public class CardTest {
         c.addPerk(p2);
         c.addPerk(p3);
 
-        User u1 = new User("U1", "L1", "ul1@gmail.com");
-        User u2 = new User("U2", "L2", "ul2@gmail.com");
-        User u3 = new User("U3", "L3", "ul3@gmail.com");
+        User u1 = new User("U1", "L1", "ul1@gmail.com", "password");
+        User u2 = new User("U2", "L2", "ul2@gmail.com", "password");
+        User u3 = new User("U3", "L3", "ul3@gmail.com", "password");
 
         card.addUser(u1);
         card.addUser(u2);

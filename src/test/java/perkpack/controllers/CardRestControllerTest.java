@@ -17,6 +17,7 @@ import perkpack.AppBoot;
 import perkpack.models.Card;
 import perkpack.models.Category;
 import perkpack.models.Perk;
+import perkpack.models.User;
 import perkpack.repositories.CardRepository;
 import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
@@ -56,6 +57,7 @@ public class CardRestControllerTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    private User user = new User("Lava", "Tahir", "lavatahir@gmail.com","password");
 
 
     private Card validCard = new Card("American Express", "Credit Card");
