@@ -4,17 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import perkpack.models.Card;
+import perkpack.models.Perk;
 import perkpack.repositories.CardRepository;
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/cards")
-public class RestCardController {
+public class CardRestController {
 
     private final CardRepository cardRepository;
 
     @Autowired
-    public RestCardController(CardRepository cardRepository){
+    public CardRestController(CardRepository cardRepository){
         this.cardRepository = cardRepository;
     }
 
@@ -65,5 +66,37 @@ public class RestCardController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().body(cards);
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH)
+    public ResponseEntity<Card> addPerkToCard(@PathVariable("id") Long id,
+                                         @RequestParam(value = "perkToAdd", required = false) Perk perkToAdd){
+        Card c = cardRepository.findOne(id);
+
+        if(c == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        c.addPerk(perkToAdd);
+
+        Card card = cardRepository.save(c);
+
+        return ResponseEntity.ok().body(card);
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH)
+    public ResponseEntity<Card> removePerkFromCard(@PathVariable("id") Long id,
+                                              @RequestParam(value = "perkToRemove", required = false) Perk perkToRemove){
+        Card c = cardRepository.findOne(id);
+
+        if(c == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        c.removePerk(perkToRemove);
+
+        Card card = cardRepository.save(c);
+
+        return ResponseEntity.ok().body(card);
     }
 }

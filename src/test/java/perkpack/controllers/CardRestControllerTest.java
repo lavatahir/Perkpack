@@ -48,16 +48,14 @@ public class CardRestControllerTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User user = new User("Lava", "Tahir", "lavatahir@gmail.com");
 
-    private Card validCard = new Card("American Express", "Credit Card", user);
+    private Card validCard = new Card("American Express", "Credit Card");
 
     @Before
     public void setup()
     {
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        userRepository.save(user);
     }
 
     @Test
