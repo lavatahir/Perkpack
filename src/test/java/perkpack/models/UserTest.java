@@ -16,7 +16,7 @@ public class UserTest {
     @Before
     public  void setup()
     {
-        user = new User(firstName,lastName,email);
+        user = new User(firstName,lastName,email,"password");
     }
 
     @Test
@@ -57,13 +57,13 @@ public class UserTest {
 
     @Test
     public void validEqualsTest() throws Exception {
-        User user2 = new User(firstName,lastName,email);
+        User user2 = new User(firstName,lastName,email,"password");
         assertEquals(user,user2);
     }
 
     @Test
     public void invalidEqualsTest() throws Exception {
-        User user2 = new User(firstName,lastName,"");
+        User user2 = new User(firstName,lastName,"","password");
         assertNotEquals(user2,user);
     }
 }
