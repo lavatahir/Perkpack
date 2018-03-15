@@ -68,7 +68,7 @@ public class CardRestController {
         return ResponseEntity.ok().body(cards);
     }
 
-    @RequestMapping(method = RequestMethod.PATCH)
+    @RequestMapping(value = "/{id}/{perkToAdd}",method = RequestMethod.PATCH)
     public ResponseEntity<Card> addPerkToCard(@PathVariable("id") Long id,
                                          @RequestParam(value = "perkToAdd", required = false) Perk perkToAdd){
         Card c = cardRepository.findOne(id);
@@ -84,7 +84,7 @@ public class CardRestController {
         return ResponseEntity.ok().body(card);
     }
 
-    @RequestMapping(method = RequestMethod.PATCH)
+    @RequestMapping(value = "/{id}/{perkToRemove}", method = RequestMethod.PATCH)
     public ResponseEntity<Card> removePerkFromCard(@PathVariable("id") Long id,
                                               @RequestParam(value = "perkToRemove", required = false) Perk perkToRemove){
         Card c = cardRepository.findOne(id);

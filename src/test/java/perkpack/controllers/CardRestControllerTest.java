@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import perkpack.AppBoot;
 import perkpack.models.Card;
+import perkpack.models.Perk;
 import perkpack.models.User;
 import perkpack.repositories.CardRepository;
 import perkpack.repositories.UserRepository;
@@ -98,4 +99,20 @@ public class CardRestControllerTest {
                 andExpect(jsonPath("$.description", is(newDescription)));
 
     }
+
+    @Test
+    public void addPerkToCardTest() throws Exception
+    {
+        Card savedCard = cardRepository.save(validCard);
+        Perk p = new Perk("Perk 1", "Description for perk");
+
+
+        //for some reason, I cant do newName or newDescription separately
+        mockMvc.perform(patch("/cards/" + savedCard.getId() + "?).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.name", is(newName))).
+                andExpect(jsonPath("$.description", is(newDescription)));
+
+    }
+
 }

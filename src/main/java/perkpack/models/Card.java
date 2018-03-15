@@ -12,7 +12,7 @@ public class Card {
     private Long id;
     private String name;
     private String description;
-    @ManyToOne
+    @OneToMany
     private Collection<User> users;
     @OneToMany
     private Collection<Perk> perks;
@@ -68,10 +68,6 @@ public class Card {
 
     public Collection<Perk> getPerks() {
         return perks;
-    }
-
-    public void setPerks(Collection<Perk> perks) {
-        this.perks = perks;
     }
 
     public void addPerk(Perk p){
