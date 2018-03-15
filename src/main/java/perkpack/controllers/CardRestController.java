@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import perkpack.models.Card;
 import perkpack.models.Perk;
 import perkpack.repositories.CardRepository;
+import perkpack.repositories.PerkRepository;
+
 import javax.validation.Valid;
 
 @RestController
@@ -13,10 +15,12 @@ import javax.validation.Valid;
 public class CardRestController {
 
     private final CardRepository cardRepository;
+    private final PerkRepository perkRepository;
 
     @Autowired
-    public CardRestController(CardRepository cardRepository){
+    public CardRestController(CardRepository cardRepository, PerkRepository perkRepository){
         this.cardRepository = cardRepository;
+        this.perkRepository = perkRepository;
     }
 
 
@@ -68,12 +72,13 @@ public class CardRestController {
         return ResponseEntity.ok().body(cards);
     }
 
-    @RequestMapping(value = "/{id}/{perkToAdd}",method = RequestMethod.PATCH)
+    @RequestMapping(value = "/{id}/addPerk/{perkName}", method = RequestMethod.PATCH)
     public ResponseEntity<Card> addPerkToCard(@PathVariable("id") Long id,
-                                         @RequestParam(value = "perkToAdd", required = false) Perk perkToAdd){
+                                         @PathVariable(value = "perkName", required = false) String perkName){
         Card c = cardRepository.findOne(id);
+        Perk perkToAdd = perkRepository.findByName(perkName);
 
-        if(c == null){
+        if(c == null || perkToAdd == null){
             return ResponseEntity.badRequest().build();
         }
 
@@ -84,12 +89,14 @@ public class CardRestController {
         return ResponseEntity.ok().body(card);
     }
 
-    @RequestMapping(value = "/{id}/{perkToRemove}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/{id}/removePerk/{perkName}", method = RequestMethod.PATCH)
     public ResponseEntity<Card> removePerkFromCard(@PathVariable("id") Long id,
-                                              @RequestParam(value = "perkToRemove", required = false) Perk perkToRemove){
+                                                   @RequestParam(value = "perkName", required = false) String perkName){
         Card c = cardRepository.findOne(id);
 
-        if(c == null){
+        Perk perkToRemove = perkRepository.findByName(perkName);
+
+        if(c == null || perkToRemove == null){
             return ResponseEntity.badRequest().build();
         }
 

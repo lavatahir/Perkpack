@@ -15,9 +15,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import perkpack.AppBoot;
 import perkpack.models.Card;
+import perkpack.models.Category;
 import perkpack.models.Perk;
-import perkpack.models.User;
 import perkpack.repositories.CardRepository;
+import perkpack.repositories.CategoryRepository;
+import perkpack.repositories.PerkRepository;
 import perkpack.repositories.UserRepository;
 
 import java.nio.charset.Charset;
@@ -48,6 +50,12 @@ public class CardRestControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PerkRepository perkRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
 
     private Card validCard = new Card("American Express", "Credit Card");
@@ -92,7 +100,6 @@ public class CardRestControllerTest {
         String newName = "Visa";
         String newDescription = "A Better Way";
 
-        //for some reason, I cant do newName or newDescription separately
         mockMvc.perform(patch("/cards/" + savedCard.getId() + "?newName=" + newName + "&newDescription=" + newDescription)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.name", is(newName))).
@@ -100,20 +107,17 @@ public class CardRestControllerTest {
 
     }
 
-    /*
     @Test
     public void addPerkToCardTest() throws Exception
     {
         Card savedCard = cardRepository.save(validCard);
-        Perk p = new Perk("Perk 1", "Description for perk");
+        Category games = new Category("Games");
+        categoryRepository.save(games);
+        Perk p = new Perk("Perk1", "Description for perk", games);
+        perkRepository.save(p);
 
-
-        //for some reason, I cant do newName or newDescription separately
-        mockMvc.perform(patch("/cards/" + savedCard.getId() + "?).
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + p.getName())).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.name", is(newName))).
-                andExpect(jsonPath("$.description", is(newDescription)));
-
+                andExpect(jsonPath("$.perks[0].name", is(p.getName())));
     }
-    */
 }
