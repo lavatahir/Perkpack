@@ -2,12 +2,36 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './Perkpack.css';
 
-function PerkList(props) {
-  return (
-      <div>
-          {props.name}
+class PerkList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: props.name,
+      perks: [],
+    }
+
+    fetch('http://perkpack.herokuapp.com/perks')
+      .then(result => result.json())
+      .then(data => {
+        console.log(data);
+        this.setState({perks: data._embedded.perks,});
+      });
+  }
+  render() {
+    return (
+      <div className="perk-list">
+        <div className="name">
+          {this.state.name}
+        </div>
+        <div className="list">
+          <ul>
+            {this.state.perks.map(perk => <li key={perk.name}>{perk.name}</li>)}
+          </ul>
+        </div>
       </div>
-  );
+    );
+  }
 }
 
 class Perkpack extends Component {
