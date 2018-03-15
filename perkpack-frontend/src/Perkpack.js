@@ -11,6 +11,9 @@ class PerkList extends Component {
       perks: [],
     }
 
+    this.upvote = this.upvote.bind(this);
+    this.downvote = this.downvote.bind(this);
+
     fetch('http://perkpack.herokuapp.com/perks')
       .then(result => result.json())
       .then(data => {
@@ -18,6 +21,31 @@ class PerkList extends Component {
         this.setState({perks: data._embedded.perks,});
       });
   }
+
+  vote(event, increment) {
+    console.log(event.currentTarget.dataset.name);
+
+    fetch('http://perkpack.herokuapp.com/score', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: event.currentTarget.dataset.name,
+        score: increment,
+      }),
+    })
+  }
+
+  upvote(event) {
+    this.vote(event, 1);
+  }
+
+  downvote(event) {
+    this.vote(event, -1);
+  }
+
   render() {
     return (
       <div className="perk-list">
@@ -26,7 +54,19 @@ class PerkList extends Component {
         </div>
         <div className="list">
           <ul>
-            {this.state.perks.map(perk => <li key={perk.name}>{perk.name}</li>)}
+            {this.state.perks.map(perk => <li key={perk.name}>
+              <div>
+                <button className="up" data-name={perk.name} onClick={this.upvote}>+</button>
+                <button className="down" data-name={perk.name} onClick={this.downvote}>-</button>
+                {perk.score}
+              </div>
+              <div>
+                {perk.name}
+              </div>
+              <div>
+                {perk.description}
+              </div>
+            </li>)}
           </ul>
         </div>
       </div>
