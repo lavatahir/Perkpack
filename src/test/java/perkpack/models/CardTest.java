@@ -15,6 +15,7 @@ public class CardTest {
     private static String name = "Visa";
     private static String description = "Credit Card";
     private static Card card;
+    private static Category food = new Category("Food");
 
     @Before
     public  void setup()
@@ -70,20 +71,20 @@ public class CardTest {
 
     @Test
     public void removePerkTest() throws Exception {
-        Perk p = new Perk("Lava", "Some perk");
+        Perk p = new Perk("Lava", "Some perk", food);
         card.addPerk(p);
 
-        Perk removePerk = new Perk("Lava", "Some perk");
+        Perk removePerk = new Perk("Lava", "Some perk", food);
         card.removePerk(removePerk);
         assertTrue(!card.getPerks().contains(p));
     }
 
     @Test
     public void dontRemovePerkTest() throws Exception {
-        Perk p = new Perk("Lava", "Some perk");
+        Perk p = new Perk("Lava", "Some perk", food);
         card.addPerk(p);
 
-        Perk removePerk = new Perk("Lava2", "Some perk");
+        Perk removePerk = new Perk("Lava2", "Some perk", food);
         card.removePerk(removePerk);
         assertTrue(card.getPerks().contains(p));
     }
@@ -98,9 +99,9 @@ public class CardTest {
     public void checkEqualsWithPerksAndUsersTest() throws Exception {
         Card c = new Card(name, description);
 
-        Perk p1 = new Perk("Perk 1", "desc1");
-        Perk p2 = new Perk("Perk 2", "desc2");
-        Perk p3 = new Perk("Perk 3", "desc3");
+        Perk p1 = new Perk("Perk 1", "desc1", food);
+        Perk p2 = new Perk("Perk 2", "desc2", food);
+        Perk p3 = new Perk("Perk 3", "desc3", food);
 
         card.addPerk(p1);
         card.addPerk(p2);
