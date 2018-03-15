@@ -9,6 +9,15 @@ import perkpack.models.PerkScoreChange;
 import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
 
+import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
+
 @RestController
 public class PerkRestController {
     private final PerkRepository perkRepository;
@@ -22,11 +31,19 @@ public class PerkRestController {
     }
 
     private void setupCategories() {
-        Category foodCatergory = new Category("Food");
-        Category clothesCategory = new Category("Clothes");
+        Path file = Paths.get("./categories.txt");
 
-        categoryRepository.save(foodCatergory);
-        categoryRepository.save(clothesCategory);
+        try (InputStream in = new BufferedInputStream(Files.newInputStream(file))) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String line = null;
+
+            while ((line = reader.readLine()) != null) {
+                Category lineCategory = new Category(line);
+                categoryRepository.save(lineCategory);
+            }
+        } catch (IOException e) {
+            System.out.println(e.toString());
+        }
     }
 
     @RequestMapping(value = "/score", method = RequestMethod.POST)
