@@ -87,9 +87,9 @@ $(document).ready(function() {
     function updateServerScore(perkName, score) {
         $.ajax({
             method: "POST",
-            url: "/score",
+            url: "/perks/score",
             contentType: "application/json",
-            data: '{"name": "' + perkName + '", "score": "' + score + '"}'
+            data: '{"name": "' + perkName + '", "scoreChange": "' + score + '"}'
         }).done(function(perk) {
         });
     }

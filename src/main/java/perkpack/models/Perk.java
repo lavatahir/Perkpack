@@ -71,6 +71,11 @@ public class Perk {
         this.score = score;
     }
 
+    public void changeScore(int change, User user)
+    {
+        this.score += change;
+    }
+
     public void setCategory(Category category) {
         this.category = category;
     }

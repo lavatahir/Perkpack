@@ -1,31 +1,37 @@
 package perkpack.models;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class PerkScoreChange {
     private String name;
-    private int score;
+
+    @NotNull
+    @Size(min =-1, max = 1)
+    private int scoreChange;
 
     public PerkScoreChange() {
 
     }
 
-    public PerkScoreChange(String name, int score) {
+    public PerkScoreChange(String name, int scoreChange) {
         this.name = name;
-        this.score = score;
+        this.scoreChange = scoreChange;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public int getScore() {
-        return this.score;
+    public int getScoreChange() {
+        return this.scoreChange;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setScore(int scoreChange) {
+        this.scoreChange = scoreChange;
     }
 }

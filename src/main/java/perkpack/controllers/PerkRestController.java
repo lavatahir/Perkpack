@@ -2,12 +2,16 @@ package perkpack.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import perkpack.models.Category;
 import perkpack.models.Perk;
 import perkpack.models.PerkScoreChange;
+import perkpack.models.User;
 import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
+import perkpack.repositories.UserRepository;
 
 import java.io.*;
 import java.nio.file.FileSystems;
@@ -22,10 +26,12 @@ import static java.nio.file.StandardOpenOption.CREATE;
 public class PerkRestController {
     private final PerkRepository perkRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository) {
+    public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
         this.perkRepository = perkRepository;
+        this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.setupCategories();
     }
@@ -46,18 +52,18 @@ public class PerkRestController {
         }
     }
 
-    @RequestMapping(value = "/score", method = RequestMethod.POST)
+    @RequestMapping(value = "/perks/score", method = RequestMethod.POST)
     @ResponseBody
-    public void changeScore(@RequestBody PerkScoreChange scoreChange) {
+    public ResponseEntity<Perk> changeScore(@RequestBody PerkScoreChange scoreChange) {
         Perk perkInRepository = perkRepository.findByName(scoreChange.getName());
+        User user = getUser();
 
         if (perkInRepository == null) {
-            return;
+            return ResponseEntity.badRequest().build();
         }
 
-        perkInRepository.setScore(scoreChange.getScore());
-
-        perkRepository.save(perkInRepository);
+        perkInRepository.changeScore(scoreChange.getScoreChange(), user);
+        return ResponseEntity.ok().body(perkRepository.save(perkInRepository));
     }
 
     @RequestMapping(value = "/perkedit", method = RequestMethod.PATCH)
@@ -80,5 +86,12 @@ public class PerkRestController {
         Perk updatedPerk = perkRepository.save(perkInRepository);
 
         return ResponseEntity.ok().body(updatedPerk);
+    }
+
+    private User getUser()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User)auth.getPrincipal()).getUsername();
+        return userRepository.findByEmail(email);
     }
 }
