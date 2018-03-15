@@ -54,7 +54,7 @@ public class UserRestControllerTest {
     @Test
     public void createValidUserTest() throws Exception
     {
-        User user = new User("Ali", "Farah", "a@gmail.com");
+        User user = new User("Ali", "Farah", "a@gmail.com", "password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String userJson = ow.writeValueAsString(user);
@@ -71,7 +71,7 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithEmptyFirstNameTest() throws Exception
     {
-        User user = new User("", "Farah", "a@gmail.com");
+        User user = new User("", "Farah", "a@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String userJson = ow.writeValueAsString(user);
@@ -85,7 +85,7 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithTooLongFirstNameTest() throws Exception
     {
-        User user = new User("asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad", "Farah", "a@gmail.com");
+        User user = new User("asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad", "Farah", "a@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String userJson = ow.writeValueAsString(user);
@@ -99,7 +99,7 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithEmptyLastNameTest() throws Exception
     {
-        User user = new User("ali", "", "a@gmail.com");
+        User user = new User("ali", "", "a@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String userJson = ow.writeValueAsString(user);
@@ -113,7 +113,7 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithTooLongLastNameTest() throws Exception
     {
-        User user = new User("ali","asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad", "a@gmail.com");
+        User user = new User("ali","asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad", "a@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String userJson = ow.writeValueAsString(user);
@@ -127,7 +127,7 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithEmptyEmailTest() throws Exception
     {
-        User user = new User("ali", "farah", "");
+        User user = new User("ali", "farah", "","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String userJson = ow.writeValueAsString(user);
@@ -141,7 +141,7 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithTooLongEmailTest() throws Exception
     {
-        User user = new User("ali","Farah", "asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad@gmail.com");
+        User user = new User("ali","Farah", "asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String userJson = ow.writeValueAsString(user);
@@ -155,7 +155,7 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithInvalidEmailTest() throws Exception
     {
-        User user = new User("ali", "farah", "alifad");
+        User user = new User("ali", "farah", "alifad","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String userJson = ow.writeValueAsString(user);
@@ -169,7 +169,7 @@ public class UserRestControllerTest {
     @Test
     public void getValidUserTest() throws Exception
     {
-        User user = new User("Ali", "Farah", "a@gmail.com");
+        User user = new User("Ali", "Farah", "a@gmail.com","password");
         User createUser = userRepository.save(user);
 
         mockMvc.perform(get("/user/" + createUser.getId())).

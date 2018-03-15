@@ -1,6 +1,9 @@
 package perkpack.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +15,8 @@ import java.util.Objects;
 
 @Entity
 public class User {
+
+    public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     @NotNull
     @Size(min =1, max = 32)
@@ -26,6 +31,9 @@ public class User {
     @Size(min =1, max = 32)
     private String email;
 
+    @NotNull
+    private String password;
+
     @Id
     @GeneratedValue
     private long id;
@@ -35,11 +43,12 @@ public class User {
 
     }
 
-    public User(String firstName, String lastName, String email)
+    public User(String firstName, String lastName, String email, String password)
     {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.setPassword(password);
     }
 
     public String getFirstName() {
@@ -54,6 +63,8 @@ public class User {
         return lastName;
     }
 
+    public String getPassword() { return password; }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -64,6 +75,10 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = PASSWORD_ENCODER.encode(password);
     }
 
     public long getId() {
@@ -88,6 +103,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.firstName, this.lastName, this.id, this.email);
+        return Objects.hash(this.firstName, this.lastName, this.id, this.email, this.password);
     }
 }

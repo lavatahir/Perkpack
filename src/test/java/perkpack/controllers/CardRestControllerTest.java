@@ -48,7 +48,7 @@ public class CardRestControllerTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User user = new User("Lava", "Tahir", "lavatahir@gmail.com");
+    private User user = new User("Lava", "Tahir", "lavatahir@gmail.com","password");
 
     private Card validCard = new Card("American Express", "Credit Card", user);
 
