@@ -1,3 +1,2 @@
 *.idea/
 target/*
-perkpack-frontend/node_modules/*

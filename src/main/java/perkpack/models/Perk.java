@@ -18,24 +18,27 @@ public class Perk {
     private int score;
 
     @ManyToOne
+    private Category category;
+
+    @ManyToOne
     private User creator;
-    // private Product product;
 
     public Perk () {
 
     }
 
-    public Perk (String name, Date expiryDate, String location, String description) {
+    public Perk (String name, Date expiryDate, String location, String description, Category category) {
         this.name = name;
         this.expiryDate = expiryDate;
         this.location = location;
         this.description = description;
+        this.category = category;
 
         score = 0;
     }
 
-    public Perk (String name, String description) {
-        this(name, new Date(), "", description);
+    public Perk (String name, String description, Category category) {
+        this(name, new Date(), "", description, category);
     }
 
     public String getName() {
@@ -52,6 +55,10 @@ public class Perk {
 
     public Long getId() { return this.id; }
 
+    public Category getCategory() {
+        return this.category;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -64,15 +71,21 @@ public class Perk {
         this.score = score;
     }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public String toString() {
-        return (name + " - " + description);
+        return (name + " - " + description + " - " + category.toString());
     }
 
     public boolean equals(Object o){
-        if (!(o instanceof Perk) || o == null){
+        if (!(o instanceof Perk)){
             return false;
         }
+
         Perk p = (Perk) o;
+
         return p.name.equalsIgnoreCase(this.name) &&
                 p.description.equalsIgnoreCase(this.description) &&
                 p.location.equalsIgnoreCase(this.location) &&
