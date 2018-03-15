@@ -13,7 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import perkpack.AppBoot;
+import perkpack.models.Category;
 import perkpack.models.Perk;
+import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
 
 import java.nio.charset.Charset;
@@ -42,18 +44,25 @@ public class PerkRestControllerTest {
     @Autowired
     private PerkRepository perkRepository;
 
-    private Perk testPerk = new Perk("10% off Coffee", "This is a description");
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    private Category testCategory = new Category("None");
+    private Perk testPerk = new Perk("10% off Coffee", "This is a description", testCategory);
 
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        categoryRepository.save(testCategory);
         perkRepository.save(testPerk);
     }
 
     @After
     public void tearDown() {
         Perk toRemove = perkRepository.findByName("10% off Coffee");
+        Category catToRemove = categoryRepository.findByName("None");
         perkRepository.delete(toRemove.getId());
+        categoryRepository.delete(catToRemove.getId());
     }
 
     @Test
@@ -78,7 +87,9 @@ public class PerkRestControllerTest {
 
     @Test
     public void editPerkTest() throws Exception {
-        Perk startingPerk = new Perk("50% off", "Everything");
+        Category startingCategory = new Category("Test Category");
+        Perk startingPerk = new Perk("50% off", "Everything", startingCategory);
+        categoryRepository.save(startingCategory);
         startingPerk = perkRepository.save(startingPerk);
 
         String newName = "25% off Coffee";

@@ -2,6 +2,9 @@
 
 PerkPack is a perk/card organizer.
 
+## Notes
+- On cloning the repository, go to the React app root folder (currently react-frontend) and run npm install.
+
 ## Milestone 1
 - Perk creation and perk voting (changes are saved to the server)
 - User creation
