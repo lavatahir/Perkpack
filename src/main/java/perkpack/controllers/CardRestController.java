@@ -91,7 +91,7 @@ public class CardRestController {
 
     @RequestMapping(value = "/{id}/removePerk/{perkName}", method = RequestMethod.PATCH)
     public ResponseEntity<Card> removePerkFromCard(@PathVariable("id") Long id,
-                                                   @RequestParam(value = "perkName", required = false) String perkName){
+                                                   @PathVariable(value = "perkName", required = false) String perkName){
         Card c = cardRepository.findOne(id);
 
         Perk perkToRemove = perkRepository.findByName(perkName);
@@ -101,7 +101,6 @@ public class CardRestController {
         }
 
         c.removePerk(perkToRemove);
-
         Card card = cardRepository.save(c);
 
         return ResponseEntity.ok().body(card);

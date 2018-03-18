@@ -1,5 +1,6 @@
 package perkpack.controllers;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Before;
@@ -25,6 +26,8 @@ import perkpack.repositories.UserRepository;
 
 import java.nio.charset.Charset;
 
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -121,5 +124,21 @@ public class CardRestControllerTest {
         mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + p.getName())).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.perks[0].name", is(p.getName())));
+    }
+
+    @Test
+    public void removePerkFromCardTest() throws Exception
+    {
+        Card savedCard = cardRepository.save(validCard);
+        Category games = new Category("Games");
+        categoryRepository.save(games);
+        Perk p = new Perk("Perk1", "Description for perk", games);
+        perkRepository.save(p);
+
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + p.getName()));
+
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removePerk/" + p.getName())).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.perks", hasSize(0)));
     }
 }

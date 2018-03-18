@@ -14,7 +14,6 @@ public class CardTest {
 
     private static String name = "Visa";
     private static String description = "Credit Card";
-    private static User user = new User("Lava", "Tahir", "lava@gmail.com","password");
     private static Card card;
     private static Category food = new Category("Food");
 
