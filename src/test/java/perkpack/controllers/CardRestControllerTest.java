@@ -130,9 +130,9 @@ public class CardRestControllerTest {
     public void removePerkFromCardTest() throws Exception
     {
         Card savedCard = cardRepository.save(validCard);
-        Category games = new Category("Games");
+        Category games = new Category("Games1");
         categoryRepository.save(games);
-        Perk p = new Perk("Perk1", "Description for perk", games);
+        Perk p = new Perk("Perk2", "Description for perk2", games);
         perkRepository.save(p);
 
         mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + p.getName()));
@@ -140,5 +140,35 @@ public class CardRestControllerTest {
         mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removePerk/" + p.getName())).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.perks", hasSize(0)));
+    }
+
+    @Test
+    public void addUserToCardTest() throws Exception
+    {
+        Card savedCard = cardRepository.save(validCard);
+        Category games = new Category("Games2");
+        categoryRepository.save(games);
+        User u = new User("Lava", "Tahir", "lava@gmail.com", "password");
+        userRepository.save(u);
+
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser/" + u.getId())).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.users[0].firstName", is(u.getFirstName())));
+    }
+
+    @Test
+    public void removeUserFromCardTest() throws Exception
+    {
+        Card savedCard = cardRepository.save(validCard);
+        Category games = new Category("Games3");
+        categoryRepository.save(games);
+        User u = new User("Lava", "Tahir", "lava@gmail.com", "password");
+        userRepository.save(u);
+
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser/" + u.getId()));
+
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removeUser/" + u.getId())).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.users", hasSize(0)));
     }
 }
