@@ -50,6 +50,28 @@ h2 {
 	font-weight: unset;
 }
 
+input[type="text"] {
+	border: 1px solid rgba(0, 0, 0, 0.03);
+	border-radius: 5em;
+	padding: 10px;
+	flex: 1;
+	font-family: 'Heebo', sans-serif;
+}
+
+	input[type="text"]:active,
+	input[type="text"]:focus
+	{
+		outline: unset;
+		border: 2px solid rgba(66, 244, 206, 1);
+		padding: 9px 10px;
+	}
+
+	input[type="text"]:active ~ i,
+	input[type="text"]:focus ~ i
+	{
+		opacity: 1;
+	}
+
 #header {
 	display: flex;
 	align-items: center;
@@ -121,7 +143,7 @@ h2 {
 				font-size: 2em;
 				flex: 0;
 				transform: translate(0, -0.5rem);
-				padding: 0 3px;
+				padding: 0 10px;
 			}
 
 		.footer-menu-item .button {
@@ -182,7 +204,7 @@ h2 {
 
 	.card .button {
 		background: linear-gradient(
-				to right,
+				45deg,
 				rgb(75, 211, 67),
 				rgb(66, 244, 206)
 			);
@@ -202,4 +224,21 @@ h2 {
 
 		.button:hover {
 			opacity: 0.8;
+		}
+
+	.section.search {
+		flex-direction: row;
+		align-items: center;
+		color: rgb(66, 244, 206);
+		position: relative;
+	}
+
+		.section.search i {
+			position: absolute;
+			left: 10px;
+			opacity: 0.5;
+		}
+
+		.section.search input[type="text"] {
+			padding-left: 40px;
 		}
