@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
@@ -56,11 +55,6 @@ public class PerkVote {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public void removeUser(User user)
-    {
-
     }
 
     @Override
