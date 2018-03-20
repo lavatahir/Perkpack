@@ -5,13 +5,13 @@ import org.hibernate.validator.constraints.Email;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -37,6 +37,10 @@ public class User {
     @Id
     @GeneratedValue
     private long id;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_vote")
+    private Set<PerkVote> votes = new HashSet<>();
 
     public User()
     {
@@ -83,6 +87,36 @@ public class User {
 
     public long getId() {
         return id;
+    }
+
+    public Set<PerkVote> getVotes() {
+        return votes;
+    }
+
+    public Optional<PerkVote> getVoteForPerk(PerkVote pendingVote)
+    {
+        if(this.votes.contains(pendingVote))
+            return Optional.of(pendingVote);
+
+        for(PerkVote vote: this.votes)
+        {
+            if(vote.getName().equals(pendingVote.getName()))
+            {
+                return Optional.of(vote);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public boolean removeVote(PerkVote vote)
+    {
+        return this.votes.remove(vote);
+    }
+
+    public boolean addVote(PerkVote vote)
+    {
+        return this.votes.add(vote);
     }
 
     @Override
