@@ -20,12 +20,15 @@ var applyUser = function(user) {
 };
 
 var authenticate = function() {
+	$('#app-loader').addClass('loading')
 	$.getJSON('/authenticate', function(data) {
+		$('#app-loader').removeClass('loading');
 		if (Object.keys(data).length === 0 && data.constructor === Object) {
 			applyUser(data)
 		}
 	})
 	.fail(function() {
+		$('#app-loader').removeClass('loading');
 		//applyUser({name: 'Vanja'});
 	});
 };
@@ -59,7 +62,6 @@ var goHome = function() {
 };
 
 var goAccount = function() {
-	authenticate();
 	activatePage('account');
 };
 
@@ -110,6 +112,10 @@ $(document).ready(function() {
 	$('#menu-account').on('click', function() {
 		goAccount();
 	});
+
+	$('#login-button').on('click', function() {
+		authenticate();
+	})
 
 	// perk
 
