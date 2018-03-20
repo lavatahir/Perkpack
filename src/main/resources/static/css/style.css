@@ -1,0 +1,187 @@
+/* GENERAL */
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Heebo', sans-serif;
+	margin: 0;
+	padding: 0;
+	color: rgba(0, 0, 0, 0.8);
+}
+
+.bg {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -100;
+}
+
+	#bg-color {
+		background: linear-gradient(
+				to right,
+				rgba(75, 211, 67, 1),
+				rgba(66, 244, 206, 1)
+			);
+		opacity: 0.1;
+	}
+
+	#bg-fade {
+		background: linear-gradient(
+				to top,
+				rgba(255, 255, 255, 1) 0%,
+				rgba(255, 255, 255, 0.8) 50%,
+				rgba(255, 255, 255, 0) 100%
+			);
+	}
+
+	#bg-white {
+		width: calc(100% - 20px);
+		height: calc(100% - 20px);
+		top: 10px;
+		left: 10px;
+		background: rgba(255, 255, 255, 1);
+	}
+
+h2 {
+	font-weight: unset;
+}
+
+#header {
+	display: flex;
+	align-items: center;
+	color: white;
+	justify-content: center;
+	margin-top: 30px;
+}
+
+	#title {
+		font-size: 0.8em;
+		text-transform: uppercase;
+		letter-spacing: 1em;
+		background: rgba(0, 0, 0, 1);
+		padding: 15px 20px;
+		padding-right: calc(20px - 1em);
+	}
+
+#main {
+	padding: 30px;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100px;
+	background:
+		linear-gradient(
+			to top,
+			rgba(75, 211, 67, 1) 0%,
+			rgba(66, 244, 206, 0.8) 33%,
+			rgba(66, 244, 206, 0.5) 50%,
+			rgba(255, 255, 255, 0) 100%
+		),
+		linear-gradient(
+			to top,
+			rgba(255, 255, 255, 1) 50%,
+			rgba(255, 255, 255, 0) 100%
+		);
+	padding-top: 40px;
+	color: white;
+}
+
+	#footer-inner {
+		width: 100%;
+		height: 60px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+		.footer-menu-item {
+			flex: 1;
+			display: flex;
+			justify-content: center;
+		}
+
+			.footer-menu-item .title {
+				letter-spacing: unset;
+				font-weight: bold;
+			}
+
+			.footer-menu-item.big {
+				font-size: 2em;
+				flex: 0;
+			}
+
+/* SECTIONS */
+
+.section {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+}
+
+	.section:last-child {
+		margin-bottom: unset;
+	}
+
+	.card {
+		background: white;
+		border: 1px solid rgba(0, 0, 0, 0.03);
+		padding: 20px;
+		position: relative;
+		margin-bottom: 30px;
+	}
+
+	.title {
+		font-size: 0.8em;
+		text-transform: uppercase;
+		font-weight: bold;
+		letter-spacing: 0.5em;
+		display: unset;
+	}
+
+		.title span {
+			position: relative;
+		}
+
+			.title span::after {
+				content: '';
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				width: calc(100% - 0.5em);
+				height: 0.7em;
+				background: rgb(66, 244, 206);
+				opacity: 0.5;
+			}
+
+	.card .button {
+		background: linear-gradient(
+				to right,
+				rgb(75, 211, 67),
+				rgb(66, 244, 206)
+			);
+		color: white;
+		position: absolute;
+		font-size: 0.7em;
+		padding: 5px 15px;
+		padding-left: calc(15px + 0.5em);
+		border-radius: 5em;
+		bottom: 0;
+		right: 20px;
+		transform: translate(0, 50%);
+		text-transform: uppercase;
+		letter-spacing: 0.5em;
+		cursor: default;
+	}
+
+		.button:hover {
+			opacity: 0.8;
+		}
