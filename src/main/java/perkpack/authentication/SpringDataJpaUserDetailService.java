@@ -6,22 +6,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import perkpack.models.User;
-import perkpack.repositories.UserRepository;
+import perkpack.models.Account;
+import perkpack.repositories.AccountRepository;
 
 @Component
 public class SpringDataJpaUserDetailService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private AccountRepository accountRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = this.userRepository.findByEmail(email);
+        Account account = this.accountRepository.findByEmail(email);
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
+                account.getEmail(),
+                account.getPassword(),
                 AuthorityUtils.NO_AUTHORITIES);
     }
 }

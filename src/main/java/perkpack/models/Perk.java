@@ -69,9 +69,9 @@ public class Perk {
         this.score = score;
     }
 
-    public boolean vote(PerkVote pendingVote, User voter)
+    public boolean vote(PerkVote pendingVote, Account voter)
     {
-        pendingVote.setUser(voter);
+        pendingVote.setAccount(voter);
         Optional<PerkVote> optionalPerkVote = voter.getVoteForPerk(pendingVote);
 
         if(optionalPerkVote.isPresent())
