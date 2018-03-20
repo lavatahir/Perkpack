@@ -2,6 +2,8 @@ package perkpack.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import perkpack.models.Card;
 import perkpack.models.Perk;
@@ -25,6 +27,13 @@ public class CardRestController {
         this.cardRepository = cardRepository;
         this.perkRepository = perkRepository;
         this.userRepository = userRepository;
+    }
+
+    private User getUser()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User)auth.getPrincipal()).getUsername();
+        return userRepository.findByEmail(email);
     }
 
 
@@ -163,7 +172,7 @@ public class CardRestController {
         return ResponseEntity.ok().body(card);
     }
 
-    /*
+
     @RequestMapping(value = "/{id}/removeUserFromCardByEmail/{userEmail}", method = RequestMethod.PATCH)
     public ResponseEntity<Card> removeUserFromCardByEmail(@PathVariable("id") Long id,
                                                    @PathVariable(value = "userEmail") String userEmail){
@@ -180,6 +189,6 @@ public class CardRestController {
 
         return ResponseEntity.ok().body(card);
     }
-    */
+
 
 }

@@ -3,6 +3,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 @Entity
 public class Card {
@@ -12,8 +13,8 @@ public class Card {
     private Long id;
     private String name;
     private String description;
-    @OneToMany
-    private Collection<User> users;
+    @ManyToMany(mappedBy = "cards", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<User> users;
     @OneToMany
     private Collection<Perk> perks;
 

@@ -154,6 +154,9 @@ public class CardRestControllerTest {
         mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser/" + u.getId())).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.users[0].firstName", is(u.getFirstName())));
+
+        Card testCard = cardRepository.findByName(savedCard.getName());
+
     }
 
     @Test
@@ -185,7 +188,7 @@ public class CardRestControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.users[0].firstName", is(u.getFirstName())));
     }
-
+    */
     @Test
     public void removeUserFromCardByEmailTest() throws Exception
     {
@@ -201,5 +204,5 @@ public class CardRestControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.users", hasSize(0)));
     }
-    */
+
 }

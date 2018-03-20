@@ -7,10 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class User {
@@ -40,6 +37,10 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_vote")
     private Set<PerkVote> votes = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "cards_and_users")
+    private Set<Card> cards = new HashSet<>();
 
     public User()
     {
@@ -118,6 +119,18 @@ public class User {
         return this.votes.add(vote);
     }
 
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public boolean addCard(Card cardToAdd) {
+        return this.cards.add(cardToAdd);
+    }
+
+    public boolean removeCard(Card cardToRemove){
+        return this.cards.remove(cardToRemove);
+    }
+
     @Override
     public boolean equals(Object o) {
         if(!(o instanceof User))
@@ -130,7 +143,6 @@ public class User {
         return this.email == user.email
                 && this.firstName == user.firstName
                 && this.lastName == user.lastName
-                && this.email == user.email
                 && this.id == user.id;
     }
 
