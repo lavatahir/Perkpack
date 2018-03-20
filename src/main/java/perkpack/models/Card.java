@@ -12,15 +12,15 @@ public class Card {
     private Long id;
     private String name;
     private String description;
-    @ManyToOne
-    private User creator;
+    @OneToMany
+    private Collection<User> users;
     @OneToMany
     private Collection<Perk> perks;
 
-    public Card(String name, String description, User creator){
+    public Card(String name, String description){
         this.name = name;
         this.description = description;
-        this.creator = creator;
+        this.users = new HashSet<>();
         this.perks = new HashSet<>();
     }
 
@@ -48,20 +48,26 @@ public class Card {
         this.description = description;
     }
 
-    public User getCreator() {
-        return creator;
+    public Collection<User> getUsers() {
+        return users;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void addUser(User u){
+        users.add(u);
+    }
+
+    public void removeUser(User user){
+        Iterator<User> itr = users.iterator();  // list is a Set<String>!
+        while (itr.hasNext()) {
+            User u = itr.next();
+            if (user.equals(u)) {
+                itr.remove();
+            }
+        }
     }
 
     public Collection<Perk> getPerks() {
         return perks;
-    }
-
-    public void setPerks(Collection<Perk> perks) {
-        this.perks = perks;
     }
 
     public void addPerk(Perk p){
@@ -88,7 +94,7 @@ public class Card {
 
         return c.getName().equalsIgnoreCase(this.getName()) &&
                 c.getDescription().equalsIgnoreCase(this.getDescription()) &&
-                c.creator.equals(this.creator) &&
+                c.users.equals(this.users) &&
                 c.perks.equals(this.perks);
     }
 }
