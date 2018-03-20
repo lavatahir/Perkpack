@@ -99,7 +99,7 @@ input[type="text"] {
 	bottom: 0;
 	left: 0;
 	width: 100%;
-	height: 110px;
+	height: 100px;
 	background:
 		linear-gradient(
 			to top,
@@ -110,10 +110,10 @@ input[type="text"] {
 		),
 		linear-gradient(
 			to top,
-			rgba(255, 255, 255, 1) 50%,
+			rgba(255, 255, 255, 1) 60%,
 			rgba(255, 255, 255, 0) 100%
 		);
-	padding-top: 50px;
+	padding-top: 40px;
 	color: white;
 }
 
@@ -132,6 +132,10 @@ input[type="text"] {
 			justify-content: center;
 			text-align: center;
 		}
+
+			.footer-menu-item:hover {
+				opacity: 0.5;
+			}
 
 			.footer-menu-item .title {
 				letter-spacing: 0.2em;
@@ -222,7 +226,7 @@ input[type="text"] {
 		cursor: default;
 	}
 
-		.button:hover {
+		.card .button:hover {
 			opacity: 0.8;
 		}
 
