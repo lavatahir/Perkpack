@@ -51,7 +51,7 @@ h2 {
 	font-weight: unset;
 }
 
-input[type="text"] {
+.text-input {
 	border: 1px solid rgba(0, 0, 0, 0.03);
 	border-radius: 5em;
 	padding: 10px 1em;
@@ -60,18 +60,22 @@ input[type="text"] {
 	font-size: 1em;
 }
 
-	input[type="text"]:active,
-	input[type="text"]:focus
+	.text-input:active,
+	.text-input:focus
 	{
 		outline: unset;
 		border: 2px solid rgba(66, 244, 206, 1);
 		padding: 9px 1em;
 	}
 
-	input[type="text"]:active ~ i,
-	input[type="text"]:focus ~ i
+	.text-input:active ~ i,
+	.text-input:focus ~ i
 	{
 		opacity: 1;
+	}
+
+	.text-input:invalid {
+		border-color: red;
 	}
 
 #header {
@@ -92,13 +96,13 @@ input[type="text"] {
 	}
 
 .page {
-	padding: 30px;
-	padding-bottom: 150px;
-	display: none;
+	padding: 30px !important;
+	padding-bottom: 150px !important;
+	display: none !important;
 }
 
 	.page.active {
-		display: block;
+		display: block !important;
 	}
 
 #footer {
@@ -142,7 +146,7 @@ input[type="text"] {
 			align-items: center;
 			text-align: center;
 			height: 100%;
-			border-bottom: 2px solid rgba(255, 255, 255, 0);
+			border-bottom: 3px solid rgba(255, 255, 255, 0);
 		}
 
 			.footer-menu-item.active {
@@ -218,7 +222,7 @@ input[type="text"] {
 		text-transform: uppercase;
 		font-weight: bold;
 		letter-spacing: 0.5em;
-		display: unset;
+		display: block;
 	}
 
 		.title span {
@@ -239,6 +243,27 @@ input[type="text"] {
 		.main.title {
 			font-size: 1.2em;
 		}
+
+	.subtitle {
+		font-size: 1.2em;
+		color: rgb(66, 244, 206);
+		display: block;
+	}
+
+		.subtitle span {
+			position: relative;
+		}
+
+			.subtitle span::after {
+				content: '';
+				position: absolute;
+				left: 0;
+				bottom: 0.25em;
+				width: 100%;
+				height: 0.3em;
+				background: black;
+				opacity: 0.067;
+			}
 
 	.card .button {
 		background: linear-gradient(
@@ -264,25 +289,51 @@ input[type="text"] {
 			opacity: 0.67;
 		}
 
-	.section.search {
+		.card .big.button {
+			font-size: unset;
+			letter-spacing: unset;
+			width: 3em;
+			height: 3em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: unset;
+			padding-left: 0.08em;
+		}
+
+	.section.input {
 		flex-direction: row;
 		align-items: center;
-		color: rgb(66, 244, 206);
 		position: relative;
 	}
 
-		.section.search i {
+		.section.input .text-input {
+			width: 0;
+		}
+
+		.section.input .input-label {
+			margin-right: 10px;
+		}
+
+		.section.input .input-container {
+			position: relative;
+			flex: 1;
+			display: flex;
+			align-items: center;
+		}
+
+		.section.input i {
 			position: absolute;
 			left: 0.67em;
 			opacity: 0.5;
 		}
 
-		.section.search input[type="text"] {
+		.section.input .text-input {
 			padding-left: 2.5em;
 		}
 
-			.section.search input[type="text"]:focus,
-			.section.search input[type="text"]:active
+			.section.input .text-input:focus,
+			.section.input .text-input:active
 			{
 				padding-left: calc(2.5em - 1px);
 			}

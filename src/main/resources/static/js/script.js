@@ -26,22 +26,26 @@ var authenticate = function() {
 		}
 	})
 	.fail(function() {
-		applyUser({name: 'Vanja'});
 	});
 };
 
 /* ---------- PAGES ---------- */
 
-var activatePage = function(name) {
-	currentPage = name;
+var activatePage = function(page, menu) {
+	if (menu === undefined) menu = page;
+
+	$('.footer-menu-item.active').removeClass('active');
+	$('#menu-'+menu).addClass('active');
+
+	currentPage = page;
 	$('.page.active').removeClass('active');
-	$('#page-'+name).addClass('active');
+	$('#page-'+page).addClass('active');
 };
 
 /* ---------- FOOTER ---------- */
 
 var goSearch = function() {
-	activatePage('home');
+	activatePage('home', 'search');
 	$('#search-bar').focus();
 };
 
@@ -73,16 +77,14 @@ $(document).ready(function() {
 	// footer
 
 	$('.footer-menu-item').on('click', function() {
-		$('.footer-menu-item.active').removeClass('active');
-		$(this).addClass('active');
+		
 	});
 
 	// search
 
 	$('#search-bar').on('blur', function() {
 		if (currentPage === 'home') {
-			$('.footer-menu-item.active').removeClass('active');
-			$('#menu-home').addClass('active');
+			goHome();
 		}
 	});
 

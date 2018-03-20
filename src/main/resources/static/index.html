@@ -26,8 +26,8 @@
 		</span>
 	</div>
 	<div class="page active" id="page-home">
-		<div class="section search">
-			<input type="text" id="search-bar"/>
+		<div class="section input">
+			<input type="text" class="text-input" id="search-bar" />
 			<i class="material-icons">search</i>
 		</div>
 		<div class="section card">
@@ -53,24 +53,51 @@
 			</div>
 		</div>
 	</div>
-	<div class="page" id="page-search">
+	<div class="page section" id="page-search">
 		<div class="section main title">
 			<span>x results for x</span>
 		</div>
 	</div>
-	<div class="page" id="page-discover">
+	<div class="page section" id="page-discover">
 		<div class="section main title">
 			<span>Discover</span>
 		</div>
 	</div>
-	<div class="page" id="page-account">
-		<div class="section main title">
-			<span>Name</span>
+	<div class="page section" id="page-account">
+		<div class="section card">
+			<div class="section main title">
+				<span>Log in</span>
+			</div>
+			<div class="section input">
+				<div class="input-label">Email</div>
+				<div class="input-container">
+					<input type="email" class="text-input" id="email" />
+					<i class="material-icons">person_outline</i>
+				</div>
+			</div>
+			<div class="section input">
+				<div class="input-label">Password</div>
+				<div class="input-container">
+					<input type="password" class="text-input" id="password" />
+					<i class="material-icons">security</i>
+				</div>
+			</div>
+			<div class="section big button">
+				<i class="material-icons">send</i>
+			</div>
+		</div>
+		<div class="section">
+			<div class="section subtitle">
+				<span>Don't have an account yet?</span>
+			</div>
+			<div class="section">
+				Sign up now
+			</div>
 		</div>
 	</div>
-	<div class="page" id="page-perk">
+	<div class="page section" id="page-perk">
 		<div class="section main title">
-			<span>Create Perk</span>
+			<span>Add perk</span>
 		</div>
 	</div>
 	<div id="footer">
@@ -112,9 +139,7 @@
 			</div>
 			<div class="footer-menu-item" id="menu-perk">
 				<div class="button">
-					<div class="title">
-						<i class="material-icons">library_add</i>
-					</div>
+					<i class="material-icons">library_add</i>
 				</div>
 			</div>
 		</div>
