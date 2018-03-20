@@ -10,5 +10,5 @@ PerkPack is a perk/card organizer.
 - User creation
 - Card creation
 
-The idea is that a account signs up, creating a User object. Users can then add cards to their account. If the card doesn't exit, 
-the account can then add perks to the card.
+The idea is that a user signs up, creating a User object. Users can then add cards to their account. If the card doesn't exit, 
+the user can then add perks to the card.
