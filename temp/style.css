@@ -1,0 +1,87 @@
+/* GENERAL */
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Heebo', sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+h2 {
+	font-weight: unset;
+}
+
+#header {
+	width: 100%;
+	height: 50px;
+	padding: 0 20px;
+	display: flex;
+	align-items: center;
+	color: rgb(75, 211, 67);
+}
+
+	#title {
+		font-size: 0.8em;
+		text-transform: uppercase;
+		font-weight: bold;
+		letter-spacing: 1em;
+	}
+
+#main {
+	padding: 20px;
+}
+
+/* SECTIONS */
+
+.section {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+}
+
+	.section:last-child {
+		margin-bottom: unset;
+	}
+
+	.card {
+		background: white;
+		border-radius: 10px;
+		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05);
+		padding: 20px;
+		position: relative;
+		margin-bottom: 30px;
+	}
+
+	.title {
+		font-size: 0.6em;
+		text-transform: uppercase;
+		font-weight: bold;
+		letter-spacing: 0.5em;
+	}
+
+	.card .button {
+		background: linear-gradient(
+				to right,
+				rgb(75, 211, 67),
+				rgb(66, 244, 206)
+			);
+		color: white;
+		position: absolute;
+		font-size: 0.7em;
+		padding: 7px 20px;
+		padding-left: calc(20px + 0.5em);
+		border-radius: 5em;
+		bottom: 0;
+		right: 20px;
+		transform: translate(0, 50%);
+		text-transform: uppercase;
+		letter-spacing: 0.5em;
+		cursor: default;
+	}
+
+		.button:hover {
+			opacity: 0.8;
+		}
