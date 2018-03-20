@@ -20,7 +20,7 @@ var applyUser = function(user) {
 };
 
 var authenticate = function() {
-	$('#app-loader').addClass('loading')
+	$('#app-loader').addClass('loading');
 	$.getJSON('/authenticate', function(data) {
 		$('#app-loader').removeClass('loading');
 		if (Object.keys(data).length === 0 && data.constructor === Object) {
@@ -30,6 +30,28 @@ var authenticate = function() {
 	.fail(function() {
 		$('#app-loader').removeClass('loading');
 		//applyUser({name: 'Vanja'});
+	});
+};
+
+var logIn = function(username, password) {
+	$.ajax({
+		type: 'POST',
+		url: '/login',
+		data: $.param({
+			username: username,
+			password: password
+		}),
+		contentType: 'application/x-www-form-urlencoded'
+	})
+	.done(function(data) {
+		console.log('login attempt went through, returned:');
+		console.log(data);
+		$('#app-loader').removeClass('loading');
+		authenticate();
+	})
+	.fail(function() {
+		$('#app-loader').removeClass('loading');
+		console.log('login attempt failed');
 	});
 };
 
@@ -114,7 +136,9 @@ $(document).ready(function() {
 	});
 
 	$('#login-button').on('click', function() {
-		authenticate();
+		if ($('#email').val().length > 0 && $('#password').val().length > 0) {
+			logIn($('#email').val(), $('#password').val());
+		}
 	})
 
 	// perk
