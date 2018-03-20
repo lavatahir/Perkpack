@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -60,7 +61,7 @@ public class CardRestControllerTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
-    private User user = new User("Lava", "Tahir", "lavatahir@gmail.com","password");
+    private static User user ;
 
 
     private Card validCard = new Card("American Express", "Credit Card");
@@ -68,7 +69,8 @@ public class CardRestControllerTest {
     @Before
     public void setup()
     {
-
+        user = new User("Lava", "Tahir", "lava@gmail.com", "password");
+        userRepository.save(user);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
@@ -143,64 +145,25 @@ public class CardRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "lava@gmail.com", password = "password")
     public void addUserToCardTest() throws Exception
     {
         Card savedCard = cardRepository.save(validCard);
-        Category games = new Category("Games2");
-        categoryRepository.save(games);
-        User u = new User("Lava", "Tahir", "lava@gmail.com", "password");
-        userRepository.save(u);
-
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser/" + u.getId())).
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser")).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.users[0].firstName", is(u.getFirstName())));
+                andExpect(jsonPath("$.users[0].firstName", is(user.getFirstName())));
         Card card = cardRepository.findOne(validCard.getId());
     }
 
     @Test
+    @WithMockUser(username = "lava@gmail.com", password = "password")
     public void removeUserFromCardTest() throws Exception
     {
         Card savedCard = cardRepository.save(validCard);
-        Category games = new Category("Games3");
-        categoryRepository.save(games);
-        User u = new User("Lava", "Tahir", "lava@gmail.com", "password");
-        userRepository.save(u);
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser"));
 
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser/" + u.getId()));
-
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removeUser/" + u.getId())).
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removeUser/")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.users", hasSize(0)));
     }
-    /*
-    @Test
-    public void addUserToCardByEmailTest() throws Exception
-    {
-        Card savedCard = cardRepository.save(validCard);
-        Category games = new Category("Games4");
-        categoryRepository.save(games);
-        User u = new User("Lava", "Tahir", "lava@gmail.com", "password");
-        userRepository.save(u);
-
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUserToCardByEmail/" + u.getEmail())).
-                andExpect(status().isOk()).
-                andExpect(jsonPath("$.users[0].firstName", is(u.getFirstName())));
-    }
-    */
-    @Test
-    public void removeUserFromCardByEmailTest() throws Exception
-    {
-        Card savedCard = cardRepository.save(validCard);
-        Category games = new Category("Games5");
-        categoryRepository.save(games);
-        User u = new User("Lava", "Tahir", "lava@gmail.com", "password");
-        userRepository.save(u);
-
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser/" + u.getId()));
-
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removeUserByEmail/" + u.getEmail())).
-                andExpect(status().isOk()).
-                andExpect(jsonPath("$.users", hasSize(0)));
-    }
-
 }

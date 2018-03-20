@@ -119,11 +119,10 @@ public class CardRestController {
         return ResponseEntity.ok().body(card);
     }
 
-    @RequestMapping(value = "/{id}/addUser/{userID}", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> addUserToCard(@PathVariable("id") Long id,
-                                              @PathVariable(value = "userID") Long userID){
+    @RequestMapping(value = "/{id}/addUser", method = RequestMethod.PATCH)
+    public ResponseEntity<Card> addUserToCard(@PathVariable("id") Long id){
         Card c = cardRepository.findOne(id);
-        User userToAdd = userRepository.findOne(userID);
+        User userToAdd = getUser();
 
         if(c == null || userToAdd == null){
             return ResponseEntity.badRequest().build();
@@ -135,12 +134,10 @@ public class CardRestController {
         return ResponseEntity.ok().body(card);
     }
 
-    @RequestMapping(value = "/{id}/removeUser/{userID}", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> removeUserFromCard(@PathVariable("id") Long id,
-                                                   @PathVariable(value = "userID") Long userID){
+    @RequestMapping(value = "/{id}/removeUser", method = RequestMethod.PATCH)
+    public ResponseEntity<Card> removeUserFromCard(@PathVariable("id") Long id){
         Card c = cardRepository.findOne(id);
-
-        User userToRemove = userRepository.findOne(userID);
+        User userToRemove = getUser();
 
         if(c == null || userToRemove == null){
             return ResponseEntity.badRequest().build();
