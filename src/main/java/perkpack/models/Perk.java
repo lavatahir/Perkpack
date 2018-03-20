@@ -2,6 +2,7 @@ package perkpack.models;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Optional;
 
 @Entity
 public class Perk {
@@ -19,9 +20,6 @@ public class Perk {
 
     @ManyToOne
     private Category category;
-
-    @ManyToOne
-    private User creator;
 
     public Perk () {
 
@@ -69,6 +67,41 @@ public class Perk {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public boolean vote(PerkVote pendingVote, User voter)
+    {
+        pendingVote.setUser(voter);
+        Optional<PerkVote> optionalPerkVote = voter.getVoteForPerk(pendingVote);
+
+        if(optionalPerkVote.isPresent())
+        {
+            PerkVote castedVote = optionalPerkVote.get();
+            if(castedVote.getVote() == pendingVote.getVote())
+            {
+                return false;
+            }
+            else if(pendingVote.getVote() == 0)
+            {
+                // reverse the previous vote
+                this.score += (castedVote.getVote() * -1);
+
+            }
+            else {
+                if(castedVote.getVote() == 0)
+                    this.score += pendingVote.getVote();
+                else
+                    this.score += pendingVote.getVote() * 2;
+
+            }
+            voter.removeVote(castedVote);
+        }
+        else {
+            this.score += pendingVote.getVote();
+        }
+
+        voter.addVote(pendingVote);
+        return true;
     }
 
     public void setCategory(Category category) {

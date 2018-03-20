@@ -41,6 +41,7 @@ $(document).ready(function() {
 
     function modifyScore(perk, button) {
         var score = parseInt($(perk).find('td.score')[0].innerHTML);
+        var vote = 0;
         let eventSource = $($(perk).context);
         let perkName = $(perk).find('td.name')[0].innerHTML;
 
@@ -54,19 +55,22 @@ $(document).ready(function() {
             }
 
             $(button).removeClass('undo');
+            vote = 0;
         } else {
             if (eventSource.hasClass('upvote')) {
                 let downvoteButton = $(perk).find('td.downcell').find('input');
                 score++;
-
+                vote = 1;
                 if (downvoteButton.hasClass('undo')) {
                     score++;
                     downvoteButton.removeClass('undo');
                     downvoteButton.prop("value", "Downvote");
+
                 }
             } else {
                 let upvoteButton = $(perk).find('td.upcell').find('input');
                 score--;
+                vote = -1;
 
                 if (upvoteButton.hasClass('undo')) {
                     score--;
@@ -81,15 +85,15 @@ $(document).ready(function() {
 
         $(perk).find('td.score')[0].innerHTML = score;
 
-        updateServerScore(perkName, score);
+        updateServerScore(perkName, vote);
     }
 
-    function updateServerScore(perkName, score) {
+    function updateServerScore(perkName, vote) {
         $.ajax({
             method: "POST",
-            url: "/score",
+            url: "/perks/vote",
             contentType: "application/json",
-            data: '{"name": "' + perkName + '", "score": "' + score + '"}'
+            data: '{"name": "' + perkName + '", "vote": "' + vote + '"}'
         }).done(function(perk) {
         });
     }
