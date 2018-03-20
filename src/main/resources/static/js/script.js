@@ -26,6 +26,7 @@ var authenticate = function() {
 		}
 	})
 	.fail(function() {
+		//applyUser({name: 'Vanja'});
 	});
 };
 
