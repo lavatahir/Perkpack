@@ -130,30 +130,10 @@ public class CardRestController {
         }
 
         c.addUser(userToAdd);
-
         Card card = cardRepository.save(c);
 
         return ResponseEntity.ok().body(card);
     }
-
-    /*
-    @RequestMapping(value = "/{id}/addUserToCardByEmail/{userEmail}", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> addUserToCardByEmail(@PathVariable("id") Long id,
-                                              @PathVariable(value = "userEmail") String userEmail){
-        Card c = cardRepository.findOne(id);
-        User userToAdd = userRepository.findByEmail(userEmail);
-
-        if(c == null || userToAdd == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        c.addUser(userToAdd);
-
-        Card card = cardRepository.save(c);
-
-        return ResponseEntity.ok().body(card);
-    }
-    */
 
     @RequestMapping(value = "/{id}/removeUser/{userID}", method = RequestMethod.PATCH)
     public ResponseEntity<Card> removeUserFromCard(@PathVariable("id") Long id,
@@ -171,24 +151,5 @@ public class CardRestController {
 
         return ResponseEntity.ok().body(card);
     }
-
-
-    @RequestMapping(value = "/{id}/removeUserFromCardByEmail/{userEmail}", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> removeUserFromCardByEmail(@PathVariable("id") Long id,
-                                                   @PathVariable(value = "userEmail") String userEmail){
-        Card c = cardRepository.findOne(id);
-
-        User userToRemove = userRepository.findByEmail(userEmail);
-
-        if(c == null || userToRemove == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        c.removeUser(userToRemove);
-        Card card = cardRepository.save(c);
-
-        return ResponseEntity.ok().body(card);
-    }
-
 
 }

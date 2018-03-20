@@ -1,5 +1,6 @@
 package perkpack.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,8 +39,8 @@ public class User {
     @JoinColumn(name = "user_vote")
     private Set<PerkVote> votes = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "cards_and_users")
+    @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     private Set<Card> cards = new HashSet<>();
 
     public User()

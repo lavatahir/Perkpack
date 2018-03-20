@@ -154,9 +154,7 @@ public class CardRestControllerTest {
         mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser/" + u.getId())).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.users[0].firstName", is(u.getFirstName())));
-
-        Card testCard = cardRepository.findByName(savedCard.getName());
-
+        Card card = cardRepository.findOne(validCard.getId());
     }
 
     @Test

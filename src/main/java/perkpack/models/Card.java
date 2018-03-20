@@ -1,9 +1,6 @@
 package perkpack.models;
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Card {
@@ -13,16 +10,17 @@ public class Card {
     private Long id;
     private String name;
     private String description;
-    @ManyToMany(mappedBy = "cards", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<User> users;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable
+    private Set<User> users = new HashSet<>();
+
     @OneToMany
-    private Collection<Perk> perks;
+    private Collection<Perk> perks = new HashSet<>();
 
     public Card(String name, String description){
         this.name = name;
         this.description = description;
-        this.users = new HashSet<>();
-        this.perks = new HashSet<>();
     }
 
     //Dummy constructor for json
@@ -97,5 +95,10 @@ public class Card {
                 c.getDescription().equalsIgnoreCase(this.getDescription()) &&
                 c.users.equals(this.users) &&
                 c.perks.equals(this.perks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.description, this.name, this.perks, this.users);
     }
 }
