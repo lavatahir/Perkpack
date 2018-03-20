@@ -171,4 +171,35 @@ public class CardRestControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.users", hasSize(0)));
     }
+    /*
+    @Test
+    public void addUserToCardByEmailTest() throws Exception
+    {
+        Card savedCard = cardRepository.save(validCard);
+        Category games = new Category("Games4");
+        categoryRepository.save(games);
+        User u = new User("Lava", "Tahir", "lava@gmail.com", "password");
+        userRepository.save(u);
+
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUserToCardByEmail/" + u.getEmail())).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.users[0].firstName", is(u.getFirstName())));
+    }
+
+    @Test
+    public void removeUserFromCardByEmailTest() throws Exception
+    {
+        Card savedCard = cardRepository.save(validCard);
+        Category games = new Category("Games5");
+        categoryRepository.save(games);
+        User u = new User("Lava", "Tahir", "lava@gmail.com", "password");
+        userRepository.save(u);
+
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser/" + u.getId()));
+
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removeUserByEmail/" + u.getEmail())).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.users", hasSize(0)));
+    }
+    */
 }
