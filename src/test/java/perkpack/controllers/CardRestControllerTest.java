@@ -3,6 +3,7 @@ package perkpack.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,22 +63,35 @@ public class CardRestControllerTest {
     @Autowired
     private CategoryRepository categoryRepository;
     private static User user ;
-
-
+    private static Perk perk;
+    private static Category games;
     private Card validCard = new Card("American Express", "Credit Card");
 
     @Before
     public void setup()
     {
         user = new User("Lava", "Tahir", "lava@gmail.com", "password");
-        userRepository.save(user);
+        user = userRepository.save(user);
+
+        games = new Category("Games1");
+        games = categoryRepository.save(games);
+
+        perk = new Perk("Perk1", "Description for perk", games);
+        perk = perkRepository.save(perk);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @After
+    public void tearDown()
+    {
+        userRepository.delete(user);
+        perkRepository.delete(perk);
+        categoryRepository.delete(games);
     }
 
     @Test
     public void createValidCardTest() throws Exception
     {
-
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String userJson = ow.writeValueAsString(validCard);
 
@@ -111,35 +125,27 @@ public class CardRestControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.name", is(newName))).
                 andExpect(jsonPath("$.description", is(newDescription)));
-
     }
 
     @Test
+    @WithMockUser(username = "lava@gmail.com", password = "password")
     public void addPerkToCardTest() throws Exception
     {
         Card savedCard = cardRepository.save(validCard);
-        Category games = new Category("Games");
-        categoryRepository.save(games);
-        Perk p = new Perk("Perk1", "Description for perk", games);
-        perkRepository.save(p);
-
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + p.getName())).
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + perk.getName())).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.perks[0].name", is(p.getName())));
+                andExpect(jsonPath("$.perks[0].name", is(perk.getName())));
     }
 
     @Test
+    @WithMockUser(username = "lava@gmail.com", password = "password")
     public void removePerkFromCardTest() throws Exception
     {
         Card savedCard = cardRepository.save(validCard);
-        Category games = new Category("Games1");
-        categoryRepository.save(games);
-        Perk p = new Perk("Perk2", "Description for perk2", games);
-        perkRepository.save(p);
 
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + p.getName()));
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + perk.getName()));
 
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removePerk/" + p.getName())).
+        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removePerk/" + perk.getName())).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.perks", hasSize(0)));
     }
@@ -152,7 +158,6 @@ public class CardRestControllerTest {
         mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.users[0].firstName", is(user.getFirstName())));
-        Card card = cardRepository.findOne(validCard.getId());
     }
 
     @Test

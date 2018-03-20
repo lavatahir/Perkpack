@@ -95,12 +95,12 @@ public class PerkRestController {
         Perk updatedPerk = perkRepository.save(perkInRepository);
 
         return ResponseEntity.ok().body(updatedPerk);
-    }
+        }
 
-    private User getUser()
-    {
+private User getUser()
+        {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = ((org.springframework.security.core.userdetails.User)auth.getPrincipal()).getUsername();
         return userRepository.findByEmail(email);
-    }
-}
+        }
+        }

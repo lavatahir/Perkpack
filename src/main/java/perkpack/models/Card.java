@@ -16,6 +16,7 @@ public class Card {
     private Set<User> users = new HashSet<>();
 
     @OneToMany
+    @JoinColumn(name = "perk_id")
     private Collection<Perk> perks = new HashSet<>();
 
     public Card(String name, String description){
