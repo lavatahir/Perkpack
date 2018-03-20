@@ -37,6 +37,9 @@ public class PerkRestController {
     }
 
     private void setupCategories() {
+        /*
+        Need to fix for Postgres, the second time this executes,
+        a crash happens (because the categories already exist)
         Path file = Paths.get("./categories.txt");
 
         try (InputStream in = new BufferedInputStream(Files.newInputStream(file))) {
@@ -49,7 +52,7 @@ public class PerkRestController {
             }
         } catch (IOException e) {
             System.out.println(e.toString());
-        }
+        }*/
     }
 
     @RequestMapping(value = "/perks/vote", method = RequestMethod.POST)

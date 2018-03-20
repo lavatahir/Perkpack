@@ -112,7 +112,6 @@ public class CardRestControllerTest {
 
     }
 
-  /*  These tests fail with Postgres. Need to figure out why
     @Test
     public void addPerkToCardTest() throws Exception
     {
@@ -142,7 +141,6 @@ public class CardRestControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.perks", hasSize(0)));
     }
-    */
 
     @Test
     public void addUserToCardTest() throws Exception
