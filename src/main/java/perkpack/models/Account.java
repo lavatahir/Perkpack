@@ -39,7 +39,7 @@ public class Account {
     @JoinColumn(name = "user_vote")
     private Set<PerkVote> votes = new HashSet<>();
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "accounts")
     @JsonIgnore
     private Set<Card> cards = new HashSet<>();
 

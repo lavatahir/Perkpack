@@ -150,7 +150,7 @@ public class CardRestControllerTest {
         user2 = accountRepository.save(user2);
         mockMvc.perform(patch("/cards/"+card.getId() + "/addUser")).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.users[0].firstName", is(user2.getFirstName())));
+                andExpect(jsonPath("$.accounts[0].firstName", is(user2.getFirstName())));
     }
     @Test
     @WithMockUser(username = "guy@gmail.com", password = "password")
@@ -160,7 +160,7 @@ public class CardRestControllerTest {
         user3 = accountRepository.save(user3);
         mockMvc.perform(patch("/cards/"+card.getId() + "/addUser"));
 
-        mockMvc.perform(patch("/cards/"+card.getId() + "/removeUser/" + user3.getId())).
+        mockMvc.perform(patch("/cards/"+card.getId() + "/removeUser/")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.accounts", hasSize(0)));
     }
