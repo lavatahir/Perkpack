@@ -13,14 +13,14 @@ public class Card {
     private String name;
     private String description;
     @OneToMany
-    private Collection<User> users;
+    private Collection<Account> accounts;
     @OneToMany
     private Collection<Perk> perks;
 
     public Card(String name, String description){
         this.name = name;
         this.description = description;
-        this.users = new HashSet<>();
+        this.accounts = new HashSet<>();
         this.perks = new HashSet<>();
     }
 
@@ -48,19 +48,19 @@ public class Card {
         this.description = description;
     }
 
-    public Collection<User> getUsers() {
-        return users;
+    public Collection<Account> getAccounts() {
+        return accounts;
     }
 
-    public void addUser(User u){
-        users.add(u);
+    public void addUser(Account u){
+        accounts.add(u);
     }
 
-    public void removeUser(User user){
-        Iterator<User> itr = users.iterator();  // list is a Set<String>!
+    public void removeUser(Account account){
+        Iterator<Account> itr = accounts.iterator();  // list is a Set<String>!
         while (itr.hasNext()) {
-            User u = itr.next();
-            if (user.equals(u)) {
+            Account u = itr.next();
+            if (account.equals(u)) {
                 itr.remove();
             }
         }
@@ -94,7 +94,7 @@ public class Card {
 
         return c.getName().equalsIgnoreCase(this.getName()) &&
                 c.getDescription().equalsIgnoreCase(this.getDescription()) &&
-                c.users.equals(this.users) &&
+                c.accounts.equals(this.accounts) &&
                 c.perks.equals(this.perks);
     }
 }

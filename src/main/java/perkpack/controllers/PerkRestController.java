@@ -6,14 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import perkpack.models.Account;
 import perkpack.models.Category;
 import perkpack.models.Perk;
 import perkpack.models.PerkVote;
-import perkpack.models.User;
+import perkpack.repositories.AccountRepository;
 import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
 import perkpack.repositories.PerkVoteRepository;
-import perkpack.repositories.UserRepository;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -24,19 +24,23 @@ import java.nio.file.Paths;
 public class PerkRestController {
     private final PerkRepository perkRepository;
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final PerkVoteRepository perkVoteRepository;
 
     @Autowired
-    public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository, UserRepository userRepository, PerkVoteRepository perkVoteRepository) {
+    public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository, AccountRepository accountRepository, PerkVoteRepository perkVoteRepository) {
         this.perkRepository = perkRepository;
-        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
         this.categoryRepository = categoryRepository;
         this.perkVoteRepository = perkVoteRepository;
         this.setupCategories();
     }
 
     private void setupCategories() {
+        if (categoryRepository.count() != 0) {
+            return;
+        }
+
         Path file = Paths.get("./categories.txt");
 
         try (InputStream in = new BufferedInputStream(Files.newInputStream(file))) {
@@ -56,23 +60,23 @@ public class PerkRestController {
     @ResponseBody
     public ResponseEntity changeScore(@RequestBody PerkVote perkVote) {
         Perk perkInRepository = perkRepository.findByName(perkVote.getName());
-        User user = getUser();
+        Account account = getUser();
 
         if (perkInRepository == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        if(perkInRepository.vote(perkVote, user))
+        if(perkInRepository.vote(perkVote, account))
         {
             perkVoteRepository.save(perkVote);
-            userRepository.save(user);
+            accountRepository.save(account);
             return ResponseEntity.ok().body(perkRepository.save(perkInRepository));
 
         }
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body("User already voted");
+                .body("Account already voted");
     }
 
     @RequestMapping(value = "/perkedit", method = RequestMethod.PATCH)
@@ -97,10 +101,10 @@ public class PerkRestController {
         return ResponseEntity.ok().body(updatedPerk);
     }
 
-    private User getUser()
+    private Account getUser()
     {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = ((org.springframework.security.core.userdetails.User)auth.getPrincipal()).getUsername();
-        return userRepository.findByEmail(email);
+        return accountRepository.findByEmail(email);
     }
 }
