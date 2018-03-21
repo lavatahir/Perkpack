@@ -27,8 +27,6 @@ import perkpack.repositories.PerkRepository;
 import perkpack.repositories.UserRepository;
 
 import java.nio.charset.Charset;
-
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -62,10 +60,12 @@ public class CardRestControllerTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
-    private static User user ;
+    private static User user;
+    private static User user2;
+    private static User user3;
     private static Perk perk;
     private static Category games;
-    private Card validCard = new Card("American Express", "Credit Card");
+    private static Card card;
 
     @Before
     public void setup()
@@ -78,13 +78,16 @@ public class CardRestControllerTest {
 
         perk = new Perk("Perk1", "Description for perk", games);
         perk = perkRepository.save(perk);
+
+        card = new Card("American Express", "Credit Card");
+        card = cardRepository.save(card);
+
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @After
     public void tearDown()
     {
-        userRepository.delete(user);
         perkRepository.delete(perk);
         categoryRepository.delete(games);
     }
@@ -93,81 +96,71 @@ public class CardRestControllerTest {
     public void createValidCardTest() throws Exception
     {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String userJson = ow.writeValueAsString(validCard);
+        String userJson = ow.writeValueAsString(card);
 
         mockMvc.perform(post("/cards").
                 contentType(jsonContentType).
                 content(userJson)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.name", is(validCard.getName()))).
-                andExpect(jsonPath("$.description", is(validCard.getDescription())));
+                andExpect(jsonPath("$.name", is(card.getName()))).
+                andExpect(jsonPath("$.description", is(card.getDescription())));
     }
-
     @Test
     public void getValidCardTest() throws Exception
     {
-        Card savedCard = cardRepository.save(validCard);
-
-        mockMvc.perform(get("/cards/" + savedCard.getId())).
+        mockMvc.perform(get("/cards/" + card.getId())).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.name", is(savedCard.getName()))).
-                andExpect(jsonPath("$.description", is(savedCard.getDescription())));
+                andExpect(jsonPath("$.name", is(card.getName()))).
+                andExpect(jsonPath("$.description", is(card.getDescription())));
     }
-
     @Test
     public void editValidCardTest() throws Exception
     {
-        Card savedCard = cardRepository.save(validCard);
         String newName = "Visa";
         String newDescription = "A Better Way";
 
-        mockMvc.perform(patch("/cards/" + savedCard.getId() + "?newName=" + newName + "&newDescription=" + newDescription)).
+        mockMvc.perform(patch("/cards/" + card.getId() + "?newName=" + newName + "&newDescription=" + newDescription)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.name", is(newName))).
                 andExpect(jsonPath("$.description", is(newDescription)));
     }
-
     @Test
     @WithMockUser(username = "lava@gmail.com", password = "password")
     public void addPerkToCardTest() throws Exception
     {
-        Card savedCard = cardRepository.save(validCard);
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + perk.getName())).
+        mockMvc.perform(patch("/cards/"+card.getId() + "/addPerk/" + perk.getName())).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.perks[0].name", is(perk.getName())));
     }
-
     @Test
     @WithMockUser(username = "lava@gmail.com", password = "password")
     public void removePerkFromCardTest() throws Exception
     {
-        Card savedCard = cardRepository.save(validCard);
+        mockMvc.perform(patch("/cards/"+card.getId() + "/addPerk/" + perk.getName()));
 
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addPerk/" + perk.getName()));
-
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removePerk/" + perk.getName())).
+        mockMvc.perform(patch("/cards/"+card.getId() + "/removePerk/" + perk.getName())).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.perks", hasSize(0)));
     }
-
     @Test
-    @WithMockUser(username = "lava@gmail.com", password = "password")
+    @WithMockUser(username = "ali@gmail.com", password = "password")
     public void addUserToCardTest() throws Exception
     {
-        Card savedCard = cardRepository.save(validCard);
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser")).
+        user2 = new User("Ali", "Farah", "ali@gmail.com", "password");
+        user2 = userRepository.save(user2);
+        mockMvc.perform(patch("/cards/"+card.getId() + "/addUser")).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.users[0].firstName", is(user.getFirstName())));
+                andExpect(jsonPath("$.users[0].firstName", is(user2.getFirstName())));
     }
-
     @Test
-    @WithMockUser(username = "lava@gmail.com", password = "password")
+    @WithMockUser(username = "guy@gmail.com", password = "password")
     public void removeUserFromCardTest() throws Exception
     {
-        Card savedCard = cardRepository.save(validCard);
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/addUser"));
+        user3 = new User("Some", "Guy", "guy@gmail.com", "password");
+        user3 = userRepository.save(user3);
+        mockMvc.perform(patch("/cards/"+card.getId() + "/addUser"));
 
-        mockMvc.perform(patch("/cards/"+savedCard.getId() + "/removeUser/")).
+        mockMvc.perform(patch("/cards/"+card.getId() + "/removeUser/")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.users", hasSize(0)));
     }
