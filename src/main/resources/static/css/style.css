@@ -99,7 +99,6 @@ h2 {
 	align-items: center;
 	color: white;
 	justify-content: center;
-	margin-top: 30px;
 }
 
 	#title {
@@ -196,6 +195,7 @@ h2 {
 				animation-name: menu-bounce;
 				animation-duration: 0.2s;
 				animation-iteration-count: 1;
+				opacity: 1 !important;
 			}
 
 			.footer-menu-item:hover {
