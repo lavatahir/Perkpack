@@ -1,5 +1,6 @@
 package perkpack.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,10 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Account {
@@ -40,6 +38,10 @@ public class Account {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_vote")
     private Set<PerkVote> votes = new HashSet<>();
+
+    @ManyToMany(mappedBy = "accounts")
+    @JsonIgnore
+    private Set<Card> cards = new HashSet<>();
 
     public Account()
     {
@@ -118,6 +120,18 @@ public class Account {
         return this.votes.add(vote);
     }
 
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public boolean addCard(Card cardToAdd) {
+        return this.cards.add(cardToAdd);
+    }
+
+    public boolean removeCard(Card cardToRemove){
+        return this.cards.remove(cardToRemove);
+    }
+
     @Override
     public boolean equals(Object o) {
         if(!(o instanceof Account))
@@ -130,7 +144,6 @@ public class Account {
         return this.email == account.email
                 && this.firstName == account.firstName
                 && this.lastName == account.lastName
-                && this.email == account.email
                 && this.id == account.id;
     }
 

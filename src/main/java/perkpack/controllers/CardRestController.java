@@ -2,6 +2,8 @@ package perkpack.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import perkpack.models.Account;
 import perkpack.models.Card;
@@ -25,6 +27,13 @@ public class CardRestController {
         this.cardRepository = cardRepository;
         this.perkRepository = perkRepository;
         this.accountRepository = accountRepository;
+    }
+
+    private Account getUser()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((org.springframework.security.core.userdetails.User)auth.getPrincipal()).getUsername();
+        return accountRepository.findByEmail(email);
     }
 
 
@@ -110,13 +119,12 @@ public class CardRestController {
         return ResponseEntity.ok().body(card);
     }
 
-    @RequestMapping(value = "/{id}/addUser/{userID}", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> addUserToCard(@PathVariable("id") Long id,
-                                              @PathVariable(value = "userID") Long userID){
+    @RequestMapping(value = "/{id}/addUser", method = RequestMethod.PATCH)
+    public ResponseEntity<Card> addUserToCard(@PathVariable("id") Long id) {
         Card c = cardRepository.findOne(id);
-        Account accountToAdd = accountRepository.findOne(userID);
+        Account accountToAdd = getUser();
 
-        if(c == null || accountToAdd == null){
+        if (c == null || accountToAdd == null) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -127,31 +135,11 @@ public class CardRestController {
         return ResponseEntity.ok().body(card);
     }
 
-    /*
-    @RequestMapping(value = "/{id}/addUserToCardByEmail/{userEmail}", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> addUserToCardByEmail(@PathVariable("id") Long id,
-                                              @PathVariable(value = "userEmail") String userEmail){
-        Card c = cardRepository.findOne(id);
-        Account userToAdd = accountRepository.findByEmail(userEmail);
-
-        if(c == null || userToAdd == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        c.addUser(userToAdd);
-
-        Card card = cardRepository.save(c);
-
-        return ResponseEntity.ok().body(card);
-    }
-    */
-
-    @RequestMapping(value = "/{id}/removeUser/{userID}", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> removeUserFromCard(@PathVariable("id") Long id,
-                                                   @PathVariable(value = "userID") Long userID){
+    @RequestMapping(value = "/{id}/removeUser", method = RequestMethod.PATCH)
+    public ResponseEntity<Card> removeUserFromCard(@PathVariable("id") Long id){
         Card c = cardRepository.findOne(id);
 
-        Account accountToRemove = accountRepository.findOne(userID);
+        Account accountToRemove = getUser();
 
         if(c == null || accountToRemove == null){
             return ResponseEntity.badRequest().build();
@@ -162,24 +150,4 @@ public class CardRestController {
 
         return ResponseEntity.ok().body(card);
     }
-
-    /*
-    @RequestMapping(value = "/{id}/removeUserFromCardByEmail/{userEmail}", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> removeUserFromCardByEmail(@PathVariable("id") Long id,
-                                                   @PathVariable(value = "userEmail") String userEmail){
-        Card c = cardRepository.findOne(id);
-
-        Account userToRemove = accountRepository.findByEmail(userEmail);
-
-        if(c == null || userToRemove == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        c.removeUser(userToRemove);
-        Card card = cardRepository.save(c);
-
-        return ResponseEntity.ok().body(card);
-    }
-    */
-
 }
