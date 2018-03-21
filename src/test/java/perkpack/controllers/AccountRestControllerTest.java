@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import perkpack.AppBoot;
-import perkpack.models.User;
-import perkpack.repositories.UserRepository;
+import perkpack.models.Account;
+import perkpack.repositories.AccountRepository;
 
 import java.nio.charset.Charset;
 
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppBoot.class)
 @WebAppConfiguration
-public class UserRestControllerTest {
+public class AccountRestControllerTest {
 
 
     private MediaType jsonContentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
@@ -43,7 +43,7 @@ public class UserRestControllerTest {
 
 
     @Autowired
-    private UserRepository userRepository;
+    private AccountRepository accountRepository;
 
     @Before
     public void setup()
@@ -54,29 +54,29 @@ public class UserRestControllerTest {
     @Test
     public void createValidUserTest() throws Exception
     {
-        User user = new User("Ali", "Farah", "a@gmail.com", "password");
+        Account account = new Account("Ali", "Farah", "a@gmail.com", "password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String userJson = ow.writeValueAsString(user);
+        String userJson = ow.writeValueAsString(account);
 
-        mockMvc.perform(post("/user").
+        mockMvc.perform(post("/account").
                 contentType(jsonContentType).
                 content(userJson)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.firstName", is(user.getFirstName()))).
-                andExpect(jsonPath("$.lastName", is(user.getLastName()))).
-                andExpect(jsonPath("$.email", is(user.getEmail())));
+                andExpect(jsonPath("$.firstName", is(account.getFirstName()))).
+                andExpect(jsonPath("$.lastName", is(account.getLastName()))).
+                andExpect(jsonPath("$.email", is(account.getEmail())));
     }
 
     @Test
     public void createUserWithEmptyFirstNameTest() throws Exception
     {
-        User user = new User("", "Farah", "a@gmail.com","password");
+        Account account = new Account("", "Farah", "a@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String userJson = ow.writeValueAsString(user);
+        String userJson = ow.writeValueAsString(account);
 
-        mockMvc.perform(post("/user").
+        mockMvc.perform(post("/account").
                 contentType(jsonContentType).
                 content(userJson)).
                 andExpect(status().isBadRequest());
@@ -85,12 +85,12 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithTooLongFirstNameTest() throws Exception
     {
-        User user = new User("asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad", "Farah", "a@gmail.com","password");
+        Account account = new Account("asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad", "Farah", "a@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String userJson = ow.writeValueAsString(user);
+        String userJson = ow.writeValueAsString(account);
 
-        mockMvc.perform(post("/user").
+        mockMvc.perform(post("/account").
                 contentType(jsonContentType).
                 content(userJson)).
                 andExpect(status().isBadRequest());
@@ -99,12 +99,12 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithEmptyLastNameTest() throws Exception
     {
-        User user = new User("ali", "", "a@gmail.com","password");
+        Account account = new Account("ali", "", "a@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String userJson = ow.writeValueAsString(user);
+        String userJson = ow.writeValueAsString(account);
 
-        mockMvc.perform(post("/user").
+        mockMvc.perform(post("/account").
                 contentType(jsonContentType).
                 content(userJson)).
                 andExpect(status().isBadRequest());
@@ -113,12 +113,12 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithTooLongLastNameTest() throws Exception
     {
-        User user = new User("ali","asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad", "a@gmail.com","password");
+        Account account = new Account("ali","asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad", "a@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String userJson = ow.writeValueAsString(user);
+        String userJson = ow.writeValueAsString(account);
 
-        mockMvc.perform(post("/user").
+        mockMvc.perform(post("/account").
                 contentType(jsonContentType).
                 content(userJson)).
                 andExpect(status().isBadRequest());
@@ -127,12 +127,12 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithEmptyEmailTest() throws Exception
     {
-        User user = new User("ali", "farah", "","password");
+        Account account = new Account("ali", "farah", "","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String userJson = ow.writeValueAsString(user);
+        String userJson = ow.writeValueAsString(account);
 
-        mockMvc.perform(post("/user").
+        mockMvc.perform(post("/account").
                 contentType(jsonContentType).
                 content(userJson)).
                 andExpect(status().isBadRequest());
@@ -141,12 +141,12 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithTooLongEmailTest() throws Exception
     {
-        User user = new User("ali","Farah", "asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad@gmail.com","password");
+        Account account = new Account("ali","Farah", "asdfsdafsadfdsafsadasdfsdafsadfdsafsadasdfsdafsadfdsafsad@gmail.com","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String userJson = ow.writeValueAsString(user);
+        String userJson = ow.writeValueAsString(account);
 
-        mockMvc.perform(post("/user").
+        mockMvc.perform(post("/account").
                 contentType(jsonContentType).
                 content(userJson)).
                 andExpect(status().isBadRequest());
@@ -155,12 +155,12 @@ public class UserRestControllerTest {
     @Test
     public void createUserWithInvalidEmailTest() throws Exception
     {
-        User user = new User("ali", "farah", "alifad","password");
+        Account account = new Account("ali", "farah", "alifad","password");
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String userJson = ow.writeValueAsString(user);
+        String userJson = ow.writeValueAsString(account);
 
-        mockMvc.perform(post("/user").
+        mockMvc.perform(post("/account").
                 contentType(jsonContentType).
                 content(userJson)).
                 andExpect(status().isBadRequest());
@@ -169,20 +169,20 @@ public class UserRestControllerTest {
     @Test
     public void getValidUserTest() throws Exception
     {
-        User user = new User("Ali", "Farah", "a@gmail.com","password");
-        User createUser = userRepository.save(user);
+        Account account = new Account("Ali", "Farah", "a@gmail.com","password");
+        Account createAccount = accountRepository.save(account);
 
-        mockMvc.perform(get("/user/" + createUser.getId())).
+        mockMvc.perform(get("/account/" + createAccount.getId())).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.firstName", is(user.getFirstName()))).
-                andExpect(jsonPath("$.lastName", is(user.getLastName()))).
-                andExpect(jsonPath("$.email", is(user.getEmail())));
+                andExpect(jsonPath("$.firstName", is(account.getFirstName()))).
+                andExpect(jsonPath("$.lastName", is(account.getLastName()))).
+                andExpect(jsonPath("$.email", is(account.getEmail())));
     }
 
     @Test
     public void getInValidUserTest() throws Exception
     {
-        mockMvc.perform(get("/user/" + 200)).
+        mockMvc.perform(get("/account/" + 200)).
                 andExpect(status().isBadRequest());
     }
 

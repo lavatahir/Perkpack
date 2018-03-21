@@ -17,7 +17,7 @@ public class PerkVote {
     private int vote;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    private User user;
+    private Account account;
 
     @Id
     @GeneratedValue
@@ -27,10 +27,10 @@ public class PerkVote {
 
     }
 
-    public PerkVote(String name, int vote, User user) {
+    public PerkVote(String name, int vote, Account account) {
         this.name = name;
         this.vote = vote;
-        this.user = user;
+        this.account = account;
     }
 
     public String getName() {
@@ -49,12 +49,12 @@ public class PerkVote {
         this.vote = setVote;
     }
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     @Override
@@ -67,12 +67,12 @@ public class PerkVote {
         PerkVote perkVote = (PerkVote) o;
 
         return this.name.equals(perkVote.name) &&
-                this.user.equals(perkVote.user) &&
+                this.account.equals(perkVote.account) &&
                 this.vote == perkVote.vote;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.name,this.user, this.vote);
+        return Objects.hash(this.name,this.account, this.vote);
     }
 }

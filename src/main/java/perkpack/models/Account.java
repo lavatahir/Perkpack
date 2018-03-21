@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Entity
-public class User {
+public class Account {
 
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
@@ -41,12 +41,12 @@ public class User {
     @JoinColumn(name = "user_vote")
     private Set<PerkVote> votes = new HashSet<>();
 
-    public User()
+    public Account()
     {
 
     }
 
-    public User(String firstName, String lastName, String email, String password)
+    public Account(String firstName, String lastName, String email, String password)
     {
         this.email = email;
         this.firstName = firstName;
@@ -120,18 +120,18 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof User))
+        if(!(o instanceof Account))
         {
             return false;
         }
 
-        User user = (User) o;
+        Account account = (Account) o;
 
-        return this.email == user.email
-                && this.firstName == user.firstName
-                && this.lastName == user.lastName
-                && this.email == user.email
-                && this.id == user.id;
+        return this.email == account.email
+                && this.firstName == account.firstName
+                && this.lastName == account.lastName
+                && this.email == account.email
+                && this.id == account.id;
     }
 
     @Override
