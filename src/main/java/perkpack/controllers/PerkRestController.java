@@ -99,7 +99,7 @@ public class PerkRestController {
         Perk updatedPerk = perkRepository.save(perkInRepository);
 
         return ResponseEntity.ok().body(updatedPerk);
-        }
+    }
 
     private Account getUser()
     {
