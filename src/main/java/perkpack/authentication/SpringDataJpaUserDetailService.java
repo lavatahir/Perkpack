@@ -2,7 +2,6 @@ package perkpack.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -13,15 +12,19 @@ import perkpack.repositories.AccountRepository;
 public class SpringDataJpaUserDetailService implements UserDetailsService {
 
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Account account = this.accountRepository.findByEmail(email);
+    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Account user = this.userRepository.findByEmail(email);
 
-        return new org.springframework.security.core.userdetails.User(
-                account.getEmail(),
-                account.getPassword(),
+        CustomUserDetails userDetails  = new CustomUserDetails(
+                user.getEmail(),
+                user.getPassword(),
                 AuthorityUtils.NO_AUTHORITIES);
+
+        userDetails.setId(user.getId());
+
+        return userDetails;
     }
 }
