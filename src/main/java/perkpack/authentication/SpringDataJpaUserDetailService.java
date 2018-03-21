@@ -16,12 +16,16 @@ public class SpringDataJpaUserDetailService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = this.userRepository.findByEmail(email);
 
-        return new org.springframework.security.core.userdetails.User(
+        CustomUserDetails userDetails  = new CustomUserDetails(
                 user.getEmail(),
                 user.getPassword(),
                 AuthorityUtils.NO_AUTHORITIES);
+
+        userDetails.setId(user.getId());
+
+        return userDetails;
     }
 }
