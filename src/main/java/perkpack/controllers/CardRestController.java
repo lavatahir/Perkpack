@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import perkpack.models.Account;
 import perkpack.models.Card;
 import perkpack.models.Perk;
-import perkpack.models.User;
 import perkpack.repositories.CardRepository;
 import perkpack.repositories.PerkRepository;
-import perkpack.repositories.UserRepository;
+import perkpack.repositories.AccountRepository;
 
 import javax.validation.Valid;
 
@@ -20,20 +20,20 @@ public class CardRestController {
 
     private final CardRepository cardRepository;
     private final PerkRepository perkRepository;
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public CardRestController(CardRepository cardRepository, PerkRepository perkRepository, UserRepository userRepository){
+    public CardRestController(CardRepository cardRepository, PerkRepository perkRepository, AccountRepository accountRepository){
         this.cardRepository = cardRepository;
         this.perkRepository = perkRepository;
-        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
-    private User getUser()
+    private Account getUser()
     {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = ((org.springframework.security.core.userdetails.User)auth.getPrincipal()).getUsername();
-        return userRepository.findByEmail(email);
+        return accountRepository.findByEmail(email);
     }
 
 
@@ -120,15 +120,16 @@ public class CardRestController {
     }
 
     @RequestMapping(value = "/{id}/addUser", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> addUserToCard(@PathVariable("id") Long id){
+    public ResponseEntity<Card> addUserToCard(@PathVariable("id") Long id) {
         Card c = cardRepository.findOne(id);
-        User userToAdd = getUser();
+        Account accountToAdd = getUser();
 
-        if(c == null || userToAdd == null){
+        if (c == null || accountToAdd == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        c.addUser(userToAdd);
+        c.addUser(accountToAdd);
+
         Card card = cardRepository.save(c);
 
         return ResponseEntity.ok().body(card);
@@ -137,16 +138,16 @@ public class CardRestController {
     @RequestMapping(value = "/{id}/removeUser", method = RequestMethod.PATCH)
     public ResponseEntity<Card> removeUserFromCard(@PathVariable("id") Long id){
         Card c = cardRepository.findOne(id);
-        User userToRemove = getUser();
 
-        if(c == null || userToRemove == null){
+        Account accountToRemove = getUser();
+
+        if(c == null || accountToRemove == null){
             return ResponseEntity.badRequest().build();
         }
 
-        c.removeUser(userToRemove);
+        c.removeUser(accountToRemove);
         Card card = cardRepository.save(c);
 
         return ResponseEntity.ok().body(card);
     }
-
 }

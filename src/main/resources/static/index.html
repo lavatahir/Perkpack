@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Perkpack</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Heebo:300,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+</head>
+<body>
+	<!--
+	<div id="bg-color" class="bg"></div>
+	<div id="bg-fade" class="bg"></div>
+	<div id="bg-white" class="bg"></div>
+	-->
+	<div id="header">
+		<span id="title">
+			Perkpack
+		</span>
+	</div>
+	<div class="page active" id="page-home">
+		<div class="section input">
+			<input type="text" class="text-input" id="search-bar" />
+			<i class="material-icons">search</i>
+		</div>
+		<div class="section card">
+			<div class="section title">
+				<span>Top perks</span>
+			</div>
+			<div class="section" id="top-perks">
+				Loading...
+			</div>
+			<div class="section button">
+				More
+			</div>
+		</div>
+		<div class="section card">
+			<div class="section title">
+				<span>Recommended for you</span>
+			</div>
+			<div class="section" id="recommended-perks">
+				Loading...
+			</div>
+			<div class="section button">
+				More
+			</div>
+		</div>
+	</div>
+	<div class="page section" id="page-search">
+		<div class="section main title">
+			<span>x results for x</span>
+		</div>
+	</div>
+	<div class="page section" id="page-discover">
+		<div class="section main title">
+			<span>Discover</span>
+		</div>
+	</div>
+	<div class="page section" id="page-account">
+		<div class="section card">
+			<div class="section main title">
+				<span>Log in</span>
+			</div>
+			<div class="section input">
+				<div class="input-label">Email</div>
+				<div class="input-container">
+					<input type="email" class="text-input" id="email" />
+					<i class="material-icons">person_outline</i>
+				</div>
+			</div>
+			<div class="section input">
+				<div class="input-label">Password</div>
+				<div class="input-container">
+					<input type="password" class="text-input" id="password" />
+					<i class="material-icons">security</i>
+				</div>
+			</div>
+			<div class="section big button" id="login-button">
+				<i class="material-icons">arrow_forward</i>
+			</div>
+		</div>
+		<div class="section">
+			<div class="section subtitle">
+				<span>Don't have an account yet?</span>
+			</div>
+			<div class="section">
+				Sign up now
+			</div>
+		</div>
+	</div>
+	<div class="page section" id="page-perk">
+		<div class="section main title">
+			<span>Add perk</span>
+		</div>
+	</div>
+	<div id="footer">
+		<div id="footer-inner">
+			<div class="footer-menu-item" id="menu-search">
+				<div class="title">
+					<div>
+						<i class="material-icons">search</i>
+					</div>
+					<div class="name">
+						Search
+					</div>
+				</div>
+			</div>
+			<div class="footer-menu-item" id="menu-discover">
+				<div class="title">
+					<div>
+						<i class="material-icons">public</i>
+					</div>
+					<div class="name">
+						Discover
+					</div>
+				</div>
+			</div>
+			<div class="footer-menu-item big active" id="menu-home">
+				<div class="logo">
+					🤑
+				</div>
+			</div>
+			<div class="footer-menu-item" id="menu-account">
+				<div class="title">
+					<div>
+						<i class="material-icons">person_pin</i>
+					</div>
+					<div class="name">
+						Log in
+					</div>
+				</div>
+			</div>
+			<div class="footer-menu-item" id="menu-perk">
+				<div class="button">
+					<i class="material-icons">library_add</i>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="app-loader">
+		<div class="loader"></div>
+	</div>
+</body>
+</html>

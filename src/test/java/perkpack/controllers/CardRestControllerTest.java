@@ -17,14 +17,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import perkpack.AppBoot;
+import perkpack.models.Account;
 import perkpack.models.Card;
 import perkpack.models.Category;
 import perkpack.models.Perk;
-import perkpack.models.User;
 import perkpack.repositories.CardRepository;
 import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
-import perkpack.repositories.UserRepository;
+import perkpack.repositories.AccountRepository;
 
 import java.nio.charset.Charset;
 import static org.hamcrest.Matchers.hasSize;
@@ -53,16 +53,16 @@ public class CardRestControllerTest {
     private CardRepository cardRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
     private PerkRepository perkRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
-    private static User user;
-    private static User user2;
-    private static User user3;
+    private static Account user;
+    private static Account user2;
+    private static Account user3;
     private static Perk perk;
     private static Category games;
     private static Card card;
@@ -70,8 +70,8 @@ public class CardRestControllerTest {
     @Before
     public void setup()
     {
-        user = new User("Lava", "Tahir", "lava@gmail.com", "password");
-        user = userRepository.save(user);
+        user = new Account("Lava", "Tahir", "lava@gmail.com", "password");
+        user = accountRepository.save(user);
 
         games = new Category("Games1");
         games = categoryRepository.save(games);
@@ -146,8 +146,8 @@ public class CardRestControllerTest {
     @WithMockUser(username = "ali@gmail.com", password = "password")
     public void addUserToCardTest() throws Exception
     {
-        user2 = new User("Ali", "Farah", "ali@gmail.com", "password");
-        user2 = userRepository.save(user2);
+        user2 = new Account("Ali", "Farah", "ali@gmail.com", "password");
+        user2 = accountRepository.save(user2);
         mockMvc.perform(patch("/cards/"+card.getId() + "/addUser")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.users[0].firstName", is(user2.getFirstName())));
@@ -156,12 +156,12 @@ public class CardRestControllerTest {
     @WithMockUser(username = "guy@gmail.com", password = "password")
     public void removeUserFromCardTest() throws Exception
     {
-        user3 = new User("Some", "Guy", "guy@gmail.com", "password");
-        user3 = userRepository.save(user3);
+        user3 = new Account("Some", "Guy", "guy@gmail.com", "password");
+        user3 = accountRepository.save(user3);
         mockMvc.perform(patch("/cards/"+card.getId() + "/addUser"));
 
-        mockMvc.perform(patch("/cards/"+card.getId() + "/removeUser/")).
+        mockMvc.perform(patch("/cards/"+card.getId() + "/removeUser/" + user3.getId())).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.users", hasSize(0)));
+                andExpect(jsonPath("$.accounts", hasSize(0)));
     }
 }

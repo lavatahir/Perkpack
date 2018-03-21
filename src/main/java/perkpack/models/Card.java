@@ -13,7 +13,7 @@ public class Card {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable
-    private Set<User> users = new HashSet<>();
+    private Set<Account> accounts = new HashSet<>();
 
     @OneToMany
     @JoinColumn(name = "perk_id")
@@ -48,19 +48,19 @@ public class Card {
         this.description = description;
     }
 
-    public Collection<User> getUsers() {
-        return users;
+    public Collection<Account> getAccounts() {
+        return accounts;
     }
 
-    public void addUser(User u){
-        users.add(u);
+    public void addUser(Account u){
+        accounts.add(u);
     }
 
-    public void removeUser(User user){
-        Iterator<User> itr = users.iterator();  // list is a Set<String>!
+    public void removeUser(Account account){
+        Iterator<Account> itr = accounts.iterator();  // list is a Set<String>!
         while (itr.hasNext()) {
-            User u = itr.next();
-            if (user.equals(u)) {
+            Account u = itr.next();
+            if (account.equals(u)) {
                 itr.remove();
             }
         }
@@ -94,12 +94,12 @@ public class Card {
 
         return c.getName().equalsIgnoreCase(this.getName()) &&
                 c.getDescription().equalsIgnoreCase(this.getDescription()) &&
-                c.users.equals(this.users) &&
+                c.accounts.equals(this.accounts) &&
                 c.perks.equals(this.perks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.description, this.name, this.perks, this.users);
+        return Objects.hash(this.description, this.name, this.perks, this.accounts);
     }
 }

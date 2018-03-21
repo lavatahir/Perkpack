@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 public class PerkVoteTest {
 
-    private static final User voter = new User("Ali","farah", "a@gmail.com", "password");
+    private static final Account voter = new Account("Ali","farah", "a@gmail.com", "password");
     private static final int score = 1;
     private static final String  perkName = "perk";
 
@@ -24,7 +24,7 @@ public class PerkVoteTest {
 
     @Test
     public void getVoter() {
-        assertEquals(voter, perkVote.getUser() );
+        assertEquals(voter, perkVote.getAccount() );
     }
 
     @Test

@@ -35,24 +35,24 @@ public class CardTest {
 
     @Test
     public void getUsersTest() throws Exception {
-        Collection<User> emptyUsers = new HashSet<>();
-        assertEquals(card.getUsers(), emptyUsers);
+        Collection<Account> emptyAccounts = new HashSet<>();
+        assertEquals(card.getAccounts(), emptyAccounts);
     }
 
     @Test
     public void addUserTest() throws Exception {
-        User u = new User("Lava", "Tahir", "lavatahir@gmail.com", "password");
+        Account u = new Account("Lava", "Tahir", "lavatahir@gmail.com", "password");
         card.addUser(u);
-        assertTrue(card.getUsers().contains(u));
+        assertTrue(card.getAccounts().contains(u));
     }
 
     @Test
     public void removeUserTest() throws Exception {
-        User u = new User("Lava", "Tahir", "lavatahir@gmail.com", "password");
+        Account u = new Account("Lava", "Tahir", "lavatahir@gmail.com", "password");
         card.addUser(u);
-        User u2 = new User("Lava", "Tahir", "lavatahir@gmail.com", "password");
+        Account u2 = new Account("Lava", "Tahir", "lavatahir@gmail.com", "password");
         card.removeUser(u2);
-        assertTrue(!card.getUsers().contains(u));
+        assertTrue(!card.getAccounts().contains(u));
     }
 
     @Test
@@ -111,9 +111,9 @@ public class CardTest {
         c.addPerk(p2);
         c.addPerk(p3);
 
-        User u1 = new User("U1", "L1", "ul1@gmail.com", "password");
-        User u2 = new User("U2", "L2", "ul2@gmail.com", "password");
-        User u3 = new User("U3", "L3", "ul3@gmail.com", "password");
+        Account u1 = new Account("U1", "L1", "ul1@gmail.com", "password");
+        Account u2 = new Account("U2", "L2", "ul2@gmail.com", "password");
+        Account u3 = new Account("U3", "L3", "ul3@gmail.com", "password");
 
         card.addUser(u1);
         card.addUser(u2);
