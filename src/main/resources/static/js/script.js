@@ -1,39 +1,60 @@
 /* ---------- MAIN --------- */
 
+var getPerkTileHTML = function(perk) {
+	return '<div class="section perk-tile"><div class="perk-vote"><div class="perk-upvote perk-vote-button" onclick=vote(this,1)><i class="material-icons">thumb_up</i></div><div class="perk-score">'+perk.score+'</div><div class="perk-downvote perk-vote-button" onclick=vote(this,-1)><i class="material-icons">thumb_down</i></div></div><div class="perk-info"><div class="perk-name subtitle"><span>'+perk.name+'</span></div><div class="perk-desc">'+perk.description+'</div><div class="perk-cat"><i class="material-icons">restaurant</i></div></div></div>';
+}
+
 var populatePerkList = function() {
 	$.getJSON('/perks', function(data) {
 		$('#top-perks').empty();
 		var perks = data._embedded.perks;
 		for (var i = 0; i < perks.length; i++) {
-			$('#top-perks').append(
-				'<div class="section perk">'+perks[i].name+'</div>'
-			);
+			$('#top-perks').append(getPerkTileHTML(perks[i]));
 		}
 	});
+};
+
+// loader
+
+var startLoad = function() {
+	$('#app-loader').addClass('loading');
+};
+
+var stopLoad = function() {
+	$('#app-loader').removeClass('loading');
 };
 
 // authentication
 
+var loggedIn = false;
+
 var applyUser = function(user) {
+	loggedIn = true;
+
+	$('#page-account').addClass('logged-in');
+
 	$('#menu-account .name').addClass('logged-in');
-	$('#menu-account .name').text(user.name);
+	$('.first-name').text(user.firstName);
+
+	activatePage('home');
 };
 
 var authenticate = function() {
-	$('#app-loader').addClass('loading');
+	/*
 	$.getJSON('/authenticate', function(data) {
-		$('#app-loader').removeClass('loading');
+		stopLoad();
 		if (Object.keys(data).length === 0 && data.constructor === Object) {
-			applyUser(data)
+			applyUser(data);
 		}
 	})
 	.fail(function() {
-		$('#app-loader').removeClass('loading');
-		//applyUser({name: 'Vanja'});
+		stopLoad();
 	});
+	*/
 };
 
-var logIn = function(username, password) {
+var tryLogIn = function(username, password) {
+	startLoad();
 	$.ajax({
 		type: 'POST',
 		url: '/login',
@@ -44,14 +65,14 @@ var logIn = function(username, password) {
 		contentType: 'application/x-www-form-urlencoded'
 	})
 	.done(function(data) {
-		console.log('login attempt went through, returned:');
+		stopLoad();
 		console.log(data);
-		$('#app-loader').removeClass('loading');
-		authenticate();
+		applyUser(data);
 	})
 	.fail(function() {
-		$('#app-loader').removeClass('loading');
-		console.log('login attempt failed');
+		stopLoad();
+		$('#email, #password').addClass('invalid');
+		//applyUser({firstName: 'Vanja', lastName: 'Veselinovic'});
 	});
 };
 
@@ -91,6 +112,40 @@ var goPerk = function() {
 	activatePage('perk');
 };
 
+/* ---------- VOTING ---------- */
+
+var vote = function(element, vote) {
+	var perkName = $($(element)[0].parentElement.parentElement).find('.perk-name span').text();
+
+	if ($(element).hasClass('voted')) {
+		vote *= -1;
+	}
+	else {
+		if ($($(element)[0].parentElement).find('.voted').length > 0) {
+			vote *= 2;
+		}
+	}
+
+	var currentScore = parseInt($($(element)[0].parentElement).find('.perk-score').text());
+	var newScore = currentScore + vote;
+
+	$.ajax({
+        method: 'POST',
+        url: '/perks/vote',
+        contentType: 'application/json',
+        data: '{"name": "' + perkName + '", "vote": "' + newScore + '"}'
+    }).done(function(perk) {
+    	if ($(element).hasClass('voted')) {
+			$(element).removeClass('voted');
+		}
+		else {
+			$($(element)[0].parentElement).find('.perk-vote-button').removeClass('voted');
+			$(element).toggleClass('voted');
+		}
+    	$($(element)[0].parentElement).find('.perk-score').text(perk.score);
+    });
+}
+
 /* ---------- PAGE LOAD ---------- */
 
 var currentPage = 'home';
@@ -99,10 +154,10 @@ $(document).ready(function() {
 	populatePerkList();
 	authenticate();
 
-	// footer
+	// general
 
-	$('.footer-menu-item').on('click', function() {
-		
+	$('.text-input').on('click', function() {
+		$('.text-input').removeClass('invalid');
 	});
 
 	// search
@@ -137,7 +192,10 @@ $(document).ready(function() {
 
 	$('#login-button').on('click', function() {
 		if ($('#email').val().length > 0 && $('#password').val().length > 0) {
-			logIn($('#email').val(), $('#password').val());
+			tryLogIn($('#email').val(), $('#password').val());
+		}
+		else {
+			$('#email, #password').addClass('invalid');
 		}
 	})
 
