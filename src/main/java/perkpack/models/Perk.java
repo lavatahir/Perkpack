@@ -21,8 +21,8 @@ public class Perk {
     @ManyToOne
     private Category category;
 
-    @ManyToOne
-    private Card cardBelongsTo;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Card cardPerkBelongsTo;
 
     public Perk () {
 
@@ -110,12 +110,12 @@ public class Perk {
         this.category = category;
     }
 
-    public Card getCard() {
-        return cardBelongsTo;
+    public Card getCardPerkBelongsTo() {
+        return cardPerkBelongsTo;
     }
 
-    public void setCard(Card card) {
-        this.cardBelongsTo = card;
+    public void setCardPerkBelongsTo(Card card) {
+        this.cardPerkBelongsTo = card;
     }
 
     public String toString() {

@@ -1,5 +1,7 @@
 package perkpack.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,16 +9,21 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import perkpack.AppBoot;
+import perkpack.models.Account;
 import perkpack.models.Category;
 import perkpack.models.Perk;
+import perkpack.models.PerkVote;
+import perkpack.repositories.AccountRepository;
 import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
+import perkpack.repositories.PerkVoteRepository;
 
 import java.nio.charset.Charset;
 
@@ -46,6 +53,12 @@ public class PerkRestControllerTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private PerkVoteRepository perkVoteRepository;
 
     private Category testCategory = new Category("None");
     private Perk testPerk = new Perk("10% off Coffee", "This is a description", testCategory);
@@ -96,5 +109,28 @@ public class PerkRestControllerTest {
         String newDescription = "Test Description 2";
 
         mockMvc.perform(patch("/perkedit?id=" + startingPerk.getId() + "&name=" + newName + "&description=" + newDescription)).andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "guy@gmail.com", password = "password")
+    public void changeScoreTest() throws Exception {
+        Category startingCategory = new Category("Another Test Category");
+        Perk startingPerk = new Perk("50% off", "Everything", startingCategory);
+        categoryRepository.save(startingCategory);
+        perkRepository.save(startingPerk);
+
+        Account user = new Account("Some", "Guy", "guy@gmail.com", "password");
+        user = accountRepository.save(user);
+        PerkVote pv = new PerkVote("50% off", 1,user);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String perkVoteJSON = ow.writeValueAsString(pv);
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perkVoteJSON)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.score", is(1)));
+
     }
 }

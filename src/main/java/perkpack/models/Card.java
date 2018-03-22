@@ -15,8 +15,8 @@ public class Card {
     @JoinTable
     private Set<Account> accounts = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "perk_id")
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "card_perks")
     private Set<Perk> perks = new HashSet<>();
 
     public Card(String name, String description){
