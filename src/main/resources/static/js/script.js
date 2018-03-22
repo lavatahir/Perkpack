@@ -12,28 +12,43 @@ var populatePerkList = function() {
 	});
 };
 
+// loader
+
+var startLoad = function() {
+	$('#app-loader').addClass('loading');
+};
+
+var stopLoad = function() {
+	$('#app-loader').removeClass('loading');
+};
+
 // authentication
 
+var loggedIn = false;
+
 var applyUser = function(user) {
+	loggedIn = true;
+
+	$('#page-account').addClass('logged-in');
+
 	$('#menu-account .name').addClass('logged-in');
 	$('#menu-account .name').text(user.name);
 };
 
 var authenticate = function() {
-	$('#app-loader').addClass('loading');
 	$.getJSON('/authenticate', function(data) {
-		$('#app-loader').removeClass('loading');
+		stopLoad();
 		if (Object.keys(data).length === 0 && data.constructor === Object) {
 			applyUser(data)
 		}
 	})
 	.fail(function() {
-		$('#app-loader').removeClass('loading');
-		//applyUser({name: 'Vanja'});
+		stopLoad();
 	});
 };
 
-var logIn = function(username, password) {
+var tryLogIn = function(username, password) {
+	startLoad();
 	$.ajax({
 		type: 'POST',
 		url: '/login',
@@ -44,14 +59,11 @@ var logIn = function(username, password) {
 		contentType: 'application/x-www-form-urlencoded'
 	})
 	.done(function(data) {
-		console.log('login attempt went through, returned:');
-		console.log(data);
-		$('#app-loader').removeClass('loading');
-		authenticate();
+		stopLoad();
 	})
 	.fail(function() {
-		$('#app-loader').removeClass('loading');
-		console.log('login attempt failed');
+		stopLoad();
+		applyUser({firstName: 'Vanja', lastName: 'Veselinovic'});
 	});
 };
 
@@ -99,12 +111,6 @@ $(document).ready(function() {
 	populatePerkList();
 	authenticate();
 
-	// footer
-
-	$('.footer-menu-item').on('click', function() {
-		
-	});
-
 	// search
 
 	$('#search-bar').on('blur', function() {
@@ -137,7 +143,7 @@ $(document).ready(function() {
 
 	$('#login-button').on('click', function() {
 		if ($('#email').val().length > 0 && $('#password').val().length > 0) {
-			logIn($('#email').val(), $('#password').val());
+			tryLogIn($('#email').val(), $('#password').val());
 		}
 	})
 
