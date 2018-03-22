@@ -32,13 +32,36 @@
 		</div>
 		<div class="section card">
 			<div class="section title">
-				<span>Top perks</span>
+				<span>Hot</span>
 			</div>
-			<div class="section" id="top-perks">
-				Loading...
-				<div class="section tile">
-					
+			<div class="section perk-list" id="top-perks">
+				<div class="loader"></div>
+				<!--
+				<div class="section perk-tile">
+					<div class="perk-vote">
+						<div class="perk-upvote perk-vote-button" onclick=vote(this,1)>
+							<i class="material-icons">thumb_up</i>
+						</div>
+						<div class="perk-score">
+							5
+						</div>
+						<div class="perk-downvote perk-vote-button" onclick=vote(this,-1)>
+							<i class="material-icons">thumb_down</i>
+						</div>
+					</div>
+					<div class="perk-info">
+						<div class="perk-name subtitle">
+							<span>10% off Starbucks</span>
+						</div>
+						<div class="perk-desc">
+							Get 10% off any drink at Starbucks with blah blah blah.
+						</div>
+						<div class="perk-cat">
+							<i class="material-icons">restaurant</i>
+						</div>
+					</div>
 				</div>
+				-->
 			</div>
 			<div class="section button">
 				More
@@ -48,8 +71,8 @@
 			<div class="section title">
 				<span>Recommended for you</span>
 			</div>
-			<div class="section" id="recommended-perks">
-				Loading...
+			<div class="section perk-list" id="recommended-perks">
+				<div class="loader"></div>
 			</div>
 			<div class="section button">
 				More
@@ -68,7 +91,43 @@
 	</div>
 	<div class="page section" id="page-account">
 		<div id="account-logged-in">
-			
+			Welcome,
+			<div class="section subtitle">
+				<span class="first-name"></span>
+			</div>
+			<div class="section card">
+				<div class="section title">
+					<span>Saved</span>
+				</div>
+				<div class="section perk-list">
+					<div class="loader"></div>
+				</div>
+			</div>
+			<div class="section card">
+				<div class="section title">
+					<span>You</span>
+				</div>
+				<div class="section">
+					<div class="section pp-card pp-card-visa">
+						<div class="pp-card-inner">
+							Visa
+						</div>
+					</div>
+					<div class="section pp-card pp-card-td-bank">
+						<div class="pp-card-inner">
+							TD Bank
+						</div>
+					</div>
+					<div class="section pp-card pp-card-spc">
+						<div class="pp-card-inner">
+							SPC
+						</div>
+					</div>
+				</div>
+				<div class="section big button" id="edit-account-button">
+					<i class="material-icons">mode_edit</i>
+				</div>
+			</div>
 		</div>
 		<div id="account-logged-out">
 			<div class="section card">
@@ -140,7 +199,7 @@
 					<div>
 						<i class="material-icons">person_pin</i>
 					</div>
-					<div class="name">
+					<div class="name first-name">
 						Log in
 					</div>
 				</div>
