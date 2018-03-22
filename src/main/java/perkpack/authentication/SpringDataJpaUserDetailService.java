@@ -24,6 +24,8 @@ public class SpringDataJpaUserDetailService implements UserDetailsService {
                 AuthorityUtils.NO_AUTHORITIES);
 
         userDetails.setId(user.getId());
+        userDetails.setFirstName(user.getFirstName());
+        userDetails.setLastName(user.getLastName());
 
         return userDetails;
     }
