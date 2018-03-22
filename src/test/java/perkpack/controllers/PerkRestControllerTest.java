@@ -112,14 +112,14 @@ public class PerkRestControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "guy@gmail.com", password = "password")
+    @WithMockUser(username = "five@gmail.com", password = "password")
     public void changeScoreTest() throws Exception {
         Category startingCategory = new Category("Another Test Category");
         Perk startingPerk = new Perk("50% off", "Everything", startingCategory);
         categoryRepository.save(startingCategory);
         perkRepository.save(startingPerk);
 
-        Account user = new Account("Some", "Guy", "guy@gmail.com", "password");
+        Account user = new Account("Guy", "Five", "five@gmail.com", "password");
         user = accountRepository.save(user);
         PerkVote pv = new PerkVote("50% off", 1,user);
 
