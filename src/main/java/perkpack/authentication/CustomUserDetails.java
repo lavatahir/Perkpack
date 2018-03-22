@@ -9,6 +9,9 @@ public class CustomUserDetails extends User {
 
     private long id;
 
+    private String firstName;
+    private String lastName;
+
     public CustomUserDetails(String username, String password,
                              Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
@@ -16,6 +19,22 @@ public class CustomUserDetails extends User {
 
     public long getId() {
         return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setId(long id) {
