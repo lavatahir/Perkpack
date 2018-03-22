@@ -5,6 +5,13 @@ PerkPack is a perk/card organizer.
 ## Notes
 - On cloning the repository, go to the React app root folder (currently react-frontend) and run npm install.
 
+## Milestone 2
+- Switched from H2 DB to PostgresSQL (except for tests, which still use H2)
+- Added significantly more tests (both model tests and controllers tests)
+- Added nicer looking front end
+- Secure user login, with passwords being salted before saving in database
+- Can add cards to an account
+
 ## Milestone 1
 - Perk creation and perk voting (changes are saved to the server)
 - User creation
