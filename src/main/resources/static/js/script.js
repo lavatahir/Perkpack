@@ -67,7 +67,7 @@ var tryLogIn = function(username, password) {
 	.done(function(data) {
 		stopLoad();
 		console.log(data);
-		applyUser(data);
+		applyUser(JSON.parse(data));
 	})
 	.fail(function() {
 		stopLoad();
