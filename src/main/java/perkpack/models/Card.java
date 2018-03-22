@@ -15,9 +15,9 @@ public class Card {
     @JoinTable
     private Set<Account> accounts = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "perk_id")
-    private Collection<Perk> perks = new HashSet<>();
+    private Set<Perk> perks = new HashSet<>();
 
     public Card(String name, String description){
         this.name = name;

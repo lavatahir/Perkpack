@@ -21,6 +21,9 @@ public class Perk {
     @ManyToOne
     private Category category;
 
+    @ManyToOne
+    private Card cardBelongsTo;
+
     public Perk () {
 
     }
@@ -31,7 +34,6 @@ public class Perk {
         this.location = location;
         this.description = description;
         this.category = category;
-
         score = 0;
     }
 
@@ -106,6 +108,14 @@ public class Perk {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Card getCard() {
+        return cardBelongsTo;
+    }
+
+    public void setCard(Card card) {
+        this.cardBelongsTo = card;
     }
 
     public String toString() {

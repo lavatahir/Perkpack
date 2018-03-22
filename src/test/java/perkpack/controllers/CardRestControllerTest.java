@@ -131,6 +131,8 @@ public class CardRestControllerTest {
         mockMvc.perform(patch("/cards/"+card.getId() + "/addPerk/" + perk.getName())).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.perks[0].name", is(perk.getName())));
+        Card c = cardRepository.findOne(card.getId());
+        Perk p = perkRepository.findOne(perk.getId());
     }
     @Test
     @WithMockUser(username = "lava@gmail.com", password = "password")
