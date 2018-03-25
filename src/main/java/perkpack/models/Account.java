@@ -12,20 +12,20 @@ import java.util.*;
 
 @Entity
 public class Account {
-
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     @NotNull
-    @Size(min =1, max = 32)
+    @Size(min = 1, max = 32)
     private String firstName;
 
     @NotNull
-    @Size(min =1, max = 32)
+    @Size(min = 1, max = 32)
     private String lastName;
 
     @NotNull
     @Email
-    @Size(min =1, max = 32)
+    @Column(unique = true)
+    @Size(min = 1, max = 32)
     private String email;
 
     @NotNull
