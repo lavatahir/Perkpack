@@ -42,7 +42,7 @@ public class Category {
 
         Category c = (Category) o;
 
-        return c.name.equalsIgnoreCase(this.name) && c.id == this.id;
+        return c.name.equalsIgnoreCase(this.name);
     }
 
     public String toString() {

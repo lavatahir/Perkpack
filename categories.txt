@@ -1,2 +1,5 @@
 Food
 Clothing
+Groceries
+Electronics
+Shoes
