@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 @RestController
 public class PerkRestController {
@@ -26,6 +27,7 @@ public class PerkRestController {
     private final CategoryRepository categoryRepository;
     private final AccountRepository accountRepository;
     private final PerkVoteRepository perkVoteRepository;
+    private final String categoryPath = "./categories.txt";
 
     @Autowired
     public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository, AccountRepository accountRepository, PerkVoteRepository perkVoteRepository) {
@@ -33,27 +35,38 @@ public class PerkRestController {
         this.accountRepository = accountRepository;
         this.categoryRepository = categoryRepository;
         this.perkVoteRepository = perkVoteRepository;
-        this.setupCategories();
+        this.setupCategories(categoryPath);
     }
 
-    private void setupCategories() {
-        if (categoryRepository.count() != 0) {
-            return;
-        }
+    private void setupCategories(String filePath) {
+        ArrayList<Category> fileCategories = new ArrayList<Category>();
+        Path file = Paths.get(filePath);
 
-        Path file = Paths.get("./categories.txt");
-
+        // Create list of categories from file
         try (InputStream in = new BufferedInputStream(Files.newInputStream(file))) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             String line = null;
 
             while ((line = reader.readLine()) != null) {
                 Category lineCategory = new Category(line);
-                categoryRepository.save(lineCategory);
+                fileCategories.add(lineCategory);
             }
         } catch (IOException e) {
             System.out.println(e.toString());
         }
+
+        Iterable<Category> dbCategories = categoryRepository.findAll();
+        ArrayList<Category> dbCategoryList = new ArrayList<Category>();
+
+        // Create list of categories in database
+        for (Category category : dbCategories) {
+            dbCategoryList.add(category);
+        }
+
+        // Insert difference in categories to database
+        fileCategories.removeAll(dbCategoryList);
+
+        categoryRepository.save(fileCategories);
     }
 
     @RequestMapping(value = "/perks/vote", method = RequestMethod.POST)
@@ -66,8 +79,7 @@ public class PerkRestController {
             return ResponseEntity.badRequest().build();
         }
 
-        if(perkInRepository.vote(perkVote, account))
-        {
+        if (perkInRepository.vote(perkVote, account)) {
             perkVoteRepository.save(perkVote);
             accountRepository.save(account);
             return ResponseEntity.ok().body(perkRepository.save(perkInRepository));
@@ -101,8 +113,7 @@ public class PerkRestController {
         return ResponseEntity.ok().body(updatedPerk);
     }
 
-    private Account getUser()
-    {
+    private Account getUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = ((org.springframework.security.core.userdetails.User)auth.getPrincipal()).getUsername();
         return accountRepository.findByEmail(email);
