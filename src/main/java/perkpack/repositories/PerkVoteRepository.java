@@ -1,7 +1,7 @@
 package perkpack.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import perkpack.models.PerkVote;
 
-public interface PerkVoteRepository extends CrudRepository<PerkVote,Long> {
+public interface PerkVoteRepository extends PagingAndSortingRepository<PerkVote,Long> {
 }

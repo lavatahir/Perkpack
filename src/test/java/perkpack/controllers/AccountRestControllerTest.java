@@ -169,7 +169,7 @@ public class AccountRestControllerTest {
     @Test
     public void getValidUserTest() throws Exception
     {
-        Account account = new Account("Ali", "Farah", "a@gmail.com","password");
+        Account account = new Account("Ali", "Farah", "b@gmail.com","password");
         Account createAccount = accountRepository.save(account);
 
         mockMvc.perform(get("/account/" + createAccount.getId())).
