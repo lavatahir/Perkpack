@@ -88,8 +88,10 @@ public class CardRestControllerTest {
     @After
     public void tearDown()
     {
+        accountRepository.delete(user);
         perkRepository.delete(perk);
         categoryRepository.delete(games);
+        cardRepository.delete(card);
     }
 
     @Test
@@ -124,6 +126,7 @@ public class CardRestControllerTest {
                 andExpect(jsonPath("$.name", is(newName))).
                 andExpect(jsonPath("$.description", is(newDescription)));
     }
+
     @Test
     @WithMockUser(username = "lava@gmail.com", password = "password")
     public void addPerkToCardTest() throws Exception
@@ -134,6 +137,7 @@ public class CardRestControllerTest {
         Card c = cardRepository.findOne(card.getId());
         Perk p = perkRepository.findOne(perk.getId());
     }
+
     @Test
     @WithMockUser(username = "lava@gmail.com", password = "password")
     public void removePerkFromCardTest() throws Exception
@@ -144,16 +148,24 @@ public class CardRestControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.perks", hasSize(0)));
     }
+
     @Test
     @WithMockUser(username = "ali@gmail.com", password = "password")
     public void addUserToCardTest() throws Exception
     {
         user2 = new Account("Ali", "Farah", "ali@gmail.com", "password");
         user2 = accountRepository.save(user2);
-        mockMvc.perform(patch("/cards/"+card.getId() + "/addUser")).
+        mockMvc.perform(patch("/cards/" + card.getId() + "/addUser")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.accounts[0].firstName", is(user2.getFirstName())));
+
+        mockMvc.perform(patch("/cards/" + card.getId() + "/removeUser/")).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.accounts", hasSize(0)));
+
+        accountRepository.delete(user2);
     }
+
     @Test
     @WithMockUser(username = "guy@gmail.com", password = "password")
     public void removeUserFromCardTest() throws Exception
@@ -165,5 +177,7 @@ public class CardRestControllerTest {
         mockMvc.perform(patch("/cards/"+card.getId() + "/removeUser/")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.accounts", hasSize(0)));
+
+        accountRepository.delete(user3);
     }
 }

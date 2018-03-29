@@ -108,7 +108,13 @@ public class PerkRestControllerTest {
         String newName = "25% off Coffee";
         String newDescription = "Test Description 2";
 
-        mockMvc.perform(patch("/perkedit?id=" + startingPerk.getId() + "&name=" + newName + "&description=" + newDescription)).andExpect(status().isOk());
+        mockMvc.perform(patch("/perkedit?id=" + startingPerk.getId() + "&name=" + newName + "&description=" + newDescription)).
+                andExpect(status().isOk());
+
+        mockMvc.perform(get("/perks/" + startingPerk.getId())).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.name", is(newName))).
+                andExpect(jsonPath("$.description", is(newDescription)));
     }
 
     @Test
