@@ -1,5 +1,8 @@
 package perkpack.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import perkpack.models.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,4 +37,24 @@ public class AccountRestController {
         return ResponseEntity.ok().body(account);
     }
 
+    @RequestMapping(value = "/authenticate", method = RequestMethod.GET)
+    public ResponseEntity<Account> checkIfUserIsAuthenticated()
+    {
+        Account loggedInAccount = getLoggedInAccount();
+        if(loggedInAccount == null)
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok().body(loggedInAccount);
+    }
+
+    private Account getLoggedInAccount() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null) {
+            String email = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
+            return accountRepository.findByEmail(email);
+        }
+        return null;
+    }
 }
