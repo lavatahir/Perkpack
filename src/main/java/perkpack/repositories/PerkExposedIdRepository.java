@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import perkpack.models.Perk;
 
 @Component
-public class PerkExposedIdRepository  extends RepositoryRestConfigurerAdapter {
+public class PerkExposedIdRepository extends RepositoryRestConfigurerAdapter {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
