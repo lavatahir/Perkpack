@@ -79,6 +79,10 @@ public class PerkRestController {
             return ResponseEntity.badRequest().build();
         }
 
+        perkVote.setCategory(perkInRepository.getCategory());
+
+        System.out.println(perkInRepository.getCategory());
+
         if (perkInRepository.vote(perkVote, account)) {
             perkVoteRepository.save(perkVote);
             accountRepository.save(account);

@@ -43,13 +43,17 @@ public class Account {
     @JsonIgnore
     private Set<Card> cards = new HashSet<>();
 
+    private HashMap<Category, Integer> categoryCount = new HashMap<Category, Integer>();
+
+    @OneToOne
+    private Category topCategory;
+
     public Account()
     {
 
     }
 
-    public Account(String firstName, String lastName, String email, String password)
-    {
+    public Account(String firstName, String lastName, String email, String password) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -94,6 +98,14 @@ public class Account {
         return votes;
     }
 
+    public Category getTopCategory() {
+        return topCategory;
+    }
+
+    public void setTopCategory(Category topCategory) {
+        this.topCategory = topCategory;
+    }
+
     public Optional<PerkVote> getVoteForPerk(PerkVote pendingVote)
     {
         if(this.votes.contains(pendingVote))
@@ -110,13 +122,28 @@ public class Account {
         return Optional.empty();
     }
 
-    public boolean removeVote(PerkVote vote)
-    {
+    public boolean removeVote(PerkVote vote) {
+        if (categoryCount.get(vote.getCategory()) == 1) {
+            categoryCount.remove(vote.getCategory());
+        } else {
+            categoryCount.put(vote.getCategory(), categoryCount.get(vote.getCategory()) - 1);
+        }
+
+        updateTopCategory();
+
         return this.votes.remove(vote);
     }
 
-    public boolean addVote(PerkVote vote)
-    {
+    public boolean addVote(PerkVote vote) {
+        System.out.println(categoryCount + " " + vote);
+        if (categoryCount.containsKey(vote.getCategory())) {
+            categoryCount.put(vote.getCategory(), categoryCount.get(vote.getCategory()) + 1);
+        } else {
+            categoryCount.put(vote.getCategory(), 1);
+        }
+
+        updateTopCategory();
+
         return this.votes.add(vote);
     }
 
@@ -130,6 +157,13 @@ public class Account {
 
     public boolean removeCard(Card cardToRemove){
         return this.cards.remove(cardToRemove);
+    }
+
+    private void updateTopCategory() {
+        List<Map.Entry<Category, Integer>> topList = new ArrayList<Map.Entry<Category, Integer>>(categoryCount.entrySet());
+        topList.sort((o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+
+        topCategory = topList.get(0).getKey();
     }
 
     @Override
