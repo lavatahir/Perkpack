@@ -35,7 +35,7 @@ public class Account {
     @GeneratedValue
     private long id;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_vote")
     private Set<PerkVote> votes = new HashSet<>();
 
@@ -43,7 +43,8 @@ public class Account {
     @JsonIgnore
     private Set<Card> cards = new HashSet<>();
 
-    private HashMap<Category, Integer> categoryCount = new HashMap<Category, Integer>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private Map<Category, CategoryCount> categoryCount = new HashMap<Category, CategoryCount>();
 
     @OneToOne
     private Category topCategory;
@@ -123,10 +124,13 @@ public class Account {
     }
 
     public boolean removeVote(PerkVote vote) {
-        if (categoryCount.get(vote.getCategory()) == 1) {
+        if (categoryCount.get(vote.getCategory()).getCount() == 1) {
             categoryCount.remove(vote.getCategory());
         } else {
-            categoryCount.put(vote.getCategory(), categoryCount.get(vote.getCategory()) - 1);
+            CategoryCount count = categoryCount.get(vote.getCategory());
+            count.decrementCount();
+
+            categoryCount.put(vote.getCategory(), count);
         }
 
         updateTopCategory();
@@ -135,12 +139,17 @@ public class Account {
     }
 
     public boolean addVote(PerkVote vote) {
-        System.out.println(categoryCount + " " + vote);
+        System.out.println(categoryCount + " " + vote + " " + categoryCount.size());
         if (categoryCount.containsKey(vote.getCategory())) {
-            categoryCount.put(vote.getCategory(), categoryCount.get(vote.getCategory()) + 1);
+            CategoryCount count = categoryCount.get(vote.getCategory());
+            count.incrementCount();
+
+            categoryCount.put(vote.getCategory(), count);
         } else {
-            categoryCount.put(vote.getCategory(), 1);
+            categoryCount.put(vote.getCategory(), new CategoryCount(1));
         }
+
+        System.out.println(categoryCount.size());
 
         updateTopCategory();
 
@@ -160,8 +169,8 @@ public class Account {
     }
 
     private void updateTopCategory() {
-        List<Map.Entry<Category, Integer>> topList = new ArrayList<Map.Entry<Category, Integer>>(categoryCount.entrySet());
-        topList.sort((o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        List<Map.Entry<Category, CategoryCount>> topList = new ArrayList<Map.Entry<Category, CategoryCount>>(categoryCount.entrySet());
+        topList.sort((o1, o2) -> o1.getValue().getCount().compareTo(o2.getValue().getCount()));
 
         topCategory = topList.get(0).getKey();
     }
@@ -184,5 +193,10 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(this.firstName, this.lastName, this.id, this.email, this.password);
+    }
+
+    @Override
+    public String toString() {
+        return (this.firstName + " " + this.lastName + " " + this.id + " " + this.email);
     }
 }
