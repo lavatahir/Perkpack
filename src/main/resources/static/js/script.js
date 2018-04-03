@@ -159,6 +159,17 @@ var vote = function(element, vote) {
 
 /* ---------- PAGE LOAD ---------- */
 
+var setButtonExpandScale = function() {
+	var screenSize = Math.max($(document).width(), $(document).height());
+	var buttonSize = $('#menu-perk .big.button').width();
+
+	$('<style>.big.button.active .button-expand { transform: scale('+(2*screenSize/buttonSize)+'); }</style>').appendTo(document.documentElement);
+};
+
+$(window).on('resize', function() {
+	setButtonExpandScale();
+});
+
 var currentPage = 'home';
 
 $(document).ready(function() {
@@ -211,6 +222,8 @@ $(document).ready(function() {
 	})
 
 	// perk
+
+	setButtonExpandScale();
 
 	$('#menu-perk').on('click', function() {
 		if (currentPage !== 'perk') goPerk();
