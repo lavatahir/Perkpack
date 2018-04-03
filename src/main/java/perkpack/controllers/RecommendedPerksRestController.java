@@ -27,8 +27,6 @@ public class RecommendedPerksRestController {
     public List<Perk> getRecommendedPerks() {
         Account currentUser = getUser();
 
-        System.out.println(currentUser.toString());
-
         if (currentUser == null || currentUser.getTopCategory() == null) {
             return new ArrayList<Perk>();
         }

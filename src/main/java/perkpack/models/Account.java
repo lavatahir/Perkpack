@@ -139,7 +139,8 @@ public class Account {
     }
 
     public boolean addVote(PerkVote vote) {
-        System.out.println(categoryCount + " " + vote + " " + categoryCount.size());
+        categoryCount.forEach((k, v) -> System.out.println("Cat: " + k.getName() + " count: " + v.getCount()));
+
         if (categoryCount.containsKey(vote.getCategory())) {
             CategoryCount count = categoryCount.get(vote.getCategory());
             count.incrementCount();
@@ -169,8 +170,14 @@ public class Account {
     }
 
     private void updateTopCategory() {
+        if (categoryCount.size() == 0) {
+            topCategory = null;
+
+            return;
+        }
+
         List<Map.Entry<Category, CategoryCount>> topList = new ArrayList<Map.Entry<Category, CategoryCount>>(categoryCount.entrySet());
-        topList.sort((o1, o2) -> o1.getValue().getCount().compareTo(o2.getValue().getCount()));
+        topList.sort((o1, o2) -> o2.getValue().getCount().compareTo(o1.getValue().getCount()));
 
         topCategory = topList.get(0).getKey();
     }

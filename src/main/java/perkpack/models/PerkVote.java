@@ -68,6 +68,10 @@ public class PerkVote {
         return category;
     }
 
+    public long getId() {
+        return id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if(!(o instanceof PerkVote))
