@@ -109,7 +109,8 @@ var goAccount = function() {
 };
 
 var goPerk = function() {
-	activatePage('perk');
+	$('#menu-perk .big.button').addClass('active');
+	setTimeout(function() { activatePage('perk'); }, 200);
 };
 
 /* ---------- VOTING ---------- */
