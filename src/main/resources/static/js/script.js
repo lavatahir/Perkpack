@@ -87,6 +87,11 @@ var activatePage = function(page, menu) {
 	currentPage = page;
 	$('.page.active').removeClass('active');
 	$('#page-'+page).addClass('active');
+
+	if (page !== 'perk') {
+		$('#menu-perk .big.button').removeClass('active');
+		$('#menu-perk .button-expand').show();
+	}
 };
 
 /* ---------- NAVBAR ---------- */
@@ -110,7 +115,12 @@ var goAccount = function() {
 
 var goPerk = function() {
 	$('#menu-perk .big.button').addClass('active');
-	setTimeout(function() { activatePage('perk'); }, 200);
+	setTimeout(function() {
+		activatePage('perk');
+	}, 200);
+	setTimeout(function() {
+		$('#menu-perk .button-expand').hide();
+	}, 700);
 };
 
 /* ---------- VOTING ---------- */
@@ -170,13 +180,13 @@ $(document).ready(function() {
 	});
 
 	$('#menu-search').on('click', function() {
-		goSearch();
+		if (currentPage !== 'search') goSearch();
 	});
 
 	// discover
 
 	$('#menu-discover').on('click', function() {
-		goDiscover();
+		if (currentPage !== 'discover') goDiscover();
 	});
 
 	// home
@@ -188,7 +198,7 @@ $(document).ready(function() {
 	// account
 
 	$('#menu-account').on('click', function() {
-		goAccount();
+		if (currentPage !== 'account') goAccount();
 	});
 
 	$('#login-button').on('click', function() {
@@ -203,6 +213,6 @@ $(document).ready(function() {
 	// perk
 
 	$('#menu-perk').on('click', function() {
-		goPerk();
+		if (currentPage !== 'perk') goPerk();
 	});
 });
