@@ -81,7 +81,7 @@ var tryLogIn = function(username, password) {
 var activatePage = function(page, menu) {
 	if (menu === undefined) menu = page;
 
-	$('.footer-menu-item.active').removeClass('active');
+	$('.navbar-menu-item.active').removeClass('active');
 	$('#menu-'+menu).addClass('active');
 
 	currentPage = page;
@@ -89,7 +89,7 @@ var activatePage = function(page, menu) {
 	$('#page-'+page).addClass('active');
 };
 
-/* ---------- FOOTER ---------- */
+/* ---------- NAVBAR ---------- */
 
 var goSearch = function() {
 	activatePage('home', 'search');

@@ -142,7 +142,11 @@ h2 {
 		animation-iteration-count: 1;
 	}
 
-#footer {
+.button {
+	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+#navbar {
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -166,7 +170,11 @@ h2 {
 	color: white;
 }
 
-	#footer-inner {
+	#navbar-title {
+		display: none;
+	}
+
+	#navbar-inner {
 		width: 100%;
 		height: 60px;
 		display: flex;
@@ -176,7 +184,7 @@ h2 {
 		position: relative;
 	}
 
-		.footer-menu-item {
+		.navbar-menu-item {
 			flex: 1;
 			display: flex;
 			justify-content: center;
@@ -198,7 +206,7 @@ h2 {
 				}
 			}
 
-			.footer-menu-item.active {
+			.navbar-menu-item.active {
 				border-color: rgba(255, 255, 255, 1);
 				animation-name: menu-bounce;
 				animation-duration: 0.2s;
@@ -206,18 +214,18 @@ h2 {
 				opacity: 1 !important;
 			}
 
-			.footer-menu-item:hover {
+			.navbar-menu-item:hover {
 				opacity: 0.5;
 				border-color: rgba(255, 255, 255, 1);
 			}
 
-			.footer-menu-item .title {
+			.navbar-menu-item .title {
 				letter-spacing: 0.2em;
 				font-weight: unset;
 				font-size: 0.6em;
 			}
 
-				.footer-menu-item .title .name.logged-in {
+				.navbar-menu-item .title .name.logged-in {
 					font-size: 0.9em;
 					letter-spacing: 0.1em;
 					font-weight: bold;
@@ -227,31 +235,24 @@ h2 {
 					padding: 0 10px;
 				}
 
-			.footer-menu-item.big {
+			.navbar-menu-item.big {
 				font-size: 2em;
 			}
 
-				.footer-menu-item.big .logo {
+				.navbar-menu-item.big .logo {
 					display: flex;
 					align-items: center;
 					transform: translate(0, -0.25em);
 				}
 
-					.footer-menu-item.big .logo img {
+					.navbar-menu-item.big .logo img {
 						width: 1em;
 					}
 
-		.footer-menu-item .button {
-			width: 60px;
-			height: 60px;
+		.navbar-menu-item .button {
 			background: white;
-			border-radius: 50%;
 			color: rgba(75, 211, 67, 1);
-			display: flex;
-			align-items: center;
-			justify-content: center;
 			transform: translate(0, -10px);
-			box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
 		}
 
 #app-loader {
@@ -390,7 +391,6 @@ h2 {
 		transform: translate(0, 50%);
 		text-transform: uppercase;
 		cursor: default;
-		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 		transition: transform 0.33s;
 	}
 
@@ -398,11 +398,12 @@ h2 {
 			opacity: 0.67;
 		}
 
-		.card .big.button {
+		.big.button {
 			font-size: unset;
 			letter-spacing: unset;
 			width: 3em;
 			height: 3em;
+			border-radius: 50%;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -644,7 +645,7 @@ h2 {
 	.page {
 		width: 100%;
 		max-width: 1200px;
-		padding: 100px !important;
+		padding: 200px 100px 100px 100px !important;
 	}
 
 	.section {
@@ -672,4 +673,87 @@ h2 {
 		.side-by-side > .section:last-child {
 			margin-right: unset;
 		}
+
+	.big.button {
+		width: 4em;
+		height: 4em;
+	}
+
+		.big.button i {
+			font-size: 1.5em;
+		}
+
+	#header {
+		display: none;
+	}
+
+	#navbar {
+		top: 0;
+		height: 100px;
+		padding-top: 0;
+		background: linear-gradient(
+				to right,
+				rgba(75, 211, 67, 1),
+				rgba(66, 244, 206, 1)
+			);
+		display: flex;
+		flex-direction: row;
+	}
+
+		#navbar-title {
+			display: flex;
+			align-items: center;
+			background: black;
+			text-transform: uppercase;
+			font-size: 0.8em;
+			letter-spacing: 1em;
+			justify-content: center;
+			padding: 1em;
+			padding-left: 2em;
+			cursor: default;
+		}
+
+			#navbar-title .logo {
+				width: 2em;
+				margin-right: 1em;
+			}
+
+		#navbar-inner {
+			height: 100%;
+			justify-content: left;
+			flex: 1;
+			padding-left: 0.5em;
+		}
+
+		.navbar-menu-item {
+			flex: 0;
+			min-width: 100px;
+		}
+
+			.navbar-menu-item .title {
+				transform: translate(0, 0.5em);
+			}
+
+				.navbar-menu-item .title .name {
+					transform: translate(0, -0.33em);
+				}
+
+			.navbar-menu-item.big .logo {
+				transform: unset;
+			}
+
+			.navbar-menu-item .button {
+				transform: unset;
+			}
+
+			#menu-home {
+				order: -1;
+			}
+
+			#menu-perk {
+				position: absolute;
+				min-width: unset;
+				top: 50%;
+				right: 40px;
+			}
 }
