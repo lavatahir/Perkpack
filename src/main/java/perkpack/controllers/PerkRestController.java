@@ -94,6 +94,7 @@ public class PerkRestController {
 
         if (perkInRepository.vote(perkVote, account)) {
             accountRepository.save(account);
+
             return ResponseEntity.ok().body(perkRepository.save(perkInRepository));
         }
 
