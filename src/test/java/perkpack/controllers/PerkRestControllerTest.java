@@ -171,6 +171,14 @@ public class PerkRestControllerTest {
                 content(perkVoteJSON)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.score", is(1)));
+        
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perkVoteJSON)).
+                andExpect(status().isOk());
 
+        accountRepository.delete(user);
+        perkRepository.delete(startingPerk);
+        categoryRepository.delete(startingCategory);
     }
 }
