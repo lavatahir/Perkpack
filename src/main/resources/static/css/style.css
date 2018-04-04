@@ -133,6 +133,7 @@ h2 {
 	}
 
 .input-radio-container {
+	margin-bottom: 0 !important;
 }
 
 	.input-radio {
