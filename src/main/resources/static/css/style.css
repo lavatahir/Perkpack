@@ -750,7 +750,7 @@ h2 {
 	display: none;
 }
 
-#sign-up:hover {
+.link:hover {
 	cursor: pointer;
 	opacity: 0.8;
 }

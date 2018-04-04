@@ -50,17 +50,13 @@ var applyUser = function(user) {
 };
 
 var authenticate = function() {
-	/*
-	$.getJSON('/authenticate', function(data) {
+	$.getJSON('/account/authenticate', function(data) {
 		stopLoad();
-		if (Object.keys(data).length === 0 && data.constructor === Object) {
-			applyUser(data);
-		}
+		applyUser(data);
 	})
 	.fail(function() {
 		stopLoad();
 	});
-	*/
 };
 
 var tryLogIn = function(username, password, fromSignup) {
