@@ -26,9 +26,11 @@ import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
 import perkpack.repositories.AccountRepository;
 
+import javax.transaction.Transactional;
 import java.nio.charset.Charset;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppBoot.class)
 @WebAppConfiguration
+@Transactional
 public class CardRestControllerTest {
 
     private MediaType jsonContentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
@@ -134,6 +137,9 @@ public class CardRestControllerTest {
         mockMvc.perform(patch("/cards/"+card.getId() + "/addPerk/" + perk.getName())).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.perks[0].name", is(perk.getName())));
+        Perk p = perkRepository.findOne(perk.getId());
+        Card c = cardRepository.findOne(card.getId());
+        assertEquals(p.getCardPerkBelongsTo(), c);
     }
 
     @Test

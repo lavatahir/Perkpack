@@ -1,5 +1,7 @@
 package perkpack.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +23,7 @@ import perkpack.models.PerkVote;
 import perkpack.repositories.AccountRepository;
 import perkpack.repositories.CategoryRepository;
 import perkpack.repositories.PerkRepository;
+import perkpack.repositories.PerkVoteRepository;
 
 import java.nio.charset.Charset;
 
@@ -35,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = AppBoot.class)
 @WebAppConfiguration
 public class PerkRestControllerTest {
+
     private MediaType jsonContentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
@@ -145,5 +149,36 @@ public class PerkRestControllerTest {
                 andExpect(status().isOk());
 
         accountRepository.delete(account);
+    }
+
+    @Test
+    @WithMockUser(username = "five@gmail.com", password = "password")
+    public void changeScoreTest() throws Exception {
+        Category startingCategory = new Category("Another Test Category");
+        Perk startingPerk = new Perk("50% off", "Everything", startingCategory);
+        categoryRepository.save(startingCategory);
+        perkRepository.save(startingPerk);
+
+        Account user = new Account("Guy", "Five", "five@gmail.com", "password");
+        user = accountRepository.save(user);
+        PerkVote pv = new PerkVote("50% off", 1,user);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String perkVoteJSON = ow.writeValueAsString(pv);
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perkVoteJSON)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.score", is(1)));
+        
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perkVoteJSON)).
+                andExpect(status().isOk());
+
+        accountRepository.delete(user);
+        perkRepository.delete(startingPerk);
+        categoryRepository.delete(startingCategory);
     }
 }

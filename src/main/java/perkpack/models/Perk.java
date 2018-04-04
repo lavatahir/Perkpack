@@ -1,5 +1,7 @@
 package perkpack.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Optional;
@@ -21,6 +23,11 @@ public class Perk {
     @ManyToOne
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "card_perk")
+    @JsonIgnore
+    private Card cardPerkBelongsTo;
+
     public Perk () {
 
     }
@@ -31,7 +38,6 @@ public class Perk {
         this.location = location;
         this.description = description;
         this.category = category;
-
         score = 0;
     }
 
@@ -104,6 +110,14 @@ public class Perk {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Card getCardPerkBelongsTo() {
+        return cardPerkBelongsTo;
+    }
+
+    public void setCardPerkBelongsTo(Card card) {
+        this.cardPerkBelongsTo = card;
     }
 
     public String toString() {
