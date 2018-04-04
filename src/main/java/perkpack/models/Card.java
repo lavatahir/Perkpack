@@ -15,8 +15,7 @@ public class Card {
     @JoinTable
     private Set<Account> accounts = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "card_perks")
+    @OneToMany(mappedBy ="cardPerkBelongsTo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Perk> perks = new HashSet<>();
 
     public Card(String name, String description){
@@ -72,6 +71,7 @@ public class Card {
 
     public void addPerk(Perk p){
         perks.add(p);
+        p.setCardPerkBelongsTo(this);
     }
 
     public void removePerk(Perk p){

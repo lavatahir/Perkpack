@@ -1,5 +1,7 @@
 package perkpack.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Optional;
@@ -21,7 +23,9 @@ public class Perk {
     @ManyToOne
     private Category category;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "card_perk")
+    @JsonIgnore
     private Card cardPerkBelongsTo;
 
     public Perk () {

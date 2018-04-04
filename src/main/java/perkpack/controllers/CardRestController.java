@@ -98,7 +98,6 @@ public class CardRestController {
         c.addPerk(perkToAdd);
 
         Card card = cardRepository.save(c);
-
         return ResponseEntity.ok().body(card);
     }
 
