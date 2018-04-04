@@ -94,8 +94,7 @@ public class Card {
 
         return c.getName().equalsIgnoreCase(this.getName()) &&
                 c.getDescription().equalsIgnoreCase(this.getDescription()) &&
-                c.accounts.equals(this.accounts) &&
-                c.perks.equals(this.perks);
+                c.accounts.equals(this.accounts);
     }
 
     @Override
