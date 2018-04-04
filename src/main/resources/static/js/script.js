@@ -14,6 +14,16 @@ var populatePerkList = function() {
 	});
 };
 
+// prompt
+
+var prompt = function() {
+	$('.prompt-container').show();
+};
+
+var endPrompt = function() {
+	$('.prompt-container').hide();
+}
+
 // loader
 
 var startLoad = function() {
@@ -178,35 +188,40 @@ var goPerk = function() {
 /* ---------- VOTING ---------- */
 
 var vote = function(element, vote) {
-	var perkName = $($(element)[0].parentElement.parentElement).find('.perk-name span').text();
+	if (loggedIn) {
+		var perkName = $($(element)[0].parentElement.parentElement).find('.perk-name span').text();
 
-	if ($(element).hasClass('voted')) {
-		vote *= -1;
-	}
-	else {
-		if ($($(element)[0].parentElement).find('.voted').length > 0) {
-			vote *= 2;
-		}
-	}
-
-	var currentScore = parseInt($($(element)[0].parentElement).find('.perk-score').text());
-	var newScore = currentScore + vote;
-
-	$.ajax({
-        method: 'POST',
-        url: '/perks/vote',
-        contentType: 'application/json',
-        data: '{"name": "' + perkName + '", "vote": "' + newScore + '"}'
-    }).done(function(perk) {
-    	if ($(element).hasClass('voted')) {
-			$(element).removeClass('voted');
+		if ($(element).hasClass('voted')) {
+			vote *= -1;
 		}
 		else {
-			$($(element)[0].parentElement).find('.perk-vote-button').removeClass('voted');
-			$(element).toggleClass('voted');
+			if ($($(element)[0].parentElement).find('.voted').length > 0) {
+				vote *= 2;
+			}
 		}
-    	$($(element)[0].parentElement).find('.perk-score').text(perk.score);
-    });
+
+		var currentScore = parseInt($($(element)[0].parentElement).find('.perk-score').text());
+		var newScore = currentScore + vote;
+
+		$.ajax({
+	        method: 'POST',
+	        url: '/perks/vote',
+	        contentType: 'application/json',
+	        data: '{"name": "' + perkName + '", "vote": "' + newScore + '"}'
+	    }).done(function(perk) {
+	    	if ($(element).hasClass('voted')) {
+				$(element).removeClass('voted');
+			}
+			else {
+				$($(element)[0].parentElement).find('.perk-vote-button').removeClass('voted');
+				$(element).toggleClass('voted');
+			}
+	    	$($(element)[0].parentElement).find('.perk-score').text(perk.score);
+	    });
+	}
+	else {
+		prompt();
+	}
 }
 
 /* ---------- CATEGORIES ---------- */
@@ -292,6 +307,7 @@ $(document).ready(function() {
 	// account
 
 	$('#menu-account').on('click', function() {
+		endPrompt();
 		if (currentPage !== 'account') goAccount();
 	});
 
@@ -343,7 +359,12 @@ $(document).ready(function() {
 	setButtonExpandScale();
 
 	$('#menu-perk').on('click', function() {
-		if (currentPage !== 'perk') goPerk();
+		if (loggedIn) {
+			if (currentPage !== 'perk') goPerk();
+		}
+		else {
+			prompt();
+		}
 	});
 
 	for (var i = 0; i < categoryKeys.length; i++) {
