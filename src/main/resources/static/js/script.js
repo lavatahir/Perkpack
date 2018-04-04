@@ -85,6 +85,20 @@ var tryLogIn = function(username, password, fromSignup) {
 	});
 };
 
+var tryLogOut = function() {
+	startLoad();
+	$.ajax({
+		type: 'GET',
+		url: '/logout'
+	})
+	.done(function() {
+		location.reload();
+	})
+	.fail(function() {
+		location.reload();
+	});
+};
+
 var trySignUp = function(fname, lname, email, password) {
 	startLoad();
 	$.ajax({
@@ -315,6 +329,10 @@ $(document).ready(function() {
 			$('#email, #password').addClass('invalid');
 		}
 	})
+
+	$('#log-out').on('click', function() {
+		tryLogOut();
+	});
 
 	$('#sign-up').on('click', function() {
 		goSignUp();
