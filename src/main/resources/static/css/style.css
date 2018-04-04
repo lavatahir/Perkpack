@@ -136,6 +136,14 @@ h2 {
 	margin-bottom: 0 !important;
 }
 
+	.input-radio-container.invalid .input-radio {
+		background: rgba(255, 0, 0, 0.25);
+	}
+
+		.input-radio-container.invalid .input-radio:hover {
+			background: rgba(255, 0, 0, 0.175);
+		}
+
 	.input-radio {
 		width: 50%;
 		padding-bottom: 50%;
@@ -536,15 +544,15 @@ h2 {
 			transform: translate(0, 50%) scale(1.1);
 		}
 
-			#login-button:hover {
+			.button.go:hover {
 				transform: translate(0.25em, 50%);
 			}
 
-			#login-button i {
+			.button.go i {
 				transition: transform 0.33s;
 			}
 
-				#login-button:hover i {
+				.button.go:hover i {
 					transform: translate(0.25em, 0);
 				}
 
@@ -845,6 +853,16 @@ h2 {
 
 		.side-by-side > .section:last-child {
 			margin-right: unset;
+		}
+
+	.perk-tile {
+		width: calc(100% + 120px);
+    	margin-left: -60px;
+    	margin-bottom: 20px;
+	}
+
+		.perk-desc {
+			white-space: unset;
 		}
 
 	.big.button {

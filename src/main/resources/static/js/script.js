@@ -66,14 +66,39 @@ var tryLogIn = function(username, password) {
 	})
 	.done(function(data) {
 		stopLoad();
-		console.log(data);
 		applyUser(JSON.parse(data));
 	})
 	.fail(function() {
 		stopLoad();
 		$('#email, #password').addClass('invalid');
-		//applyUser({firstName: 'Vanja', lastName: 'Veselinovic'});
 	});
+};
+
+/* ---------- CREATE PERK ---------- */
+
+var tryCreatePerk = function(name, description, category) {
+	startLoad();
+
+	console.log(name+description+category);
+
+	$.ajax({
+        type: 'POST',
+        url: '/perks',
+        data: '{"name": "' + name + '", "description": "' + description + '", "category": "/categories/' + category + '"}',
+        contentType: 'application/json',
+    })
+    .done(function(perk) {
+    	stopLoad();
+        populatePerkList();
+        goHome();
+        $('#perk-name').val('');
+        $('#perk-desc').val('');
+        $('input[name="cat"]').prop('checked', false);
+    })
+    .fail(function() {
+    	stopLoad();
+    	$('#perk-name, #perk-desc, #categories').addClass('invalid');
+    });
 };
 
 /* ---------- PAGES ---------- */
@@ -159,19 +184,34 @@ var vote = function(element, vote) {
 
 /* ---------- CATEGORIES ---------- */
 
-var categoryNamesToIcons = {
-	'Food': 'restaurant',
-	'Clothing': 'accessibility',
-	'Groceries': 'local_grocery_store',
-	'Electronics': 'devices_other',
-	'Shoes': 'airline_seat_legroom_normal'
+var categories = {
+	'Food': {
+		id: 1,
+		icon: 'restaurant'
+	},
+	'Clothing': {
+		id: 2,
+		icon: 'accessibility'
+	},
+	'Groceries': {
+		id: 3,
+		icon: 'local_grocery_store'
+	},
+	'Electronics': {
+		id: 4,
+		icon: 'devices_other'
+	},
+	'Shoes': {
+		id: 5,
+		icon: 'airline_seat_legroom_normal'
+	}
 };
 
 var getCategoryHTML = function(category) {
-	return '<div class="input-radio"><input type="radio" name="cat" id="cat-'+category+'"><label for="cat-'+category+'"><div class="radio-icon"><i class="material-icons">'+categoryNamesToIcons[category]+'</i></div><div class="radio-label">'+category+'</div></label></div>';
+	return '<div class="input-radio"><input type="radio" name="cat" id="cat-'+category+'" data-i="'+categories[category].id+'"><label for="cat-'+category+'"><div class="radio-icon"><i class="material-icons">'+categories[category].icon+'</i></div><div class="radio-label">'+category+'</div></label></div>';
 };
 
-var cntiKeys = Object.keys(categoryNamesToIcons);
+var categoryKeys = Object.keys(categories);
 
 /* ---------- PAGE LOAD ---------- */
 
@@ -245,11 +285,25 @@ $(document).ready(function() {
 		if (currentPage !== 'perk') goPerk();
 	});
 
-	for (var i = 0; i < cntiKeys.length; i++) {
-		$('#categories').append(getCategoryHTML(cntiKeys[i]));
+	for (var i = 0; i < categoryKeys.length; i++) {
+		$('#categories').append(getCategoryHTML(categoryKeys[i]));
 	}
 
-	$('.input-radio input').on('click', function() {
+	$('#categories').on('click', function() {
+		$(this).removeClass('invalid');
+	});
 
+	$('#create-button').on('click', function() {
+		if ($('#perk-name').val().length > 0 && $('input[name="cat"]:checked').length > 0) {
+			tryCreatePerk($('#perk-name').val(), $('#perk-desc').val(), $('input[name="cat"]:checked')[0].dataset.i);
+		}
+		else {
+			if ($('#perk-name').val().length <= 0) {
+				$('#perk-name').addClass('invalid');
+			}
+			if ($('input[name="cat"]:checked').length <= 0) {
+				$('#categories').addClass('invalid');
+			}
+		}
 	});
 });
