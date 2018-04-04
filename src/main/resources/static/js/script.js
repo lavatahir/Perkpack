@@ -53,7 +53,7 @@ var authenticate = function() {
 	*/
 };
 
-var tryLogIn = function(username, password) {
+var tryLogIn = function(username, password, fromSignup) {
 	startLoad();
 	$.ajax({
 		type: 'POST',
@@ -70,7 +70,30 @@ var tryLogIn = function(username, password) {
 	})
 	.fail(function() {
 		stopLoad();
-		$('#email, #password').addClass('invalid');
+		if (fromSignup) {
+			$('#page-signup input').addClass('invalid');
+		}
+		else {
+			$('#email, #password').addClass('invalid');
+		}
+	});
+};
+
+var trySignUp = function(fname, lname, email, password) {
+	startLoad();
+	$.ajax({
+		type: 'POST',
+		url: '/account',
+		data: '{"firstName": "'+fname+'", "lastName": "'+lname+'", "email": "'+email+'", "password": "'+password+'"}',
+		contentType: 'application/json'
+	})
+	.done(function() {
+		stopLoad();
+		tryLogIn(email, password, true);
+	})
+	.fail(function() {
+		stopLoad();
+		$('#page-signup input').addClass('invalid');
 	});
 };
 
@@ -136,6 +159,10 @@ var goHome = function() {
 
 var goAccount = function() {
 	activatePage('account');
+};
+
+var goSignUp = function() {
+	activatePage('signup');
 };
 
 var goPerk = function() {
@@ -276,6 +303,40 @@ $(document).ready(function() {
 			$('#email, #password').addClass('invalid');
 		}
 	})
+
+	$('#sign-up').on('click', function() {
+		goSignUp();
+	});
+
+	$('#signup-button').on('click', function() {
+		if (
+				$('#signup-fname').val().length > 0 &&
+				$('#signup-lname').val().length > 0 &&
+				$('#signup-email').val().length > 0 &&
+				$('#signup-password').val().length > 0
+			) {
+			trySignUp(
+					$('#signup-fname').val(),
+					$('#signup-lname').val(),
+					$('#signup-email').val(),
+					$('#signup-password').val()
+				);
+		}
+		else {
+			if ($('#signup-fname').val().length <= 0) {
+				$('#signup-fname').addClass('invalid');
+			}
+			if ($('#signup-lname').val().length <= 0) {
+				$('#signup-lname').addClass('invalid');
+			}
+			if ($('#signup-email').val().length <= 0) {
+				$('#signup-email').addClass('invalid');
+			}
+			if ($('#signup-password').val().length <= 0) {
+				$('#signup-password').addClass('invalid');
+			}
+		}
+	});
 
 	// perk
 

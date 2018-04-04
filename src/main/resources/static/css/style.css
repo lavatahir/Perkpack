@@ -717,6 +717,15 @@ h2 {
 	display: none;
 }
 
+#sign-up:hover {
+	cursor: pointer;
+	opacity: 0.8;
+}
+
+#page-signup .open-input-container {
+	margin-bottom: 30px;
+}
+
 	/* cards */
 
 	.pp-card {
