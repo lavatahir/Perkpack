@@ -86,14 +86,16 @@ public class PerkRestController {
         for (PerkVote vote : existingPerkVotes) {
             if (vote.getAccount().equals(account)) {
                 perkInRepository.vote(perkVote, account);
-                perkVoteRepository.delete(vote.getId());
 
-                return ResponseEntity.ok().body(perkRepository.save(perkInRepository));
+                accountRepository.save(account);
+                perkVoteRepository.delete(vote);
+
+                return ResponseEntity.ok().body(perkRepository.findByName(perkVote.getName()));
             }
         }
 
         if (perkInRepository.vote(perkVote, account)) {
-            accountRepository.save(account);
+            perkVoteRepository.save(perkVote);
 
             return ResponseEntity.ok().body(perkRepository.save(perkInRepository));
         }

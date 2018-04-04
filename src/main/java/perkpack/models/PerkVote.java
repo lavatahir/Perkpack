@@ -16,7 +16,7 @@ public class PerkVote {
     @Range(min = -1, max = 1)
     private int vote;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Account account;
 
     @OneToOne

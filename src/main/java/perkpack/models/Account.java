@@ -35,7 +35,7 @@ public class Account {
     @GeneratedValue
     private long id;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_vote")
     private Set<PerkVote> votes = new HashSet<>();
 
@@ -46,7 +46,7 @@ public class Account {
     @OneToMany(cascade = CascadeType.ALL)
     private Map<Category, CategoryCount> categoryCount = new HashMap<Category, CategoryCount>();
 
-    @OneToOne
+    @ManyToOne
     private Category topCategory;
 
     public Account()
@@ -139,8 +139,6 @@ public class Account {
     }
 
     public boolean addVote(PerkVote vote) {
-        categoryCount.forEach((k, v) -> System.out.println("Cat: " + k.getName() + " count: " + v.getCount()));
-
         if (categoryCount.containsKey(vote.getCategory())) {
             CategoryCount count = categoryCount.get(vote.getCategory());
             count.incrementCount();
@@ -149,8 +147,6 @@ public class Account {
         } else {
             categoryCount.put(vote.getCategory(), new CategoryCount(1));
         }
-
-        System.out.println(categoryCount.size());
 
         updateTopCategory();
 

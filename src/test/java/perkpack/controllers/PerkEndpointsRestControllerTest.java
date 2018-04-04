@@ -6,13 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import perkpack.AppBoot;
@@ -28,6 +27,7 @@ import java.nio.charset.Charset;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,8 +61,10 @@ public class PerkEndpointsRestControllerTest {
     private Perk testPerk3 = new Perk("30% off Coffee", "This is ANOTHER description", testCategory2);
 
     private Account testAccount = new Account("Cyrus", "Sadeghi", "cyrus@perkpack.com", "pw");
-    private Account testAccount2 = new Account("Cyyrus", "Sadeghi", "cyrus2@perkpack.com", "pw");
-    private Account testAccount3 = new Account("Cyyyrus", "Sadeghi", "cyrus3@perkpack.com", "pw");
+
+    private String perkUpvoteJson = "{\"name\": \"" + testPerk.getName() + "\", \"vote\": \"" + 1 + "\"}";
+    private String perk2UpvoteJson = "{\"name\": \"" + testPerk2.getName() + "\", \"vote\": \"" + 1 + "\"}";
+    private String perk3UpvoteJson = "{\"name\": \"" + testPerk3.getName() + "\", \"vote\": \"" + 1 + "\"}";
 
     @Before
     public void setup() {
@@ -76,14 +78,10 @@ public class PerkEndpointsRestControllerTest {
         perkRepository.save(testPerk3);
 
         accountRepository.save(testAccount);
-        accountRepository.save(testAccount2);
-        accountRepository.save(testAccount3);
     }
 
     @After
     public void tearDown() {
-        accountRepository.delete(testAccount3);
-        accountRepository.delete(testAccount2);
         accountRepository.delete(testAccount);
 
         perkRepository.delete(testPerk3);
@@ -97,10 +95,52 @@ public class PerkEndpointsRestControllerTest {
     @Test
     @WithMockUser(username = "cyrus@perkpack.com", password = "pw")
     public void testTopPerks() throws Exception {
-        String perkUpvoteJson = "{\"name\": \"" + testPerk.getName() + "\", \"vote\": \"" + 1 + "\"}";
-        String perk2UpvoteJson = "{\"name\": \"" + testPerk2.getName() + "\", \"vote\": \"" + 1 + "\"}";
-        String perk3UpvoteJson = "{\"name\": \"" + testPerk3.getName() + "\", \"vote\": \"" + 1 + "\"}";
+        mockMvc.perform(get("/account/authenticate")).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.firstName", is(testAccount.getFirstName()))).
+                andExpect(jsonPath("$.lastName", is(testAccount.getLastName()))).
+                andExpect(jsonPath("$.email", is(testAccount.getEmail())));
 
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perk3UpvoteJson)).
+                andExpect(status().isOk());
+
+        mockMvc.perform(get("/top")).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$[0].name", is(testPerk3.getName())));
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perkUpvoteJson)).
+                andExpect(status().isOk());
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perk3UpvoteJson)).
+                andExpect(status().isOk());
+
+        mockMvc.perform(get("/top")).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$[0].name", is(testPerk.getName())));
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perkUpvoteJson)).
+                andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "cyrus@perkpack.com", password = "pw")
+    public void testEmptyRecommendedPerks() throws Exception {
+        ResultActions resultActions = mockMvc.perform(get("/recommended")).
+                                              andExpect(status().isOk());
+        resultActions.andExpect(content().string("[]"));
+    }
+
+    @Test
+    @WithMockUser(username = "cyrus@perkpack.com", password = "pw")
+    public void testRecommendedPerks() throws Exception {
         mockMvc.perform(get("/account/authenticate")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.firstName", is(testAccount.getFirstName()))).
@@ -112,13 +152,38 @@ public class PerkEndpointsRestControllerTest {
                 content(perkUpvoteJson)).
                 andExpect(status().isOk());
 
-        mockMvc.perform(get("/top")).
+        mockMvc.perform(get("/recommended")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$[0].name", is(testPerk.getName())));
 
         mockMvc.perform(post("/perks/vote").
                 contentType(jsonContentType).
+                content(perk2UpvoteJson)).
+                andExpect(status().isOk());
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perk3UpvoteJson)).
+                andExpect(status().isOk());
+
+        mockMvc.perform(get("/recommended")).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$[0].name", is(testPerk2.getName())));
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perk2UpvoteJson)).
+                andExpect(status().isOk());
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perk3UpvoteJson)).
+                andExpect(status().isOk());
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
                 content(perkUpvoteJson)).
                 andExpect(status().isOk());
+
     }
 }
