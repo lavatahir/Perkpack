@@ -35,7 +35,7 @@ public class Account {
     @GeneratedValue
     private long id;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_vote")
     private Set<PerkVote> votes = new HashSet<>();
 
@@ -43,13 +43,18 @@ public class Account {
     @JsonIgnore
     private Set<Card> cards = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private Map<Category, CategoryCount> categoryCount = new HashMap<Category, CategoryCount>();
+
+    @ManyToOne
+    private Category topCategory;
+
     public Account()
     {
 
     }
 
-    public Account(String firstName, String lastName, String email, String password)
-    {
+    public Account(String firstName, String lastName, String email, String password) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -94,6 +99,14 @@ public class Account {
         return votes;
     }
 
+    public Category getTopCategory() {
+        return topCategory;
+    }
+
+    public void setTopCategory(Category topCategory) {
+        this.topCategory = topCategory;
+    }
+
     public Optional<PerkVote> getVoteForPerk(PerkVote pendingVote)
     {
         if(this.votes.contains(pendingVote))
@@ -110,13 +123,33 @@ public class Account {
         return Optional.empty();
     }
 
-    public boolean removeVote(PerkVote vote)
-    {
+    public boolean removeVote(PerkVote vote) {
+        if (categoryCount.get(vote.getCategory()).getCount() == 1) {
+            categoryCount.remove(vote.getCategory());
+        } else {
+            CategoryCount count = categoryCount.get(vote.getCategory());
+            count.decrementCount();
+
+            categoryCount.put(vote.getCategory(), count);
+        }
+
+        updateTopCategory();
+
         return this.votes.remove(vote);
     }
 
-    public boolean addVote(PerkVote vote)
-    {
+    public boolean addVote(PerkVote vote) {
+        if (categoryCount.containsKey(vote.getCategory())) {
+            CategoryCount count = categoryCount.get(vote.getCategory());
+            count.incrementCount();
+
+            categoryCount.put(vote.getCategory(), count);
+        } else {
+            categoryCount.put(vote.getCategory(), new CategoryCount(1));
+        }
+
+        updateTopCategory();
+
         return this.votes.add(vote);
     }
 
@@ -130,6 +163,19 @@ public class Account {
 
     public boolean removeCard(Card cardToRemove){
         return this.cards.remove(cardToRemove);
+    }
+
+    private void updateTopCategory() {
+        if (categoryCount.size() == 0) {
+            topCategory = null;
+
+            return;
+        }
+
+        List<Map.Entry<Category, CategoryCount>> topList = new ArrayList<Map.Entry<Category, CategoryCount>>(categoryCount.entrySet());
+        topList.sort((o1, o2) -> o2.getValue().getCount().compareTo(o1.getValue().getCount()));
+
+        topCategory = topList.get(0).getKey();
     }
 
     @Override
@@ -150,5 +196,10 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(this.firstName, this.lastName, this.id, this.email, this.password);
+    }
+
+    @Override
+    public String toString() {
+        return (this.firstName + " " + this.lastName + " " + this.id + " " + this.email);
     }
 }

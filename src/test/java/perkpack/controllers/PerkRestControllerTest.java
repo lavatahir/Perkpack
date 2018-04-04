@@ -60,8 +60,13 @@ public class PerkRestControllerTest {
     @Autowired
     private PerkVoteRepository perkVoteRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     private Category testCategory = new Category("None");
     private Perk testPerk = new Perk("10% off Coffee", "This is a description", testCategory);
+    private static final String email = "a@gmail.com";
+    private static final String password = "test123";
 
     @Before
     public void setup() {
@@ -74,6 +79,7 @@ public class PerkRestControllerTest {
     public void tearDown() {
         Perk toRemove = perkRepository.findByName("10% off Coffee");
         Category catToRemove = categoryRepository.findByName("None");
+
         perkRepository.delete(toRemove.getId());
         categoryRepository.delete(catToRemove.getId());
     }
@@ -115,6 +121,40 @@ public class PerkRestControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.name", is(newName))).
                 andExpect(jsonPath("$.description", is(newDescription)));
+    }
+
+    @Test
+    @WithMockUser(username = email, password = password)
+    public void votePerkTest() throws Exception {
+        String perkUpvoteJson = "{\"name\": \"" + testPerk.getName() + "\", \"vote\": \"" + 1 + "\"}";
+        Account account = new Account("Cyrus", "Sadeghi", email, password);
+        accountRepository.save(account);
+
+        mockMvc.perform(get("/account/authenticate")).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.firstName", is(account.getFirstName()))).
+                andExpect(jsonPath("$.lastName", is(account.getLastName()))).
+                andExpect(jsonPath("$.email", is(account.getEmail())));
+
+        mockMvc.perform(get("/perks/" + testPerk.getId())).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.score", is(0)));
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perkUpvoteJson)).
+                andExpect(status().isOk());
+
+        mockMvc.perform(get("/perks/" + testPerk.getId())).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.score", is(1)));
+
+        mockMvc.perform(post("/perks/vote").
+                contentType(jsonContentType).
+                content(perkUpvoteJson)).
+                andExpect(status().isOk());
+
+        accountRepository.delete(account);
     }
 
     @Test

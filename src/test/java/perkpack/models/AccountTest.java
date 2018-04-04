@@ -65,4 +65,55 @@ public class AccountTest {
         Account account2 = new Account(firstName,lastName,"","password");
         assertNotEquals(account2, account);
     }
+
+    @Test
+    public void topCategoryAdditionTest() throws Exception {
+        Account account2 = new Account(firstName, lastName, email, "password");
+        PerkVote perkVote = new PerkVote("TestPerk", 1, account2);
+        PerkVote perkVote2 = new PerkVote("TestPerk2", 1, account2);
+        PerkVote perkVote3 = new PerkVote("TestPerk3", 1, account2);
+        Category perkCategory = new Category("Category");
+        Category perkCategory2 = new Category("Category2");
+
+        perkVote.setCategory(perkCategory);
+        perkVote2.setCategory(perkCategory2);
+        perkVote3.setCategory(perkCategory2);
+
+        account2.addVote(perkVote);
+
+        assertEquals(account2.getTopCategory(), perkCategory);
+
+        account2.addVote(perkVote2);
+        account2.addVote(perkVote3);
+
+        assertEquals(account2.getTopCategory(), perkCategory2);
+    }
+
+    @Test
+    public void topCategoryRemovalTest() throws Exception {
+        Account account2 = new Account(firstName, lastName, email, "password");
+        PerkVote perkVote = new PerkVote("TestPerk", 1, account2);
+        PerkVote perkVote2 = new PerkVote("TestPerk2", 1, account2);
+        PerkVote perkVote3 = new PerkVote("TestPerk3", 1, account2);
+        Category perkCategory = new Category("Category");
+        Category perkCategory2 = new Category("Category2");
+
+        perkVote.setCategory(perkCategory);
+        perkVote2.setCategory(perkCategory2);
+        perkVote3.setCategory(perkCategory2);
+
+        account2.addVote(perkVote2);
+        account2.addVote(perkVote3);
+
+        assertEquals(account2.getTopCategory(), perkCategory2);
+
+        account2.addVote(perkVote);
+
+        assertEquals(account2.getTopCategory(), perkCategory2);
+
+        account2.removeVote(perkVote2);
+        account2.removeVote(perkVote3);
+
+        assertEquals(account2.getTopCategory(), perkCategory);
+    }
 }
