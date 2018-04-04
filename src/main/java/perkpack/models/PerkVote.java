@@ -16,8 +16,11 @@ public class PerkVote {
     @Range(min = -1, max = 1)
     private int vote;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Account account;
+
+    @OneToOne
+    private Category category;
 
     @Id
     @GeneratedValue
@@ -49,12 +52,24 @@ public class PerkVote {
         this.vote = setVote;
     }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public Account getAccount() {
         return account;
     }
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public long getId() {
+        return id;
     }
 
     @Override

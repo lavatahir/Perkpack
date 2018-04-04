@@ -77,30 +77,28 @@ public class Perk {
         if(optionalPerkVote.isPresent())
         {
             PerkVote castedVote = optionalPerkVote.get();
-            if(castedVote.getVote() == pendingVote.getVote())
+
+            voter.removeVote(castedVote);
+
+            if (castedVote.getVote() == pendingVote.getVote())
             {
                 return false;
             }
-            else if(pendingVote.getVote() == 0)
+            else
             {
-                // reverse the previous vote
-                this.score += (castedVote.getVote() * -1);
+                castedVote.setVote(-2 * castedVote.getVote());
+                voter.addVote(castedVote);
 
+                this.score += castedVote.getVote();
             }
-            else {
-                if(castedVote.getVote() == 0)
-                    this.score += pendingVote.getVote();
-                else
-                    this.score += pendingVote.getVote() * 2;
-
-            }
-            voter.removeVote(castedVote);
         }
-        else {
+        else
+        {
             this.score += pendingVote.getVote();
+
+            voter.addVote(pendingVote);
         }
 
-        voter.addVote(pendingVote);
         return true;
     }
 
