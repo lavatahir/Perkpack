@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class PerkRestController {
@@ -73,17 +74,30 @@ public class PerkRestController {
     @ResponseBody
     public ResponseEntity changeScore(@RequestBody PerkVote perkVote) {
         Perk perkInRepository = perkRepository.findByName(perkVote.getName());
+        List<PerkVote> existingPerkVotes = perkVoteRepository.findByName(perkInRepository.getName());
         Account account = getUser();
 
         if (perkInRepository == null) {
             return ResponseEntity.badRequest().build();
         }
 
+        perkVote.setCategory(perkInRepository.getCategory());
+
+        for (PerkVote vote : existingPerkVotes) {
+            if (vote.getAccount().equals(account)) {
+                perkInRepository.vote(perkVote, account);
+
+                accountRepository.save(account);
+                perkVoteRepository.delete(vote);
+
+                return ResponseEntity.ok().body(perkRepository.findByName(perkVote.getName()));
+            }
+        }
+
         if (perkInRepository.vote(perkVote, account)) {
             perkVoteRepository.save(perkVote);
-            accountRepository.save(account);
-            return ResponseEntity.ok().body(perkRepository.save(perkInRepository));
 
+            return ResponseEntity.ok().body(perkRepository.save(perkInRepository));
         }
 
         return ResponseEntity

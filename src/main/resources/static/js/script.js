@@ -66,14 +66,39 @@ var tryLogIn = function(username, password) {
 	})
 	.done(function(data) {
 		stopLoad();
-		console.log(data);
 		applyUser(JSON.parse(data));
 	})
 	.fail(function() {
 		stopLoad();
 		$('#email, #password').addClass('invalid');
-		//applyUser({firstName: 'Vanja', lastName: 'Veselinovic'});
 	});
+};
+
+/* ---------- CREATE PERK ---------- */
+
+var tryCreatePerk = function(name, description, category) {
+	startLoad();
+
+	console.log(name+description+category);
+
+	$.ajax({
+        type: 'POST',
+        url: '/perks',
+        data: '{"name": "' + name + '", "description": "' + description + '", "category": "/categories/' + category + '"}',
+        contentType: 'application/json',
+    })
+    .done(function(perk) {
+    	stopLoad();
+        populatePerkList();
+        goHome();
+        $('#perk-name').val('');
+        $('#perk-desc').val('');
+        $('input[name="cat"]').prop('checked', false);
+    })
+    .fail(function() {
+    	stopLoad();
+    	$('#perk-name, #perk-desc, #categories').addClass('invalid');
+    });
 };
 
 /* ---------- PAGES ---------- */
@@ -81,15 +106,20 @@ var tryLogIn = function(username, password) {
 var activatePage = function(page, menu) {
 	if (menu === undefined) menu = page;
 
-	$('.footer-menu-item.active').removeClass('active');
+	$('.navbar-menu-item.active').removeClass('active');
 	$('#menu-'+menu).addClass('active');
 
 	currentPage = page;
 	$('.page.active').removeClass('active');
 	$('#page-'+page).addClass('active');
+
+	if (page !== 'perk') {
+		$('#menu-perk .big.button').removeClass('active');
+		$('#menu-perk .button-expand').show();
+	}
 };
 
-/* ---------- FOOTER ---------- */
+/* ---------- NAVBAR ---------- */
 
 var goSearch = function() {
 	activatePage('home', 'search');
@@ -109,7 +139,13 @@ var goAccount = function() {
 };
 
 var goPerk = function() {
-	activatePage('perk');
+	$('#menu-perk .big.button').addClass('active');
+	setTimeout(function() {
+		activatePage('perk');
+	}, 200);
+	setTimeout(function() {
+		$('#menu-perk .button-expand').hide();
+	}, 700);
 };
 
 /* ---------- VOTING ---------- */
@@ -146,7 +182,49 @@ var vote = function(element, vote) {
     });
 }
 
+/* ---------- CATEGORIES ---------- */
+
+var categories = {
+	'Food': {
+		id: 1,
+		icon: 'restaurant'
+	},
+	'Clothing': {
+		id: 2,
+		icon: 'accessibility'
+	},
+	'Groceries': {
+		id: 3,
+		icon: 'local_grocery_store'
+	},
+	'Electronics': {
+		id: 4,
+		icon: 'devices_other'
+	},
+	'Shoes': {
+		id: 5,
+		icon: 'airline_seat_legroom_normal'
+	}
+};
+
+var getCategoryHTML = function(category) {
+	return '<div class="input-radio"><input type="radio" name="cat" id="cat-'+category+'" data-i="'+categories[category].id+'"><label for="cat-'+category+'"><div class="radio-icon"><i class="material-icons">'+categories[category].icon+'</i></div><div class="radio-label">'+category+'</div></label></div>';
+};
+
+var categoryKeys = Object.keys(categories);
+
 /* ---------- PAGE LOAD ---------- */
+
+var setButtonExpandScale = function() {
+	var screenSize = Math.max($(document).width(), $(document).height());
+	var buttonSize = $('#menu-perk .big.button').width();
+
+	$('<style>.big.button.active .button-expand { transform: scale('+(2*screenSize/buttonSize)+'); }</style>').appendTo(document.documentElement);
+};
+
+$(window).on('resize', function() {
+	setButtonExpandScale();
+});
 
 var currentPage = 'home';
 
@@ -169,13 +247,13 @@ $(document).ready(function() {
 	});
 
 	$('#menu-search').on('click', function() {
-		goSearch();
+		if (currentPage !== 'search') goSearch();
 	});
 
 	// discover
 
 	$('#menu-discover').on('click', function() {
-		goDiscover();
+		if (currentPage !== 'discover') goDiscover();
 	});
 
 	// home
@@ -187,7 +265,7 @@ $(document).ready(function() {
 	// account
 
 	$('#menu-account').on('click', function() {
-		goAccount();
+		if (currentPage !== 'account') goAccount();
 	});
 
 	$('#login-button').on('click', function() {
@@ -201,7 +279,31 @@ $(document).ready(function() {
 
 	// perk
 
+	setButtonExpandScale();
+
 	$('#menu-perk').on('click', function() {
-		goPerk();
+		if (currentPage !== 'perk') goPerk();
+	});
+
+	for (var i = 0; i < categoryKeys.length; i++) {
+		$('#categories').append(getCategoryHTML(categoryKeys[i]));
+	}
+
+	$('#categories').on('click', function() {
+		$(this).removeClass('invalid');
+	});
+
+	$('#create-button').on('click', function() {
+		if ($('#perk-name').val().length > 0 && $('input[name="cat"]:checked').length > 0) {
+			tryCreatePerk($('#perk-name').val(), $('#perk-desc').val(), $('input[name="cat"]:checked')[0].dataset.i);
+		}
+		else {
+			if ($('#perk-name').val().length <= 0) {
+				$('#perk-name').addClass('invalid');
+			}
+			if ($('input[name="cat"]:checked').length <= 0) {
+				$('#categories').addClass('invalid');
+			}
+		}
 	});
 });

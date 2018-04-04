@@ -15,9 +15,8 @@ public class Card {
     @JoinTable
     private Set<Account> accounts = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "perk_id")
-    private Collection<Perk> perks = new HashSet<>();
+    @OneToMany(mappedBy ="cardPerkBelongsTo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Perk> perks = new HashSet<>();
 
     public Card(String name, String description){
         this.name = name;
@@ -72,6 +71,7 @@ public class Card {
 
     public void addPerk(Perk p){
         perks.add(p);
+        p.setCardPerkBelongsTo(this);
     }
 
     public void removePerk(Perk p){
@@ -94,8 +94,7 @@ public class Card {
 
         return c.getName().equalsIgnoreCase(this.getName()) &&
                 c.getDescription().equalsIgnoreCase(this.getDescription()) &&
-                c.accounts.equals(this.accounts) &&
-                c.perks.equals(this.perks);
+                c.accounts.equals(this.accounts);
     }
 
     @Override

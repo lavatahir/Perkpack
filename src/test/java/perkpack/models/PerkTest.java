@@ -74,4 +74,15 @@ public class PerkTest {
         testPerk.setCategory(category);
         assertEquals(testPerk.getCategory(), category);
     }
+
+    @Test
+    public void setCardBelongsToTest() {
+        Card c = new Card("SPC", "Student card");
+        Category testCategory = new Category("tempcategory");
+        Perk testPerk = new Perk("tempname", "n/a", testCategory);
+
+        testPerk.setCardPerkBelongsTo(c);
+
+        assertEquals(testPerk.getCardPerkBelongsTo(), c);
+    }
 }

@@ -1,5 +1,7 @@
 package perkpack.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Optional;
@@ -21,6 +23,11 @@ public class Perk {
     @ManyToOne
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "card_perk")
+    @JsonIgnore
+    private Card cardPerkBelongsTo;
+
     public Perk () {
 
     }
@@ -31,7 +38,6 @@ public class Perk {
         this.location = location;
         this.description = description;
         this.category = category;
-
         score = 0;
     }
 
@@ -77,35 +83,41 @@ public class Perk {
         if(optionalPerkVote.isPresent())
         {
             PerkVote castedVote = optionalPerkVote.get();
-            if(castedVote.getVote() == pendingVote.getVote())
+
+            voter.removeVote(castedVote);
+
+            if (castedVote.getVote() == pendingVote.getVote())
             {
                 return false;
             }
-            else if(pendingVote.getVote() == 0)
+            else
             {
-                // reverse the previous vote
-                this.score += (castedVote.getVote() * -1);
+                castedVote.setVote(-2 * castedVote.getVote());
+                voter.addVote(castedVote);
 
+                this.score += castedVote.getVote();
             }
-            else {
-                if(castedVote.getVote() == 0)
-                    this.score += pendingVote.getVote();
-                else
-                    this.score += pendingVote.getVote() * 2;
-
-            }
-            voter.removeVote(castedVote);
         }
-        else {
+        else
+        {
             this.score += pendingVote.getVote();
+
+            voter.addVote(pendingVote);
         }
 
-        voter.addVote(pendingVote);
         return true;
     }
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Card getCardPerkBelongsTo() {
+        return cardPerkBelongsTo;
+    }
+
+    public void setCardPerkBelongsTo(Card card) {
+        this.cardPerkBelongsTo = card;
     }
 
     public String toString() {
