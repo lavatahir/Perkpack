@@ -157,6 +157,22 @@ var vote = function(element, vote) {
     });
 }
 
+/* ---------- CATEGORIES ---------- */
+
+var categoryNamesToIcons = {
+	'Food': 'restaurant',
+	'Clothing': 'accessibility',
+	'Groceries': 'local_grocery_store',
+	'Electronics': 'devices_other',
+	'Shoes': 'airline_seat_legroom_normal'
+};
+
+var getCategoryHTML = function(category) {
+	return '<div class="input-radio"><input type="radio" name="cat" id="cat-'+category+'"><label for="cat-'+category+'"><div class="radio-icon"><i class="material-icons">'+categoryNamesToIcons[category]+'</i></div><div class="radio-label">'+category+'</div></label></div>';
+};
+
+var cntiKeys = Object.keys(categoryNamesToIcons);
+
 /* ---------- PAGE LOAD ---------- */
 
 var setButtonExpandScale = function() {
@@ -227,5 +243,13 @@ $(document).ready(function() {
 
 	$('#menu-perk').on('click', function() {
 		if (currentPage !== 'perk') goPerk();
+	});
+
+	for (var i = 0; i < cntiKeys.length; i++) {
+		$('#categories').append(getCategoryHTML(cntiKeys[i]));
+	}
+
+	$('.input-radio input').on('click', function() {
+
 	});
 });
