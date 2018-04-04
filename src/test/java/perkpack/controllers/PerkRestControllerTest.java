@@ -57,12 +57,6 @@ public class PerkRestControllerTest {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private PerkVoteRepository perkVoteRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
     private Category testCategory = new Category("None");
     private Perk testPerk = new Perk("10% off Coffee", "This is a description", testCategory);
     private static final String email = "a@gmail.com";
