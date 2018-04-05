@@ -6,6 +6,8 @@ PerkPack is a perk/card organizer.
 - To run the app locally, Postgres must be installed on your machine. Postgres' port number should be 5432,
 and the database's name should be "perkpack"
 
+## Milestone 3
+
 ## Milestone 2
 - Switched from H2 DB to PostgresSQL (except for tests, which still use H2)
 - Added significantly more tests (both model tests and controllers tests)
