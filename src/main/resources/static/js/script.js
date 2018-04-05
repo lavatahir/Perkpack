@@ -46,7 +46,7 @@ var applyUser = function(user) {
 	$('.first-name').text(user.firstName);
 	$('.last-name').text(user.lastName);
 	$('.user-email').text(user.email);
-	$('.num-votes').text(user.voteCount);
+	$('.num-votes').text(user.votes.length);
 
 	activatePage('home');
 };
@@ -55,6 +55,7 @@ var authenticate = function() {
 	$.getJSON('/account/authenticate', function(data) {
 		stopLoad();
 		applyUser(data);
+		console.log(data);
 	})
 	.fail(function() {
 		stopLoad();
@@ -74,7 +75,7 @@ var tryLogIn = function(username, password, fromSignup) {
 	})
 	.done(function(data) {
 		stopLoad();
-		applyUser(JSON.parse(data));
+		authenticate();
 	})
 	.fail(function() {
 		stopLoad();
