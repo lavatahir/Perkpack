@@ -97,38 +97,43 @@
 			<div class="section subtitle">
 				<span class="first-name"></span>
 			</div>
-			<div class="section card">
-				<div class="section title">
-					<span>Saved</span>
+			<div class="section side-by-side">
+				<div class="section card">
+					<div class="section title">
+						<span>Saved</span>
+					</div>
+					<div class="section perk-list">
+						<div class="loader"></div>
+					</div>
 				</div>
-				<div class="section perk-list">
-					<div class="loader"></div>
+				<div class="section card">
+					<div class="section title">
+						<span>You</span>
+					</div>
+					<div class="section">
+						<div class="section pp-card pp-card-visa">
+							<div class="pp-card-inner">
+								Visa
+							</div>
+						</div>
+						<div class="section pp-card pp-card-td-bank">
+							<div class="pp-card-inner">
+								TD Bank
+							</div>
+						</div>
+						<div class="section pp-card pp-card-spc">
+							<div class="pp-card-inner">
+								SPC
+							</div>
+						</div>
+					</div>
+					<div class="section big button" id="edit-account-button">
+						<i class="material-icons">mode_edit</i>
+					</div>
 				</div>
 			</div>
-			<div class="section card">
-				<div class="section title">
-					<span>You</span>
-				</div>
-				<div class="section">
-					<div class="section pp-card pp-card-visa">
-						<div class="pp-card-inner">
-							Visa
-						</div>
-					</div>
-					<div class="section pp-card pp-card-td-bank">
-						<div class="pp-card-inner">
-							TD Bank
-						</div>
-					</div>
-					<div class="section pp-card pp-card-spc">
-						<div class="pp-card-inner">
-							SPC
-						</div>
-					</div>
-				</div>
-				<div class="section big button" id="edit-account-button">
-					<i class="material-icons">mode_edit</i>
-				</div>
+			<div class="section link" id="log-out">
+				Log out
 			</div>
 		</div>
 		<div id="account-logged-out">
@@ -158,9 +163,47 @@
 				<div class="section subtitle">
 					<span>Don't have an account yet?</span>
 				</div>
-				<div class="section">
+				<div class="section link" id="sign-up">
 					Sign up now
 				</div>
+			</div>
+		</div>
+	</div>
+	<div class="page section" id="page-signup">
+		<div class="section card">
+			<div class="section main title">
+				<span>Sign up</span>
+			</div>
+			<div class="section open-input-container">
+				<div class="section input open">
+					<div class="input-label">First name</div>
+					<div class="input-container">
+						<input type="text" class="text-input open" id="signup-fname" />
+					</div>
+				</div>
+				<div class="section input open">
+					<div class="input-label">Last name</div>
+					<div class="input-container">
+						<input type="text" class="text-input open" id="signup-lname" />
+					</div>
+				</div>
+			</div>
+			<div class="section input">
+				<div class="input-label">Email</div>
+				<div class="input-container">
+					<input type="email" class="text-input" id="signup-email" />
+					<i class="material-icons">person_outline</i>
+				</div>
+			</div>
+			<div class="section input">
+				<div class="input-label">Password</div>
+				<div class="input-container">
+					<input type="password" class="text-input" id="signup-password" />
+					<i class="material-icons">security</i>
+				</div>
+			</div>
+			<div class="section big button go" id="signup-button">
+				<i class="material-icons">arrow_forward</i>
 			</div>
 		</div>
 	</div>
@@ -241,6 +284,13 @@
 					</div>
 					<div class="name first-name">
 						Log in
+					</div>
+				</div>
+				<div class="prompt-container">
+					<div class="prompt">
+						Log in / sign up to vote and submit perks!
+					</div>
+					<div class="prompt-arrow">
 					</div>
 				</div>
 			</div>
