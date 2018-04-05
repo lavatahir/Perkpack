@@ -201,7 +201,6 @@ var vote = function(element, vote) {
 	if (loggedIn) {
 		var perkName = $($(element)[0].parentElement.parentElement).find('.perk-name span').text();
 
-		console.log("voting for " + vote);
 		$.ajax({
 	        method: 'POST',
 	        url: '/perks/vote',
