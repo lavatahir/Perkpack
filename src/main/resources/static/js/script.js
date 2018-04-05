@@ -1,7 +1,7 @@
 /* ---------- MAIN --------- */
 
 var getPerkTileHTML = function(perk) {
-	return '<div class="section perk-tile"><div class="perk-vote"><div class="perk-upvote perk-vote-button" onclick=vote(this,1)><i class="material-icons">thumb_up</i></div><div class="perk-score">'+perk.score+'</div><div class="perk-downvote perk-vote-button" onclick=vote(this,-1)><i class="material-icons">thumb_down</i></div></div><div class="perk-info"><div class="perk-name subtitle"><span>'+perk.name+'</span></div><div class="perk-desc">'+perk.description+'</div><div class="perk-cat"><i class="material-icons">'+categories[perk.categoryName].icon+'</i></div></div></div>';
+	return '<div class="section perk-tile"><div class="perk-vote"><div class="perk-upvote perk-vote-button" onclick=vote(this,1)><i class="material-icons">thumb_up</i></div><div class="perk-score">'+perk.score+'</div><div class="perk-downvote perk-vote-button" onclick=vote(this,-1)><i class="material-icons">thumb_down</i></div></div><div class="perk-info"><div class="perk-name subtitle"><span>'+perk.name+' - '+perk.cardName+'</span></div><div class="perk-desc">'+perk.description+'</div><div class="perk-cat"><i class="material-icons">'+categories[perk.categoryName].icon+'</i></div></div></div>';
 }
 
 var populatePerkList = function(list) {
@@ -125,13 +125,13 @@ var trySignUp = function(fname, lname, email, password) {
 
 /* ---------- CREATE PERK ---------- */
 
-var tryCreatePerk = function(name, description, category) {
+var tryCreatePerk = function(name, description,cardID, category) {
 	startLoad();
 
 	$.ajax({
         type: 'POST',
         url: '/perks',
-        data: '{"name": "' + name + '", "description": "' + description + '", "category": "/categories/' + category + '"}',
+        data: '{"name": "' + name + '", "description": "' + description + '", "category": "/categories/' + category + '", "card": "/cards/'+cardID+'"}',
         contentType: 'application/json',
     })
     .done(function(perk) {
