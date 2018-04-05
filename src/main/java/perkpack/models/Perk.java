@@ -23,6 +23,8 @@ public class Perk {
     @ManyToOne
     private Category category;
 
+    private String categoryName;
+
     @ManyToOne
     @JoinColumn(name = "card_perk")
     @JsonIgnore
@@ -38,6 +40,8 @@ public class Perk {
         this.location = location;
         this.description = description;
         this.category = category;
+        this.categoryName = category.getName();
+
         score = 0;
     }
 
@@ -63,6 +67,10 @@ public class Perk {
         return this.category;
     }
 
+    public String getCategoryName() {
+        return this.categoryName;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -73,6 +81,10 @@ public class Perk {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public boolean vote(PerkVote pendingVote, Account voter)
@@ -110,6 +122,7 @@ public class Perk {
 
     public void setCategory(Category category) {
         this.category = category;
+        this.categoryName = category.getName();
     }
 
     public Card getCardPerkBelongsTo() {
