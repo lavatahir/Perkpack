@@ -12,6 +12,10 @@ body {
 	font-size: 18px;
 }
 
+i {
+	pointer-events: none;
+}
+
 .bg {
 	position: fixed;
 	top: 0;
@@ -799,63 +803,104 @@ h2 {
 	margin-bottom: 30px;
 }
 
-	/* cards */
+/* cards */
 
-	.pp-card {
-		width: calc(100% + 60px);
-		margin-left: -30px;
-		background: blue;
-		border-radius: 5px;
-		padding-bottom: 55%;
-		color: white;
-		font-size: 2em;
-		margin-top: -55%;
-		margin-bottom: 1.25em;
-		position: relative;
-		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
-		transition: transform 0.2s;
+.pp-card {
+	width: calc(100% + 60px);
+	margin-left: -30px;
+	background: blue;
+	border-radius: 5px;
+	padding-bottom: 55%;
+	color: white;
+	font-size: 2em;
+	margin-top: -55%;
+	margin-bottom: 1.25em;
+	position: relative;
+	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+	transition: transform 0.2s;
+}
+
+		.pp-card:first-child {
+			margin-top: unset;
+		}
+
+		.pp-card:hover {
+			transform: translate(0, -25%) scale(1.025);
+			box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.33);
+		}
+
+			.pp-card:last-child {
+				margin-bottom: unset;
+			}
+
+			.pp-card:last-child:hover {
+				transform: scale(1.025);
+			}
+
+	.pp-card-inner {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		padding: 0.5em;
+		overflow: hidden;
 	}
 
-			.pp-card:first-child {
-				margin-top: unset;
-			}
+	.card-element[data-name="Visa"] {
+		background: #00579F;
+		color: #FAA61A;
+	}
 
-			.pp-card:hover {
-				transform: translate(0, -25%) scale(1.025);
-				box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.33);
-			}
+	.card-element[data-name="TD Bank"] {
+		background: #00B624;
+		color: white;
+	}
 
-				.pp-card:last-child {
-					margin-bottom: unset;
-				}
+	.card-element[data-name="SPC"] {
+		background: black;
+		color: white;
+	}
 
-				.pp-card:last-child:hover {
-					transform: scale(1.025);
-				}
+.small-card {
+	border-radius: 5px;
+	background: black;
+	color: white;
+	padding-bottom: 60%;
+	font-size: 2em;
+	position: relative;
+}
 
-		.pp-card-inner {
+	.small-card-name {
+		position: absolute;
+		top: 1em;
+		left: 1em;
+	}
+
+	#create-card {
+		opacity: 0.15;
+	}
+
+		#create-card:hover {
+			opacity: 0.25;
+		}
+
+		#create-card .small-card-name {
+			font-size: 0.75em !important;
+		}
+
+		#create-card i {
 			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			padding: 0.5em;
-			overflow: hidden;
-		}
-
-		.pp-card-visa {
-			background: #00579F;
-			color: #FAA61A;
-		}
-
-		.pp-card-td-bank {
-			background: #00B624;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -25%);
 			color: white;
+			opacity: 0;
+			font-size: 2em;
 		}
 
-		.pp-card-spc {
-			background: black;
-			color: white;
+		#create-card:hover i {
+			opacity: 1;
 		}
 
 @media only screen and (min-width: 700px) {
@@ -1064,4 +1109,18 @@ h2 {
 			#menu-home {
 				order: -1;
 			}
+
+	#all-cards {
+		display: block;
+	}
+
+		.small-card {
+			display: inline-block;
+			width: 250px;
+			height: 150px;
+			padding-bottom: unset;
+			font-size: 1.5em;
+			margin-right: 10px;
+			margin-bottom: 10px !important;
+		}
 }

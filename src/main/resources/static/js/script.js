@@ -48,6 +48,8 @@ var applyUser = function(user) {
 	$('.user-email').text(user.email);
 	$('.num-votes').text(user.votes.length);
 
+	populateUserCards(user.cardIds);
+
 	activatePage('home');
 };
 
@@ -185,6 +187,14 @@ var goAccount = function() {
 	activatePage('account');
 };
 
+var goCards = function() {
+	activatePage('editcards');
+}
+
+var goCreateCard = function() {
+	activatePage('card');
+}
+
 var goSignUp = function() {
 	activatePage('signup');
 };
@@ -257,6 +267,72 @@ var getCategoryHTML = function(category) {
 
 var categoryKeys = Object.keys(categories);
 
+/* ---------- CARDS ---------- */
+
+// all cards
+
+var cards = {};
+
+var getSmallCardHTML = function(card) {
+	return '<div class="section card-element small-card real-card" data-name="'+card.name+'"><div class="small-card-name">'+card.name+'</div></div>';
+};
+
+var populateAllCards = function() {
+	$.getJSON('/cards', function(data) {
+		$('#all-cards').empty();
+
+		for (var i = 0; i < data.length; i++) {
+			cards[data[i].id] = data[i];
+
+			$('#all-cards').append(getSmallCardHTML(data[i]));
+		}
+	})
+	.always(function() {
+		$('#all-cards').append('<div class="section card-element small-card" id="create-card"><div class="small-card-name">Don’t see yours?</div><i class="material-icons">add</i></div>');
+		$('#create-card').on('click', function() {
+			goCreateCard();
+		});
+	});
+};
+
+// user cards
+
+var getBigCardHTML = function(card) {
+	return '<div class="section card-element pp-card" data-name="'+card.name+'"><div class="pp-card-inner">'+card.name+'</div></div>';
+};
+
+var populateUserCards = function(ids) {
+	if (ids !== undefined && ids.length > 0) {
+		$('#user-card').empty();
+
+		for (var i = 0; i < ids.length; i++) {
+			$('#user-cards').append(getBigCardHTML(cards[ids[i]]));
+		}
+	}
+};
+
+var tryCreateCard = function(name, description) {
+	startLoad();
+
+	$.ajax({
+        type: 'POST',
+        url: '/cards',
+        data: '{"name": "' + name + '", "description": "' + description + '"}',
+        contentType: 'application/json',
+    })
+    .done(function(perk) {
+    	stopLoad();
+        populateAllCards();
+        goCards();
+        $('#card-name').val('');
+        $('#card-desc').val('');
+    })
+    .fail(function() {
+    	stopLoad();
+    	$('#card-name, #card-desc').addClass('invalid');
+    });
+};
+
 /* ---------- PAGE LOAD ---------- */
 
 var setButtonExpandScale = function() {
@@ -275,6 +351,8 @@ var currentPage = 'home';
 $(document).ready(function() {
 	populatePerkList('top');
 	populatePerkList('recommended');
+	populateAllCards();
+
 	authenticate();
 
 	// general
@@ -322,6 +400,19 @@ $(document).ready(function() {
 			$('#email, #password').addClass('invalid');
 		}
 	})
+
+	$('#edit-cards-button').on('click', function() {
+		goCards();
+	});
+
+	$('#create-card-button').on('click', function() {
+		if ($('#card-name').val().length > 0) {
+			tryCreateCard($('#card-name').val(), $('#card-desc').val());
+		}
+		else {
+			$('#card-name').addClass('invalid');
+		}
+	});
 
 	$('#log-out').on('click', function() {
 		tryLogOut();

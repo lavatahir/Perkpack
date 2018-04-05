@@ -102,7 +102,9 @@
 					<div class="section title">
 						<span>Wallet</span>
 					</div>
-					<div class="section">
+					<div class="section" id="user-cards">
+						Add your cards!
+						<!--
 						<div class="section pp-card pp-card-visa">
 							<div class="pp-card-inner">
 								Visa
@@ -118,8 +120,9 @@
 								SPC
 							</div>
 						</div>
+						-->
 					</div>
-					<div class="section big button" id="edit-account-button">
+					<div class="section big button" id="edit-cards-button">
 						<i class="material-icons">mode_edit</i>
 					</div>
 				</div>
@@ -176,6 +179,46 @@
 				<div class="section link" id="sign-up">
 					Sign up now
 				</div>
+			</div>
+		</div>
+	</div>
+	<div class="page section" id="page-editcards">
+		<div class="section title">
+			<span>What cards do you have?</span>
+		</div>
+		<div class="section" id="all-cards">
+			<!--
+			<div class="section card-element small-card real-card">
+				<div class="small-card-name">TD Bank</div>
+			</div>
+			<div class="section card-element small-card" id="create-card">
+				<div class="small-card-name">Don't see yours?</div>
+				<i class="material-icons">add</i>
+			</div>
+			-->
+		</div>
+	</div>
+	<div class="page section" id="page-card">
+		<div class="section title">
+			<span>Submit new card</span>
+		</div>
+		<div class="section card">
+			<div class="section open-input-container">
+				<div class="section input open">
+					<div class="input-label">Name</div>
+					<div class="input-container">
+						<input type="text" class="text-input open" id="card-name" />
+					</div>
+				</div>
+				<div class="section input open">
+					<div class="input-label">Description</div>
+					<div class="input-container">
+						<input type="text" class="text-input open" id="card-desc" />
+					</div>
+				</div>
+			</div>
+			<div class="section big button go" id="create-card-button">
+				<i class="material-icons">arrow_forward</i>
 			</div>
 		</div>
 	</div>
