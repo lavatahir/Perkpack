@@ -201,23 +201,11 @@ var vote = function(element, vote) {
 	if (loggedIn) {
 		var perkName = $($(element)[0].parentElement.parentElement).find('.perk-name span').text();
 
-		if ($(element).hasClass('voted')) {
-			vote *= -1;
-		}
-		else {
-			if ($($(element)[0].parentElement).find('.voted').length > 0) {
-				vote *= 2;
-			}
-		}
-
-		var currentScore = parseInt($($(element)[0].parentElement).find('.perk-score').text());
-		var newScore = currentScore + vote;
-
 		$.ajax({
 	        method: 'POST',
 	        url: '/perks/vote',
 	        contentType: 'application/json',
-	        data: '{"name": "' + perkName + '", "vote": "' + newScore + '"}'
+	        data: '{"name": "' + perkName + '", "vote": "' + vote + '"}'
 	    }).done(function(perk) {
 	    	if ($(element).hasClass('voted')) {
 				$(element).removeClass('voted');
