@@ -11,7 +11,6 @@ import perkpack.authentication.CustomUserDetails;
 import perkpack.models.*;
 import perkpack.repositories.*;
 
-import javax.validation.Valid;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,7 +27,7 @@ public class PerkRestController {
     private final String categoryPath = "./categories.txt";
 
     @Autowired
-    public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository, AccountRepository accountRepository, PerkVoteRepository perkVoteRepository, CardRepository cardRepository) {
+    public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository, AccountRepository accountRepository, PerkVoteRepository perkVoteRepository) {
         this.perkRepository = perkRepository;
         this.accountRepository = accountRepository;
         this.categoryRepository = categoryRepository;
