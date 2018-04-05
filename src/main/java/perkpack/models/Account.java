@@ -43,7 +43,7 @@ public class Account {
     @JsonIgnore
     private Set<Card> cards = new HashSet<>();
 
-    private Set<Long> cardIds = new HashSet<>();
+    private ArrayList<Long> cardIds = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     private Map<Category, CategoryCount> categoryCount = new HashMap<Category, CategoryCount>();
@@ -169,11 +169,11 @@ public class Account {
         return this.cards.remove(cardToRemove);
     }
 
-    public Set<Long> getCardIds() {
+    public ArrayList<Long> getCardIds() {
         return cardIds;
     }
 
-    public void setCardIds(Set<Long> cardIds) {
+    public void setCardIds(ArrayList<Long> cardIds) {
         this.cardIds = cardIds;
     }
 
