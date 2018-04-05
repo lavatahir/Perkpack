@@ -239,23 +239,23 @@ var vote = function(element, vote) {
 
 var categories = {
 	'Food': {
-		id: 1,
+		id: 332,
 		icon: 'restaurant'
 	},
 	'Clothing': {
-		id: 2,
+		id: 333,
 		icon: 'accessibility'
 	},
 	'Groceries': {
-		id: 3,
+		id: 334,
 		icon: 'local_grocery_store'
 	},
 	'Electronics': {
-		id: 4,
+		id: 335,
 		icon: 'devices_other'
 	},
 	'Shoes': {
-		id: 5,
+		id: 336,
 		icon: 'airline_seat_legroom_normal'
 	}
 };
