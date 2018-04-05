@@ -88,14 +88,15 @@ public class Perk {
 
             if (castedVote.getVote() == pendingVote.getVote())
             {
-                return false;
+                // if the voter votes in the same direction then undo the vote
+                this.score += castedVote.getVote() * -1;
             }
             else
             {
-                castedVote.setVote(-2 * castedVote.getVote());
-                voter.addVote(castedVote);
+                castedVote.setVote(castedVote.getVote());
+                voter.addVote(pendingVote);
 
-                this.score += castedVote.getVote();
+                this.score += castedVote.getVote() * -2;
             }
         }
         else
