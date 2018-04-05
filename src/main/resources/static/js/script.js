@@ -380,9 +380,9 @@ $(document).ready(function() {
 	populateAllCards(function() {
 		populatePerkList('top');
 		populatePerkList('recommended');
-	});
 
-	authenticate();
+        authenticate();
+	});
 
 	// general
 
