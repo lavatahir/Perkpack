@@ -36,6 +36,7 @@ var stopLoad = function() {
 // authentication
 
 var loggedIn = false;
+var cardIds = [];
 
 var applyUser = function(user) {
 	loggedIn = true;
@@ -48,7 +49,8 @@ var applyUser = function(user) {
 	$('.user-email').text(user.email);
 	$('.num-votes').text(user.votes.length);
 
-	populateUserCards(user.cardIds);
+	cardIds = user.cardIds === undefined ? [] : user.cardIds;
+	populateUserCards();
 
 	activatePage('home');
 };
@@ -271,10 +273,28 @@ var categoryKeys = Object.keys(categories);
 
 // all cards
 
+var tryAddUserToCard = function(element) {
+	var cardId = $(element)[0].dataset.cardi;
+
+	$.ajax({
+        type: 'PATCH',
+        url: '/cards/'+cardId+'/addUser',
+    })
+    .done(function() {
+    	stopLoad();
+    	cardIds.push(cardId);
+        populateUserCards();
+        $(element).addClass('selected');
+    })
+    .fail(function() {
+    	stopLoad();
+    });
+};
+
 var cards = {};
 
 var getSmallCardHTML = function(card) {
-	return '<div class="section card-element small-card real-card" data-name="'+card.name+'"><div class="small-card-name">'+card.name+'</div></div>';
+	return '<div class="section card-element small-card real-card '+(cardIds.indexOf(card.id) >= 0 ? 'selected' : '')+'" data-name="'+card.name+'" data-cardi="'+card.id+'"><div class="small-card-name">'+card.name+'</div><i class="material-icons">check</i></div>';
 };
 
 var populateAllCards = function() {
@@ -286,6 +306,10 @@ var populateAllCards = function() {
 
 			$('#all-cards').append(getSmallCardHTML(data[i]));
 		}
+
+		$('.real-card:not(.selected)').on('click', function() {
+			tryAddUserToCard(this);
+		});
 	})
 	.always(function() {
 		$('#all-cards').append('<div class="section card-element small-card" id="create-card"><div class="small-card-name">Don’t see yours?</div><i class="material-icons">add</i></div>');
@@ -301,12 +325,12 @@ var getBigCardHTML = function(card) {
 	return '<div class="section card-element pp-card" data-name="'+card.name+'"><div class="pp-card-inner">'+card.name+'</div></div>';
 };
 
-var populateUserCards = function(ids) {
-	if (ids !== undefined && ids.length > 0) {
-		$('#user-card').empty();
+var populateUserCards = function() {
+	if (cardIds.length > 0) {
+		$('#user-cards').empty();
 
-		for (var i = 0; i < ids.length; i++) {
-			$('#user-cards').append(getBigCardHTML(cards[ids[i]]));
+		for (var i = 0; i < cardIds.length; i++) {
+			$('#user-cards').append(getBigCardHTML(cards[cardIds[i]]));
 		}
 	}
 };

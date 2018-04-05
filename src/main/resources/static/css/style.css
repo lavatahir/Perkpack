@@ -877,6 +877,29 @@ h2 {
 		left: 1em;
 	}
 
+	.small-card i {
+		position: absolute;
+		bottom: 0.25em;
+		right: 0.25em;
+		color: white;
+		opacity: 0;
+		font-size: 2em;
+		text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+	}
+
+	.small-card:hover i {
+		opacity: 0.5;
+	}
+
+	.small-card.selected {
+		border: 3px solid rgba(66, 244, 206, 1);
+		border-radius: 8px;
+	}
+
+		.small-card.selected i {
+			opacity: 1;
+		}
+
 	#create-card {
 		opacity: 0.15;
 	}
@@ -887,16 +910,6 @@ h2 {
 
 		#create-card .small-card-name {
 			font-size: 0.75em !important;
-		}
-
-		#create-card i {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -25%);
-			color: white;
-			opacity: 0;
-			font-size: 2em;
 		}
 
 		#create-card:hover i {
