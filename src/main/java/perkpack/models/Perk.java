@@ -36,24 +36,6 @@ public class Perk {
 
     }
 
-    public Perk (String name, Date expiryDate, String location, String description, Category category) {
-        this.name = name;
-        this.expiryDate = expiryDate;
-        this.location = location;
-        this.description = description;
-        this.category = category;
-        this.categoryName = category.getName();
-
-        score = 0;
-    }
-
-    public Perk (String name, String description, Category category) {
-        this(name, new Date(), "", description, category);
-    }
-    public Perk (String name, String description, Category category, Card c) {
-        this(name, new Date(), "", description, category, c);
-    }
-
     public Perk (String name, Date expiryDate, String location, String description, Category category, Card c) {
         this.name = name;
         this.expiryDate = expiryDate;
@@ -62,9 +44,16 @@ public class Perk {
         this.category = category;
         this.categoryName = category.getName();
         this.cardPerkBelongsTo = c;
-        this.cardPerkBelongsToId = c.getId();
+
+        if (c != null) {
+            this.cardPerkBelongsToId = c.getId();
+        }
 
         score = 0;
+    }
+
+    public Perk (String name, String description, Category category) {
+        this(name, new Date(), "", description, category, null);
     }
 
     public String getName() {
@@ -150,6 +139,7 @@ public class Perk {
 
     public void setCardPerkBelongsTo(Card card) {
         this.cardPerkBelongsTo = card;
+        this.cardPerkBelongsToId = card.getId();
     }
 
     public Long getCardPerkBelongsToId() {

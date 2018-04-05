@@ -25,7 +25,6 @@ public class PerkRestController {
     private final CategoryRepository categoryRepository;
     private final AccountRepository accountRepository;
     private final PerkVoteRepository perkVoteRepository;
-    private final CardRepository cardRepository;
     private final String categoryPath = "./categories.txt";
 
     @Autowired
@@ -34,7 +33,6 @@ public class PerkRestController {
         this.accountRepository = accountRepository;
         this.categoryRepository = categoryRepository;
         this.perkVoteRepository = perkVoteRepository;
-        this.cardRepository = cardRepository;
         this.setupCategories(categoryPath);
     }
 
@@ -124,25 +122,6 @@ public class PerkRestController {
         Perk updatedPerk = perkRepository.save(perkInRepository);
 
         return ResponseEntity.ok().body(updatedPerk);
-    }
-
-    @RequestMapping(value = "/addCardOnPerkCreation/{cardID}", method = RequestMethod.PATCH)
-    public ResponseEntity<Card> addPerkToCardOnPerkCreation(@Valid @RequestBody Perk perk,
-                                              @PathVariable(value = "cardID") Long cardID){
-        Card c = cardRepository.findOne(cardID);
-
-        if(c == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        perkRepository.save(perk);
-        c.addPerk(perk);
-
-        Card card = cardRepository.save(c);
-//        Perk p = perkRepository.findOne(perk.getId());
-//        p.setCardPerkBelongsTo(card);
-//        perkRepository.save(p);
-        return ResponseEntity.ok().body(card);
     }
 
     private Account getUser() {
