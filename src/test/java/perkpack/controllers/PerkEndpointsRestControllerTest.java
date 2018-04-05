@@ -67,7 +67,7 @@ public class PerkEndpointsRestControllerTest {
     private String perk3UpvoteJson = "{\"name\": \"" + testPerk3.getName() + "\", \"vote\": \"" + 1 + "\"}";
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
         categoryRepository.save(testCategory);
@@ -184,6 +184,5 @@ public class PerkEndpointsRestControllerTest {
                 contentType(jsonContentType).
                 content(perkUpvoteJson)).
                 andExpect(status().isOk());
-
     }
 }

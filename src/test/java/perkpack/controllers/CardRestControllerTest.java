@@ -154,20 +154,22 @@ public class CardRestControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "ali@gmail.com", password = "password")
+    @WithMockUser(username = "lava@gmail.com", password = "password")
     public void addUserToCardTest() throws Exception
     {
-        user2 = new Account("Ali", "Farah", "ali@gmail.com", "password");
-        user2 = accountRepository.save(user2);
+        mockMvc.perform(get("/account/authenticate")).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.firstName", is(user.getFirstName()))).
+                andExpect(jsonPath("$.lastName", is(user.getLastName()))).
+                andExpect(jsonPath("$.email", is(user.getEmail())));
+
         mockMvc.perform(patch("/cards/" + card.getId() + "/addUser")).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.accounts[0].firstName", is(user2.getFirstName())));
+                andExpect(jsonPath("$.accounts[0].firstName", is(user.getFirstName())));
 
         mockMvc.perform(patch("/cards/" + card.getId() + "/removeUser/")).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.accounts", hasSize(0)));
-
-        accountRepository.delete(user2);
     }
 
     @Test

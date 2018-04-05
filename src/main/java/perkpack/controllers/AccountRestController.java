@@ -3,6 +3,8 @@ package perkpack.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import perkpack.authentication.CustomUserDetails;
 import perkpack.models.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,10 +53,18 @@ public class AccountRestController {
 
     private Account getLoggedInAccount() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null) {
-            String email = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
-            return accountRepository.findByEmail(email);
+
+        if (auth != null) {
+            // If someone is logged in auth.getPrincipal() returns a CustomUserDetails object
+            if ((auth.getPrincipal() instanceof CustomUserDetails) || (auth.getPrincipal() instanceof User)) {
+                String email = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
+                return accountRepository.findByEmail(email);
+            }
+
+            // Otherwise it returns a String
+            return null;
         }
+
         return null;
     }
 }
