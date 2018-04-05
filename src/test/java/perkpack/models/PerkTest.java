@@ -16,7 +16,7 @@ public class PerkTest {
 
     @Before
     public void setup() {
-        longPerk = new Perk(name, expiryDate, location, description, category);
+        longPerk = new Perk(name, expiryDate, location, description, category, null);
         shortPerk = new Perk(name, description, category);
     }
 
@@ -81,8 +81,8 @@ public class PerkTest {
         Category testCategory = new Category("tempcategory");
         Perk testPerk = new Perk("tempname", "n/a", testCategory);
 
-        testPerk.setCardPerkBelongsTo(c);
+        testPerk.setCard(c);
 
-        assertEquals(testPerk.getCardPerkBelongsTo(), c);
+        assertEquals(testPerk.getCard(), c);
     }
 }

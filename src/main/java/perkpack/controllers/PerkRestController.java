@@ -8,14 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import perkpack.authentication.CustomUserDetails;
-import perkpack.models.Account;
-import perkpack.models.Category;
-import perkpack.models.Perk;
-import perkpack.models.PerkVote;
-import perkpack.repositories.AccountRepository;
-import perkpack.repositories.CategoryRepository;
-import perkpack.repositories.PerkRepository;
-import perkpack.repositories.PerkVoteRepository;
+import perkpack.models.*;
+import perkpack.repositories.*;
 
 import java.io.*;
 import java.nio.file.Files;

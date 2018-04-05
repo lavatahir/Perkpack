@@ -26,27 +26,32 @@ public class Perk {
     private String categoryName;
 
     @ManyToOne
-    @JoinColumn(name = "card_perk")
-    @JsonIgnore
-    private Card cardPerkBelongsTo;
+    private Card card;
+
+    private String cardName;
 
     public Perk () {
 
     }
 
-    public Perk (String name, Date expiryDate, String location, String description, Category category) {
+    public Perk (String name, Date expiryDate, String location, String description, Category category, Card card) {
         this.name = name;
         this.expiryDate = expiryDate;
         this.location = location;
         this.description = description;
         this.category = category;
         this.categoryName = category.getName();
+        this.card = card;
+
+        if (card != null) {
+            this.cardName = card.getName();
+        }
 
         score = 0;
     }
 
     public Perk (String name, String description, Category category) {
-        this(name, new Date(), "", description, category);
+        this(name, new Date(), "", description, category, null);
     }
 
     public String getName() {
@@ -126,12 +131,21 @@ public class Perk {
         this.categoryName = category.getName();
     }
 
-    public Card getCardPerkBelongsTo() {
-        return cardPerkBelongsTo;
+    public Card getCard() {
+        return card;
     }
 
-    public void setCardPerkBelongsTo(Card card) {
-        this.cardPerkBelongsTo = card;
+    public void setCard(Card card) {
+        this.card = card;
+        this.cardName = card.getName();
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
     }
 
     public String toString() {
