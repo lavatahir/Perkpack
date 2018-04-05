@@ -199,6 +199,11 @@ h2 {
 					color: rgb(66, 244, 206);
 				}
 
+select {
+	overflow: hidden;
+	position: relative;
+}
+
 #header {
 	display: flex;
 	align-items: center;
@@ -808,7 +813,11 @@ h2 {
 .pp-card {
 	width: calc(100% + 60px);
 	margin-left: -30px;
-	background: blue;
+	background: linear-gradient(
+			45deg,
+			rgba(75, 211, 67, 1),
+			rgba(66, 244, 206, 1)
+		);
 	border-radius: 5px;
 	padding-bottom: 55%;
 	color: white;
@@ -864,7 +873,11 @@ h2 {
 
 .small-card {
 	border-radius: 5px;
-	background: black;
+	background: linear-gradient(
+			45deg,
+			rgba(75, 211, 67, 1),
+			rgba(66, 244, 206, 1)
+		);
 	color: white;
 	padding-bottom: 60%;
 	font-size: 2em;
@@ -896,12 +909,20 @@ h2 {
 		border-radius: 8px;
 	}
 
+		.small-card.selected .small-card-name {
+			top: calc(1em - 3px);
+			left: calc(1em - 3px);
+		}
+
 		.small-card.selected i {
 			opacity: 1;
+			bottom: calc(0.25em - 3px);
+			right: calc(0.25em - 3px);
 		}
 
 	#create-card {
 		opacity: 0.15;
+		background: black;
 	}
 
 		#create-card:hover {

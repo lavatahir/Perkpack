@@ -59,7 +59,6 @@ var authenticate = function() {
 	$.getJSON('/account/authenticate', function(data) {
 		stopLoad();
 		applyUser(data);
-		console.log(data);
 	})
 	.fail(function() {
 		stopLoad();
@@ -128,8 +127,6 @@ var trySignUp = function(fname, lname, email, password) {
 
 var tryCreatePerk = function(name, description, category) {
 	startLoad();
-
-	console.log(name+description+category);
 
 	$.ajax({
         type: 'POST',
@@ -297,14 +294,20 @@ var getSmallCardHTML = function(card) {
 	return '<div class="section card-element small-card real-card '+(cardIds.indexOf(card.id) >= 0 ? 'selected' : '')+'" data-name="'+card.name+'" data-cardi="'+card.id+'"><div class="small-card-name">'+card.name+'</div><i class="material-icons">check</i></div>';
 };
 
-var populateAllCards = function() {
+var getPerkCardOptionHTML = function(card) {
+	return '<option value="'+card.id+'">'+card.name+'</option>';
+}
+
+var populateAllCards = function(success) {
 	$.getJSON('/cards', function(data) {
 		$('#all-cards').empty();
+		$('#perk-cards').empty();
 
 		for (var i = 0; i < data.length; i++) {
 			cards[data[i].id] = data[i];
 
 			$('#all-cards').append(getSmallCardHTML(data[i]));
+			$('#perk-cards').append(getPerkCardOptionHTML(data[i]));
 		}
 
 		$('.real-card:not(.selected)').on('click', function() {
@@ -316,6 +319,7 @@ var populateAllCards = function() {
 		$('#create-card').on('click', function() {
 			goCreateCard();
 		});
+		if (success !== undefined) success();
 	});
 };
 
@@ -373,9 +377,10 @@ $(window).on('resize', function() {
 var currentPage = 'home';
 
 $(document).ready(function() {
-	populatePerkList('top');
-	populatePerkList('recommended');
-	populateAllCards();
+	populateAllCards(function() {
+		populatePerkList('top');
+		populatePerkList('recommended');
+	});
 
 	authenticate();
 
@@ -499,7 +504,7 @@ $(document).ready(function() {
 
 	$('#create-button').on('click', function() {
 		if ($('#perk-name').val().length > 0 && $('input[name="cat"]:checked').length > 0) {
-			tryCreatePerk($('#perk-name').val(), $('#perk-desc').val(), $('input[name="cat"]:checked')[0].dataset.i);
+			tryCreatePerk($('#perk-name').val(), $('#perk-desc').val(), $('#perk-cards').val(), $('input[name="cat"]:checked')[0].dataset.i);
 		}
 		else {
 			if ($('#perk-name').val().length <= 0) {
