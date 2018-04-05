@@ -14,6 +14,16 @@ var populatePerkList = function() {
 	});
 };
 
+// prompt
+
+var prompt = function() {
+	$('.prompt-container').show();
+};
+
+var endPrompt = function() {
+	$('.prompt-container').hide();
+}
+
 // loader
 
 var startLoad = function() {
@@ -40,20 +50,16 @@ var applyUser = function(user) {
 };
 
 var authenticate = function() {
-	/*
-	$.getJSON('/authenticate', function(data) {
+	$.getJSON('/account/authenticate', function(data) {
 		stopLoad();
-		if (Object.keys(data).length === 0 && data.constructor === Object) {
-			applyUser(data);
-		}
+		applyUser(data);
 	})
 	.fail(function() {
 		stopLoad();
 	});
-	*/
 };
 
-var tryLogIn = function(username, password) {
+var tryLogIn = function(username, password, fromSignup) {
 	startLoad();
 	$.ajax({
 		type: 'POST',
@@ -70,7 +76,44 @@ var tryLogIn = function(username, password) {
 	})
 	.fail(function() {
 		stopLoad();
-		$('#email, #password').addClass('invalid');
+		if (fromSignup) {
+			$('#page-signup input').addClass('invalid');
+		}
+		else {
+			$('#email, #password').addClass('invalid');
+		}
+	});
+};
+
+var tryLogOut = function() {
+	startLoad();
+	$.ajax({
+		type: 'GET',
+		url: '/logout'
+	})
+	.done(function() {
+		location.reload();
+	})
+	.fail(function() {
+		location.reload();
+	});
+};
+
+var trySignUp = function(fname, lname, email, password) {
+	startLoad();
+	$.ajax({
+		type: 'POST',
+		url: '/account',
+		data: '{"firstName": "'+fname+'", "lastName": "'+lname+'", "email": "'+email+'", "password": "'+password+'"}',
+		contentType: 'application/json'
+	})
+	.done(function() {
+		stopLoad();
+		tryLogIn(email, password, true);
+	})
+	.fail(function() {
+		stopLoad();
+		$('#page-signup input').addClass('invalid');
 	});
 };
 
@@ -138,6 +181,10 @@ var goAccount = function() {
 	activatePage('account');
 };
 
+var goSignUp = function() {
+	activatePage('signup');
+};
+
 var goPerk = function() {
 	$('#menu-perk .big.button').addClass('active');
 	setTimeout(function() {
@@ -151,35 +198,40 @@ var goPerk = function() {
 /* ---------- VOTING ---------- */
 
 var vote = function(element, vote) {
-	var perkName = $($(element)[0].parentElement.parentElement).find('.perk-name span').text();
+	if (loggedIn) {
+		var perkName = $($(element)[0].parentElement.parentElement).find('.perk-name span').text();
 
-	if ($(element).hasClass('voted')) {
-		vote *= -1;
-	}
-	else {
-		if ($($(element)[0].parentElement).find('.voted').length > 0) {
-			vote *= 2;
-		}
-	}
-
-	var currentScore = parseInt($($(element)[0].parentElement).find('.perk-score').text());
-	var newScore = currentScore + vote;
-
-	$.ajax({
-        method: 'POST',
-        url: '/perks/vote',
-        contentType: 'application/json',
-        data: '{"name": "' + perkName + '", "vote": "' + newScore + '"}'
-    }).done(function(perk) {
-    	if ($(element).hasClass('voted')) {
-			$(element).removeClass('voted');
+		if ($(element).hasClass('voted')) {
+			vote *= -1;
 		}
 		else {
-			$($(element)[0].parentElement).find('.perk-vote-button').removeClass('voted');
-			$(element).toggleClass('voted');
+			if ($($(element)[0].parentElement).find('.voted').length > 0) {
+				vote *= 2;
+			}
 		}
-    	$($(element)[0].parentElement).find('.perk-score').text(perk.score);
-    });
+
+		var currentScore = parseInt($($(element)[0].parentElement).find('.perk-score').text());
+		var newScore = currentScore + vote;
+
+		$.ajax({
+	        method: 'POST',
+	        url: '/perks/vote',
+	        contentType: 'application/json',
+	        data: '{"name": "' + perkName + '", "vote": "' + newScore + '"}'
+	    }).done(function(perk) {
+	    	if ($(element).hasClass('voted')) {
+				$(element).removeClass('voted');
+			}
+			else {
+				$($(element)[0].parentElement).find('.perk-vote-button').removeClass('voted');
+				$(element).toggleClass('voted');
+			}
+	    	$($(element)[0].parentElement).find('.perk-score').text(perk.score);
+	    });
+	}
+	else {
+		prompt();
+	}
 }
 
 /* ---------- CATEGORIES ---------- */
@@ -265,6 +317,7 @@ $(document).ready(function() {
 	// account
 
 	$('#menu-account').on('click', function() {
+		endPrompt();
 		if (currentPage !== 'account') goAccount();
 	});
 
@@ -277,12 +330,55 @@ $(document).ready(function() {
 		}
 	})
 
+	$('#log-out').on('click', function() {
+		tryLogOut();
+	});
+
+	$('#sign-up').on('click', function() {
+		goSignUp();
+	});
+
+	$('#signup-button').on('click', function() {
+		if (
+				$('#signup-fname').val().length > 0 &&
+				$('#signup-lname').val().length > 0 &&
+				$('#signup-email').val().length > 0 &&
+				$('#signup-password').val().length > 0
+			) {
+			trySignUp(
+					$('#signup-fname').val(),
+					$('#signup-lname').val(),
+					$('#signup-email').val(),
+					$('#signup-password').val()
+				);
+		}
+		else {
+			if ($('#signup-fname').val().length <= 0) {
+				$('#signup-fname').addClass('invalid');
+			}
+			if ($('#signup-lname').val().length <= 0) {
+				$('#signup-lname').addClass('invalid');
+			}
+			if ($('#signup-email').val().length <= 0) {
+				$('#signup-email').addClass('invalid');
+			}
+			if ($('#signup-password').val().length <= 0) {
+				$('#signup-password').addClass('invalid');
+			}
+		}
+	});
+
 	// perk
 
 	setButtonExpandScale();
 
 	$('#menu-perk').on('click', function() {
-		if (currentPage !== 'perk') goPerk();
+		if (loggedIn) {
+			if (currentPage !== 'perk') goPerk();
+		}
+		else {
+			prompt();
+		}
 	});
 
 	for (var i = 0; i < categoryKeys.length; i++) {

@@ -325,6 +325,7 @@ h2 {
 			text-align: center;
 			height: 100%;
 			border-bottom: 3px solid rgba(255, 255, 255, 0);
+			position: relative;
 		}
 
 			@keyframes menu-bounce {
@@ -356,6 +357,7 @@ h2 {
 				letter-spacing: 0.2em;
 				font-weight: unset;
 				font-size: 0.6em;
+				max-width: 100px;
 			}
 
 				.navbar-menu-item .title .name.logged-in {
@@ -366,6 +368,9 @@ h2 {
 					background: white;
 					border-radius: 1em;
 					padding: 0 10px;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
 				}
 
 			.navbar-menu-item.big {
@@ -391,6 +396,38 @@ h2 {
 			.navbar-menu-item .button:hover {
 				opacity: 1 !important;
 			}
+
+	.prompt-container {
+		display: none;
+	}
+
+		.prompt-container.show {
+			display: block;
+		}
+
+		.prompt-arrow {
+			position: absolute;
+			top: -10px;
+			left: 50%;
+			transform: translate(-50%, 0);
+			width: 0;
+			height: 0;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-top: 10px solid red;
+		}
+
+		.prompt {
+			position: fixed;
+			width: calc(100% - 20px);
+			left: 10px;
+			bottom: 69px;
+			background: red;
+			border-radius: 5em;
+			font-size: 0.8em;
+			padding: 1em;
+			box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.33);
+		}
 
 	#menu-perk:hover {
 		opacity: 1;
@@ -717,6 +754,15 @@ h2 {
 	display: none;
 }
 
+.link:hover {
+	cursor: pointer;
+	opacity: 0.8;
+}
+
+#page-signup .open-input-container {
+	margin-bottom: 30px;
+}
+
 	/* cards */
 
 	.pp-card {
@@ -775,6 +821,28 @@ h2 {
 			background: black;
 			color: white;
 		}
+
+@media only screen and (min-width: 700px) {
+	#menu-perk {
+		position: fixed;
+		height: unset;
+		bottom: 1em;
+		right: 1em;
+		top: unset !important;
+		min-width: unset !important;
+	}
+}
+
+@media only screen and (min-width: 850px) {
+	#menu-perk {
+		position: absolute !important;
+		min-width: unset;
+		top: 50% !important;
+		right: 40px !important;
+		bottom: unset !important;
+		left: unset !important;
+	}
+}
 
 @media only screen and (min-width: 700px) {
 	body {
@@ -840,6 +908,24 @@ h2 {
 				{
 					padding-left: calc(3em - 1px);
 				}
+
+	.prompt-arrow {
+		top: 80px;
+		border-top: unset;
+		border-bottom: 10px solid red;
+		z-index: 1000;
+	}
+
+	.prompt {
+		position: absolute;
+		width: calc(100% + 100px);
+		left: 50%;
+		bottom: unset;
+		top: 90px;
+		z-index: 1000;
+		padding: 1em 3em;
+		transform: translate(-50%, 0);
+	}
 
 	.side-by-side {
 		flex-direction: row;
@@ -941,12 +1027,5 @@ h2 {
 
 			#menu-home {
 				order: -1;
-			}
-
-			#menu-perk {
-				position: absolute;
-				min-width: unset;
-				top: 50%;
-				right: 40px;
 			}
 }
