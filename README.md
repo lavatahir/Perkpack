@@ -7,6 +7,10 @@ PerkPack is a perk/card organizer.
 and the database's name should be "perkpack"
 
 ## Milestone 3
+- Moved all user interaction to new front end
+- Added cards (alongside user accounts and perks)
+- Fixed multiple bugs
+- Increased number of tests
 
 ## Milestone 2
 - Switched from H2 DB to PostgresSQL (except for tests, which still use H2)
