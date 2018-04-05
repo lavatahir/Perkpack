@@ -1,15 +1,14 @@
 /* ---------- MAIN --------- */
 
 var getPerkTileHTML = function(perk) {
-	return '<div class="section perk-tile"><div class="perk-vote"><div class="perk-upvote perk-vote-button" onclick=vote(this,1)><i class="material-icons">thumb_up</i></div><div class="perk-score">'+perk.score+'</div><div class="perk-downvote perk-vote-button" onclick=vote(this,-1)><i class="material-icons">thumb_down</i></div></div><div class="perk-info"><div class="perk-name subtitle"><span>'+perk.name+'</span></div><div class="perk-desc">'+perk.description+'</div><div class="perk-cat"><i class="material-icons">restaurant</i></div></div></div>';
+	return '<div class="section perk-tile"><div class="perk-vote"><div class="perk-upvote perk-vote-button" onclick=vote(this,1)><i class="material-icons">thumb_up</i></div><div class="perk-score">'+perk.score+'</div><div class="perk-downvote perk-vote-button" onclick=vote(this,-1)><i class="material-icons">thumb_down</i></div></div><div class="perk-info"><div class="perk-name subtitle"><span>'+perk.name+'</span></div><div class="perk-desc">'+perk.description+'</div><div class="perk-cat"><i class="material-icons">'+categories[perk.categoryName].icon+'</i></div></div></div>';
 }
 
-var populatePerkList = function() {
-	$.getJSON('/perks', function(data) {
-		$('#top-perks').empty();
-		var perks = data._embedded.perks;
+var populatePerkList = function(list) {
+	$.getJSON('/'+list, function(perks) {
+		$('#'+list+'-perks').empty();
 		for (var i = 0; i < perks.length; i++) {
-			$('#top-perks').append(getPerkTileHTML(perks[i]));
+			$('#'+list+'-perks').append(getPerkTileHTML(perks[i]));
 		}
 	});
 };
@@ -45,6 +44,9 @@ var applyUser = function(user) {
 
 	$('#menu-account .name').addClass('logged-in');
 	$('.first-name').text(user.firstName);
+	$('.last-name').text(user.lastName);
+	$('.user-email').text(user.email);
+	$('.num-votes').text(user.voteCount);
 
 	activatePage('home');
 };
@@ -132,7 +134,8 @@ var tryCreatePerk = function(name, description, category) {
     })
     .done(function(perk) {
     	stopLoad();
-        populatePerkList();
+        populatePerkList('top');
+        populatePerkList('recommended');
         goHome();
         $('#perk-name').val('');
         $('#perk-desc').val('');
@@ -269,7 +272,8 @@ $(window).on('resize', function() {
 var currentPage = 'home';
 
 $(document).ready(function() {
-	populatePerkList();
+	populatePerkList('top');
+	populatePerkList('recommended');
 	authenticate();
 
 	// general

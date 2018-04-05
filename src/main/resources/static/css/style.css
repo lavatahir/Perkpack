@@ -593,6 +593,42 @@ h2 {
 					transform: translate(0.25em, 0);
 				}
 
+	.profile {
+		border: unset;
+		background: rgba(0, 0, 0, 0.033);
+		text-align: center;
+		border-radius: 1em;
+		padding-top: 40px;
+	}
+
+		.profile .title {
+			margin-left: 0.5em;
+		}
+
+		.profile .section {
+			margin-bottom: 10px;
+		}
+
+		.profile-picture {
+			margin-bottom: -10px !important;
+		}
+
+		.profile i {
+			font-size: 10em;
+		}
+
+		.subsubtitle {
+			font-size: 0.8em;
+			opacity: 0.5;
+		}
+
+		.num-votes {
+			font-size: 5em;
+			margin-bottom: -0.3em !important;
+			color: rgb(66, 244, 206);
+			font-weight: bold;
+		}
+
 	.section.input {
 		flex-direction: row;
 		align-items: center;
