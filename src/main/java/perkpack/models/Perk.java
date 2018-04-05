@@ -26,27 +26,25 @@ public class Perk {
     private String categoryName;
 
     @ManyToOne
-    @JoinColumn(name = "card_perk")
-    @JsonIgnore
-    private Card cardPerkBelongsTo;
+    private Card card;
 
-    private Long cardPerkBelongsToId;
+    private String cardName;
 
     public Perk () {
 
     }
 
-    public Perk (String name, Date expiryDate, String location, String description, Category category, Card c) {
+    public Perk (String name, Date expiryDate, String location, String description, Category category, Card card) {
         this.name = name;
         this.expiryDate = expiryDate;
         this.location = location;
         this.description = description;
         this.category = category;
         this.categoryName = category.getName();
-        this.cardPerkBelongsTo = c;
+        this.card = card;
 
-        if (c != null) {
-            this.cardPerkBelongsToId = c.getId();
+        if (card != null) {
+            this.cardName = card.getName();
         }
 
         score = 0;
@@ -133,21 +131,21 @@ public class Perk {
         this.categoryName = category.getName();
     }
 
-    public Card getCardPerkBelongsTo() {
-        return cardPerkBelongsTo;
+    public Card getCard() {
+        return card;
     }
 
-    public void setCardPerkBelongsTo(Card card) {
-        this.cardPerkBelongsTo = card;
-        this.cardPerkBelongsToId = card.getId();
+    public void setCard(Card card) {
+        this.card = card;
+        this.cardName = card.getName();
     }
 
-    public Long getCardPerkBelongsToId() {
-        return cardPerkBelongsToId;
+    public String getCardName() {
+        return cardName;
     }
 
-    public void setCardPerkBelongsToId(Long cardPerkBelongsToId) {
-        this.cardPerkBelongsToId = cardPerkBelongsToId;
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
     }
 
     public String toString() {
