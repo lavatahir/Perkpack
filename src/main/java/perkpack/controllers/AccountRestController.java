@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import perkpack.repositories.AccountRepository;
 
 import javax.validation.Valid;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("account")
@@ -48,6 +52,10 @@ public class AccountRestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        List<Long> cardIDs = loggedInAccount.getCards().stream().
+                map(card -> card.getId()).collect(Collectors.toList());
+
+        loggedInAccount.setCardIds(cardIDs);
         return ResponseEntity.ok().body(loggedInAccount);
     }
 

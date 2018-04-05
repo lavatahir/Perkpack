@@ -39,11 +39,12 @@ public class Account {
     @JoinColumn(name = "user_vote")
     private Set<PerkVote> votes = new HashSet<>();
 
-    @ManyToMany(mappedBy = "accounts")
+    @ManyToMany(mappedBy = "accounts", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Card> cards = new HashSet<>();
 
-    private ArrayList<Long> cardIds = new ArrayList<>();
+    @Transient
+    private List<Long> cardIds = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     private Map<Category, CategoryCount> categoryCount = new HashMap<Category, CategoryCount>();
@@ -169,11 +170,11 @@ public class Account {
         return this.cards.remove(cardToRemove);
     }
 
-    public ArrayList<Long> getCardIds() {
+    public List<Long> getCardIds() {
         return cardIds;
     }
 
-    public void setCardIds(ArrayList<Long> cardIds) {
+    public void setCardIds(List<Long> cardIds) {
         this.cardIds = cardIds;
     }
 
