@@ -16,7 +16,7 @@ public class PerkTest {
 
     @Before
     public void setup() {
-        longPerk = new Perk(name, expiryDate, location, description, category);
+        longPerk = new Perk(name, expiryDate, location, description, category, null);
         shortPerk = new Perk(name, description, category);
     }
 
