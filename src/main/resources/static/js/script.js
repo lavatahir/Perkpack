@@ -1,15 +1,14 @@
 /* ---------- MAIN --------- */
 
 var getPerkTileHTML = function(perk) {
-	return '<div class="section perk-tile"><div class="perk-vote"><div class="perk-upvote perk-vote-button" onclick=vote(this,1)><i class="material-icons">thumb_up</i></div><div class="perk-score">'+perk.score+'</div><div class="perk-downvote perk-vote-button" onclick=vote(this,-1)><i class="material-icons">thumb_down</i></div></div><div class="perk-info"><div class="perk-name subtitle"><span>'+perk.name+'</span></div><div class="perk-desc">'+perk.description+'</div><div class="perk-cat"><i class="material-icons">restaurant</i></div></div></div>';
+	return '<div class="section perk-tile"><div class="perk-vote"><div class="perk-upvote perk-vote-button" onclick=vote(this,1)><i class="material-icons">thumb_up</i></div><div class="perk-score">'+perk.score+'</div><div class="perk-downvote perk-vote-button" onclick=vote(this,-1)><i class="material-icons">thumb_down</i></div></div><div class="perk-info"><div class="perk-name subtitle"><span>'+perk.name+'</span></div><div class="perk-desc">'+perk.description+'</div><div class="perk-cat"><i class="material-icons">'+categories[perk.categoryName].icon+'</i></div></div></div>';
 }
 
-var populatePerkList = function() {
-	$.getJSON('/perks', function(data) {
-		$('#top-perks').empty();
-		var perks = data._embedded.perks;
+var populatePerkList = function(list) {
+	$.getJSON('/'+list, function(perks) {
+		$('#'+list+'-perks').empty();
 		for (var i = 0; i < perks.length; i++) {
-			$('#top-perks').append(getPerkTileHTML(perks[i]));
+			$('#'+list+'-perks').append(getPerkTileHTML(perks[i]));
 		}
 	});
 };
@@ -37,6 +36,7 @@ var stopLoad = function() {
 // authentication
 
 var loggedIn = false;
+var cardIds = [];
 
 var applyUser = function(user) {
 	loggedIn = true;
@@ -45,6 +45,12 @@ var applyUser = function(user) {
 
 	$('#menu-account .name').addClass('logged-in');
 	$('.first-name').text(user.firstName);
+	$('.last-name').text(user.lastName);
+	$('.user-email').text(user.email);
+	$('.num-votes').text(user.votes.length);
+
+	cardIds = user.cardIds === undefined ? [] : user.cardIds;
+	populateUserCards();
 
 	activatePage('home');
 };
@@ -72,7 +78,7 @@ var tryLogIn = function(username, password, fromSignup) {
 	})
 	.done(function(data) {
 		stopLoad();
-		applyUser(JSON.parse(data));
+		authenticate();
 	})
 	.fail(function() {
 		stopLoad();
@@ -122,8 +128,6 @@ var trySignUp = function(fname, lname, email, password) {
 var tryCreatePerk = function(name, description, category) {
 	startLoad();
 
-	console.log(name+description+category);
-
 	$.ajax({
         type: 'POST',
         url: '/perks',
@@ -132,7 +136,8 @@ var tryCreatePerk = function(name, description, category) {
     })
     .done(function(perk) {
     	stopLoad();
-        populatePerkList();
+        populatePerkList('top');
+        populatePerkList('recommended');
         goHome();
         $('#perk-name').val('');
         $('#perk-desc').val('');
@@ -180,6 +185,14 @@ var goHome = function() {
 var goAccount = function() {
 	activatePage('account');
 };
+
+var goCards = function() {
+	activatePage('editcards');
+}
+
+var goCreateCard = function() {
+	activatePage('card');
+}
 
 var goSignUp = function() {
 	activatePage('signup');
@@ -253,6 +266,101 @@ var getCategoryHTML = function(category) {
 
 var categoryKeys = Object.keys(categories);
 
+/* ---------- CARDS ---------- */
+
+// all cards
+
+var tryAddUserToCard = function(element) {
+	var cardId = $(element)[0].dataset.cardi;
+
+	$.ajax({
+        type: 'PATCH',
+        url: '/cards/'+cardId+'/addUser',
+    })
+    .done(function() {
+    	stopLoad();
+    	cardIds.push(cardId);
+        populateUserCards();
+        $(element).addClass('selected');
+    })
+    .fail(function() {
+    	stopLoad();
+    });
+};
+
+var cards = {};
+
+var getSmallCardHTML = function(card) {
+	return '<div class="section card-element small-card real-card '+(cardIds.indexOf(card.id) >= 0 ? 'selected' : '')+'" data-name="'+card.name+'" data-cardi="'+card.id+'"><div class="small-card-name">'+card.name+'</div><i class="material-icons">check</i></div>';
+};
+
+var getPerkCardOptionHTML = function(card) {
+	return '<option value="'+card.id+'">'+card.name+'</option>';
+}
+
+var populateAllCards = function(success) {
+	$.getJSON('/cards', function(data) {
+		$('#all-cards').empty();
+		$('#perk-cards').empty();
+
+		for (var i = 0; i < data.length; i++) {
+			cards[data[i].id] = data[i];
+
+			$('#all-cards').append(getSmallCardHTML(data[i]));
+			$('#perk-cards').append(getPerkCardOptionHTML(data[i]));
+		}
+
+		$('.real-card:not(.selected)').on('click', function() {
+			tryAddUserToCard(this);
+		});
+	})
+	.always(function() {
+		$('#all-cards').append('<div class="section card-element small-card" id="create-card"><div class="small-card-name">Don’t see yours?</div><i class="material-icons">add</i></div>');
+		$('#create-card').on('click', function() {
+			goCreateCard();
+		});
+		if (success !== undefined) success();
+	});
+};
+
+// user cards
+
+var getBigCardHTML = function(card) {
+	return '<div class="section card-element pp-card" data-name="'+card.name+'"><div class="pp-card-inner">'+card.name+'</div></div>';
+};
+
+var populateUserCards = function() {
+	if (cardIds.length > 0) {
+		$('#user-cards').empty();
+
+		for (var i = 0; i < cardIds.length; i++) {
+			$('#user-cards').append(getBigCardHTML(cards[cardIds[i]]));
+		}
+	}
+};
+
+var tryCreateCard = function(name, description) {
+	startLoad();
+
+	$.ajax({
+        type: 'POST',
+        url: '/cards',
+        data: '{"name": "' + name + '", "description": "' + description + '"}',
+        contentType: 'application/json',
+    })
+    .done(function(perk) {
+    	stopLoad();
+        populateAllCards();
+        goCards();
+        $('#card-name').val('');
+        $('#card-desc').val('');
+    })
+    .fail(function() {
+    	stopLoad();
+    	$('#card-name, #card-desc').addClass('invalid');
+    });
+};
+
 /* ---------- PAGE LOAD ---------- */
 
 var setButtonExpandScale = function() {
@@ -269,7 +377,11 @@ $(window).on('resize', function() {
 var currentPage = 'home';
 
 $(document).ready(function() {
-	populatePerkList();
+	populateAllCards(function() {
+		populatePerkList('top');
+		populatePerkList('recommended');
+	});
+
 	authenticate();
 
 	// general
@@ -317,6 +429,19 @@ $(document).ready(function() {
 			$('#email, #password').addClass('invalid');
 		}
 	})
+
+	$('#edit-cards-button').on('click', function() {
+		goCards();
+	});
+
+	$('#create-card-button').on('click', function() {
+		if ($('#card-name').val().length > 0) {
+			tryCreateCard($('#card-name').val(), $('#card-desc').val());
+		}
+		else {
+			$('#card-name').addClass('invalid');
+		}
+	});
 
 	$('#log-out').on('click', function() {
 		tryLogOut();
@@ -379,7 +504,7 @@ $(document).ready(function() {
 
 	$('#create-button').on('click', function() {
 		if ($('#perk-name').val().length > 0 && $('input[name="cat"]:checked').length > 0) {
-			tryCreatePerk($('#perk-name').val(), $('#perk-desc').val(), $('input[name="cat"]:checked')[0].dataset.i);
+			tryCreatePerk($('#perk-name').val(), $('#perk-desc').val(), $('#perk-cards').val(), $('input[name="cat"]:checked')[0].dataset.i);
 		}
 		else {
 			if ($('#perk-name').val().length <= 0) {
