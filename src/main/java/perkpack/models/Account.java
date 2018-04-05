@@ -43,6 +43,8 @@ public class Account {
     @JsonIgnore
     private Set<Card> cards = new HashSet<>();
 
+    private Set<Long> cardIds = new HashSet<>();
+
     @OneToMany(cascade = CascadeType.ALL)
     private Map<Category, CategoryCount> categoryCount = new HashMap<Category, CategoryCount>();
 
@@ -158,11 +160,21 @@ public class Account {
     }
 
     public boolean addCard(Card cardToAdd) {
+        this.cardIds.add(cardToAdd.getId());
         return this.cards.add(cardToAdd);
     }
 
     public boolean removeCard(Card cardToRemove){
+        this.cardIds.remove(cardToRemove.getId());
         return this.cards.remove(cardToRemove);
+    }
+
+    public Set<Long> getCardIds() {
+        return cardIds;
+    }
+
+    public void setCardIds(Set<Long> cardIds) {
+        this.cardIds = cardIds;
     }
 
     private void updateTopCategory() {
