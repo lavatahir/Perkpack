@@ -30,6 +30,8 @@ public class Perk {
     @JsonIgnore
     private Card cardPerkBelongsTo;
 
+    private Long cardPerkBelongsToId;
+
     public Perk () {
 
     }
@@ -60,6 +62,7 @@ public class Perk {
         this.category = category;
         this.categoryName = category.getName();
         this.cardPerkBelongsTo = c;
+        this.cardPerkBelongsToId = c.getId();
 
         score = 0;
     }
@@ -147,6 +150,14 @@ public class Perk {
 
     public void setCardPerkBelongsTo(Card card) {
         this.cardPerkBelongsTo = card;
+    }
+
+    public Long getCardPerkBelongsToId() {
+        return cardPerkBelongsToId;
+    }
+
+    public void setCardPerkBelongsToId(Long cardPerkBelongsToId) {
+        this.cardPerkBelongsToId = cardPerkBelongsToId;
     }
 
     public String toString() {
