@@ -48,6 +48,21 @@ public class Perk {
     public Perk (String name, String description, Category category) {
         this(name, new Date(), "", description, category);
     }
+    public Perk (String name, String description, Category category, Card c) {
+        this(name, new Date(), "", description, category, c);
+    }
+
+    public Perk (String name, Date expiryDate, String location, String description, Category category, Card c) {
+        this.name = name;
+        this.expiryDate = expiryDate;
+        this.location = location;
+        this.description = description;
+        this.category = category;
+        this.categoryName = category.getName();
+        this.cardPerkBelongsTo = c;
+
+        score = 0;
+    }
 
     public String getName() {
         return this.name;

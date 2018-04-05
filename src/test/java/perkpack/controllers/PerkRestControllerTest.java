@@ -181,4 +181,16 @@ public class PerkRestControllerTest {
         perkRepository.delete(startingPerk);
         categoryRepository.delete(startingCategory);
     }
+//    @Test
+//    @WithMockUser(username = "five@gmail.com", password = "password")
+//    public void addPerkToCardOnPerkCreationTest() throws Exception {
+//        String perkName = "Test Perk";
+//        String perkDescription = "This is a perk.";
+//        String perkJson = "{\"name\": \"" + perkName + "\", \"description\": \"" + perkDescription + "\"}";
+//
+//        mockMvc.perform(post("/perks").
+//                contentType(jsonContentType).
+//                content(perkJson)).
+//                andExpect(status().isCreated());
+//    }
 }

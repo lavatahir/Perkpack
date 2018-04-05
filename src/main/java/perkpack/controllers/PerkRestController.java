@@ -8,15 +8,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import perkpack.authentication.CustomUserDetails;
-import perkpack.models.Account;
-import perkpack.models.Category;
-import perkpack.models.Perk;
-import perkpack.models.PerkVote;
-import perkpack.repositories.AccountRepository;
-import perkpack.repositories.CategoryRepository;
-import perkpack.repositories.PerkRepository;
-import perkpack.repositories.PerkVoteRepository;
+import perkpack.models.*;
+import perkpack.repositories.*;
 
+import javax.validation.Valid;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,14 +25,16 @@ public class PerkRestController {
     private final CategoryRepository categoryRepository;
     private final AccountRepository accountRepository;
     private final PerkVoteRepository perkVoteRepository;
+    private final CardRepository cardRepository;
     private final String categoryPath = "./categories.txt";
 
     @Autowired
-    public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository, AccountRepository accountRepository, PerkVoteRepository perkVoteRepository) {
+    public PerkRestController(PerkRepository perkRepository, CategoryRepository categoryRepository, AccountRepository accountRepository, PerkVoteRepository perkVoteRepository, CardRepository cardRepository) {
         this.perkRepository = perkRepository;
         this.accountRepository = accountRepository;
         this.categoryRepository = categoryRepository;
         this.perkVoteRepository = perkVoteRepository;
+        this.cardRepository = cardRepository;
         this.setupCategories(categoryPath);
     }
 
@@ -127,6 +124,25 @@ public class PerkRestController {
         Perk updatedPerk = perkRepository.save(perkInRepository);
 
         return ResponseEntity.ok().body(updatedPerk);
+    }
+
+    @RequestMapping(value = "/addCardOnPerkCreation/{cardID}", method = RequestMethod.PATCH)
+    public ResponseEntity<Card> addPerkToCardOnPerkCreation(@Valid @RequestBody Perk perk,
+                                              @PathVariable(value = "cardID") Long cardID){
+        Card c = cardRepository.findOne(cardID);
+
+        if(c == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        perkRepository.save(perk);
+        c.addPerk(perk);
+
+        Card card = cardRepository.save(c);
+//        Perk p = perkRepository.findOne(perk.getId());
+//        p.setCardPerkBelongsTo(card);
+//        perkRepository.save(p);
+        return ResponseEntity.ok().body(card);
     }
 
     private Account getUser() {
