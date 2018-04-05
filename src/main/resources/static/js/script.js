@@ -1,7 +1,7 @@
 /* ---------- MAIN --------- */
 
 var getPerkTileHTML = function(perk) {
-	return '<div class="section perk-tile"><div class="perk-vote"><div class="perk-upvote perk-vote-button" onclick=vote(this,1)><i class="material-icons">thumb_up</i></div><div class="perk-score">'+perk.score+'</div><div class="perk-downvote perk-vote-button" onclick=vote(this,-1)><i class="material-icons">thumb_down</i></div></div><div class="perk-info"><div class="perk-name subtitle"><span>'+perk.name+' - '+perk.cardName+'</span></div><div class="perk-desc">'+perk.description+'</div><div class="perk-cat"><i class="material-icons">'+categories[perk.categoryName].icon+'</i></div></div></div>';
+	return '<div class="section perk-tile"><div class="perk-vote"><div class="perk-upvote perk-vote-button" onclick=vote(this,1)><i class="material-icons">thumb_up</i></div><div class="perk-score">'+perk.score+'</div><div class="perk-downvote perk-vote-button" onclick=vote(this,-1)><i class="material-icons">thumb_down</i></div></div><div class="perk-info"><div class="perk-name subtitle"><span class="the-name">'+perk.name+'</span> - <span>'+perk.cardName+'</span></div><div class="perk-desc">'+perk.description+'</div><div class="perk-cat"><i class="material-icons">'+categories[perk.categoryName].icon+'</i></div></div></div>';
 }
 
 var populatePerkList = function(list) {
@@ -212,7 +212,7 @@ var goPerk = function() {
 
 var vote = function(element, vote) {
 	if (loggedIn) {
-		var perkName = $($(element)[0].parentElement.parentElement).find('.perk-name span').text();
+		var perkName = $($(element)[0].parentElement.parentElement).find('.perk-name span.the-name').text();
 
 		$.ajax({
 	        method: 'POST',
